@@ -14,18 +14,11 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tic Tac Toe', style: AppTextStyles.heading1),
-        leading: Padding(
-          padding: const EdgeInsets.all(8.0), // Add padding if needed
-          child: Image.asset(
-            "assets/favicon.png",
-            width: 40,
-            height: 30,
-          ),
-        ),
-        centerTitle: !kIsWeb, // Center on mobile, start-aligned on web
+        title: Text('About Page'),
       ),
-      body: kIsWeb ? _buildWebLayout(context) : _buildMobileLayout(context),
+      body: Center(
+        child: Text('About Page', style: TextStyle(fontSize: 24)),
+      ),
     );
   }
 
