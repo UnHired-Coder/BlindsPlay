@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../logic/blocks/game/game_bloc.dart';
 import '../../logic/blocks/game/game_state.dart';
 
-
 class GamePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

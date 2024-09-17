@@ -1,12 +1,15 @@
+import 'package:blindsplay/config/colors.dart';
 import 'package:blindsplay/presentation/screens/about_page.dart';
 import 'package:blindsplay/presentation/screens/game_page.dart';
 import 'package:blindsplay/presentation/screens/profile_page.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../config/button_styles.dart';
 import '../../config/text_styles.dart';
 import '../../logic/blocks/game/game_bloc.dart';
+import '../ui/widgets/custom_nav_item_ui.dart';
 import 'home_page.dart';
 import 'leaderboard_page.dart';
 
@@ -84,7 +87,9 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Blind Moves', style: AppTextStyles.heading1),
+        backgroundColor: AppColors.primary,
+        title: Text('Blind Moves',
+            style: AppTextStyles.heading1.copyWith(color: AppColors.accent)),
         leading: Padding(
           padding: const EdgeInsets.all(8.0), // Add padding if needed
           child: Image.asset(
@@ -111,32 +116,20 @@ class _MainScreenState extends State<MainScreen> {
     return Row(
       children: <Widget>[
         NavigationRail(
+          backgroundColor: AppColors.primary,
+          extended: true,
+          minWidth: 300,
           selectedIndex: _selectedIndex,
           onDestinationSelected: _onTabSelected,
           useIndicator: false,
-          labelType: NavigationRailLabelType.selected,
-          destinations: const <NavigationRailDestination>[
-            NavigationRailDestination(
-              icon: Icon(Icons.home),
-              selectedIcon: Icon(Icons.home_filled),
-              label: Text('Home'),
-            ),
-            NavigationRailDestination(
-              icon: Icon(Icons.leaderboard),
-              selectedIcon: Icon(Icons.leaderboard_outlined),
-              label: Text('Leaderboard'),
-            ),
-            NavigationRailDestination(
-              icon: Icon(Icons.person),
-              selectedIcon: Icon(Icons.person_outline),
-              label: Text('Profile'),
-            ),
-            NavigationRailDestination(
-              icon: Icon(Icons.help),
-              selectedIcon: Icon(Icons.help_outline),
-              label: Text('Help'),
-            ),
-          ],
+          labelType: NavigationRailLabelType.none,
+          destinations: pages.mapIndexed((idx, toElement) {
+            return NavigationRailDestination(
+                icon:  CustomNavItemUi(
+                    isSelected: _selectedIndex == idx,
+                    label: toElement['title']),
+                label: const SizedBox.shrink());
+          }).toList(),
         ),
         Expanded(
           child: IndexedStack(
@@ -149,7 +142,9 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Widget _buildMobileLayout(BuildContext context) {
-    return ListView.builder(
+    return Container(
+        color: AppColors.primary,
+        child: ListView.builder(
       padding: const EdgeInsets.all(40.0),
       itemCount: pages.length,
       itemBuilder: (context, index) {
@@ -180,7 +175,6 @@ class _MainScreenState extends State<MainScreen> {
           ),
         );
       },
-    );
+    ));
   }
 }
-
