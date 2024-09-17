@@ -86,20 +86,29 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.primary,
-        title: Text('Blind Moves',
-            style: AppTextStyles.heading1.copyWith(color: AppColors.accent)),
-        leading: Padding(
-          padding: const EdgeInsets.all(8.0), // Add padding if needed
-          child: Image.asset(
-            "assets/favicon.png",
-            width: 40,
-            height: 30,
-          ),
-        ),
-        centerTitle: !kIsWeb, // Center on mobile, start-aligned on web
-      ),
+      backgroundColor: AppColors.primary,
+      appBar: PreferredSize(
+          preferredSize: kIsWeb ? Size.fromHeight(100) : Size.zero,
+          child: Padding(
+            padding: kIsWeb
+                ? EdgeInsets.symmetric(horizontal: 150, vertical: 20)
+                : EdgeInsets.zero,
+            child: AppBar(
+              backgroundColor: AppColors.primary,
+              title: Text('Blind Moves',
+                  style:
+                      AppTextStyles.heading2.copyWith(color: AppColors.accent)),
+              leading: Padding(
+                padding: const EdgeInsets.all(8.0), // Add padding if needed
+                child: Image.asset(
+                  "assets/favicon.png",
+                  width: 40,
+                  height: 30,
+                ),
+              ),
+              centerTitle: !kIsWeb, // Center on mobile, start-aligned on web
+            ),
+          )),
       body: LayoutBuilder(
         builder: (context, constraints) {
           if (constraints.maxWidth > 800) {
@@ -113,31 +122,34 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Widget _buildWebLayout(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        NavigationRail(
-          backgroundColor: AppColors.primary,
-          extended: true,
-          minWidth: 300,
-          selectedIndex: _selectedIndex,
-          onDestinationSelected: _onTabSelected,
-          useIndicator: false,
-          labelType: NavigationRailLabelType.none,
-          destinations: pages.mapIndexed((idx, toElement) {
-            return NavigationRailDestination(
-                icon:  CustomNavItemUi(
-                    isSelected: _selectedIndex == idx,
-                    label: toElement['title']),
-                label: const SizedBox.shrink());
-          }).toList(),
-        ),
-        Expanded(
-          child: IndexedStack(
-            index: _selectedIndex,
-            children: _pages,
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 60),
+      child: Row(
+        children: <Widget>[
+          NavigationRail(
+            backgroundColor: AppColors.primary,
+            extended: true,
+            minWidth: 300,
+            selectedIndex: _selectedIndex,
+            onDestinationSelected: _onTabSelected,
+            useIndicator: false,
+            labelType: NavigationRailLabelType.none,
+            destinations: pages.mapIndexed((idx, toElement) {
+              return NavigationRailDestination(
+                  icon: CustomNavItemUi(
+                      isSelected: _selectedIndex == idx,
+                      label: toElement['title']),
+                  label: const SizedBox.shrink());
+            }).toList(),
           ),
-        ),
-      ],
+          Expanded(
+            child: IndexedStack(
+              index: _selectedIndex,
+              children: _pages,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -145,36 +157,36 @@ class _MainScreenState extends State<MainScreen> {
     return Container(
         color: AppColors.primary,
         child: ListView.builder(
-      padding: const EdgeInsets.all(40.0),
-      itemCount: pages.length,
-      itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10.0),
-          child: ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => pages[index]['page'] as Widget,
+          padding: const EdgeInsets.all(40.0),
+          itemCount: pages.length,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => pages[index]['page'] as Widget,
+                    ),
+                  );
+                },
+                style: secondaryButtonStyle,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      pages[index]['title'],
+                      style: AppTextStyles.button,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(width: 10),
+                    Icon(pages[index]['icon']),
+                  ],
                 ),
-              );
-            },
-            style: secondaryButtonStyle,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  pages[index]['title'],
-                  style: AppTextStyles.button,
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(width: 10),
-                Icon(pages[index]['icon']),
-              ],
-            ),
-          ),
-        );
-      },
-    ));
+              ),
+            );
+          },
+        ));
   }
 }
