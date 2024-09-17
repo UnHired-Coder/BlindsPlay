@@ -9,14 +9,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../config/button_styles.dart';
 import '../../config/text_styles.dart';
 import '../../logic/blocks/game/game_bloc.dart';
-import '../ui/widgets/custom_nav_item_ui.dart';
+import '../ui/widgets/CustomNavItemUi.dart';
 import 'home_page.dart';
 import 'leaderboard_page.dart';
 
 final List<Map<String, dynamic>> pages = [
   {
     'title': 'Play Game',
-    'icon': Icons.gamepad,
+    'icon': 'assets/ic_play.png',
     'page': BlocProvider(
       create: (context) => GameBloc(),
       child: GamePage(),
@@ -24,17 +24,17 @@ final List<Map<String, dynamic>> pages = [
   },
   {
     'title': 'Leaderboard',
-    'icon': Icons.leaderboard,
+    'icon': 'assets/ic_play.png',
     'page': LeaderboardPage(),
   },
   {
     'title': 'Profile',
-    'icon': Icons.person,
+    'icon': 'assets/ic_play.png',
     'page': ProfilePage(),
   },
   {
     'title': 'Help',
-    'icon': Icons.question_mark,
+    'icon': 'assets/ic_play.png',
     'page': AboutPage(),
   },
 ];
@@ -139,7 +139,8 @@ class _MainScreenState extends State<MainScreen> {
               return NavigationRailDestination(
                   icon: CustomNavItemUi(
                       isSelected: _selectedIndex == idx,
-                      label: toElement['title']),
+                      label: toElement['title'],
+                      imageUrl: toElement['icon']),
                   label: const SizedBox.shrink());
             }).toList(),
           ),
@@ -182,7 +183,7 @@ class _MainScreenState extends State<MainScreen> {
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(width: 10),
-                    Icon(pages[index]['icon']),
+                    Image(image: AssetImage(pages[index]['icon']),),
                   ],
                 ),
               ),
