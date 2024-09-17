@@ -24,7 +24,7 @@ class HomePage extends StatelessWidget {
                 center: Alignment.center,
                 radius: 1,
                 // Applying GradientTransform to create an elliptical gradient
-                transform: CenteredEllipticalGradientTransform(scaleX: 1.1, scaleY: 0.3)
+                transform: CenteredEllipticalGradientTransform(scaleX: 1.2, scaleY: 0.4)
                 , // Stretch horizontally and shrink vertically
               ),
             ),
@@ -77,11 +77,6 @@ class HomePage extends StatelessWidget {
                             )
                           ],
                         )),
-                    // GameModeWidget(
-                    //   title: 'Play now',
-                    //   description: 'Play against similar rated players',
-                    //   imageUrl: 'assets/favicon.png',
-                    // )
                   ],
                 ),
                 SizedBox(height: 60),
