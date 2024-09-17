@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../config/button_styles.dart';
-import '../../config/icon_sizes.dart';
 import '../../config/text_styles.dart';
 import '../../logic/blocks/game/game_bloc.dart';
 import 'home_page.dart';
@@ -46,7 +45,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MainScreen(),
+      home: Center(child: MainScreen()),
     );
   }
 }
@@ -84,19 +83,28 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Blind Moves', style: AppTextStyles.heading1),
-          leading: Padding(
-            padding: const EdgeInsets.all(8.0), // Add padding if needed
-            child: Image.asset(
-              "assets/favicon.png",
-              width: 40,
-              height: 30,
-            ),
+      appBar: AppBar(
+        title: const Text('Blind Moves', style: AppTextStyles.heading1),
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0), // Add padding if needed
+          child: Image.asset(
+            "assets/favicon.png",
+            width: 40,
+            height: 30,
           ),
-          centerTitle: !kIsWeb, // Center on mobile, start-aligned on web
         ),
-        body: kIsWeb ? _buildWebLayout(context) : _buildMobileLayout(context));
+        centerTitle: !kIsWeb, // Center on mobile, start-aligned on web
+      ),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          if (constraints.maxWidth > 800) {
+            return _buildWebLayout(context);
+          } else {
+            return _buildMobileLayout(context);
+          }
+        },
+      ),
+    );
   }
 
   Widget _buildWebLayout(BuildContext context) {
@@ -155,7 +163,6 @@ class _MainScreenState extends State<MainScreen> {
                   builder: (context) => pages[index]['page'] as Widget,
                 ),
               );
-              //navigateToPage(index, context); // Navigate to the selected page
             },
             style: secondaryButtonStyle,
             child: Row(
@@ -176,3 +183,4 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 }
+
