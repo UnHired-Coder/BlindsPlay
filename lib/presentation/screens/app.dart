@@ -112,7 +112,7 @@ class _MainScreenState extends State<MainScreen> {
           )),
       body: LayoutBuilder(
         builder: (context, constraints) {
-          if (constraints.maxWidth > 800) {
+          if (constraints.maxWidth > 1000) {
             return _buildWebLayout(context);
           } else {
             return _buildMobileLayout(context);

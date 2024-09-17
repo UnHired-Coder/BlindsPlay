@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../config/colors.dart';
 import '../../config/text_styles.dart';
 import '../ui/widgets/RoundedCornerButton.dart';
+import 'game_page.dart';
 
 class HomePage extends StatelessWidget {
   final List<Map<String, dynamic>> pages;
@@ -82,13 +83,27 @@ class HomePage extends StatelessWidget {
                 RoundedCornerButton(
                   text: "Compete online!",
                   icon: AssetImage("assets/ic_lightning.png"),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => GamePage() as Widget,
+                      ),
+                    );
+                  },
                 ),
                 SizedBox(height: 30),
                 RoundedCornerButton(
-                  text: "Compete online!",
+                  text: "Play now!",
                   icon: AssetImage("assets/ic_play.png"),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => GamePage() as Widget,
+                      ),
+                    );
+                  },
                 )
               ],
             )));

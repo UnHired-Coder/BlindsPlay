@@ -1,3 +1,4 @@
+import 'package:blindsplay/config/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -8,8 +9,11 @@ class GamePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+    backgroundColor: AppColors.primary,
       appBar: AppBar(
-        title: Text('Game'),
+        iconTheme: IconThemeData(color: AppColors.onPrimary),
+        backgroundColor: AppColors.primary,
+        title: SizedBox.shrink(),
       ),
       body: BlocProvider(
         create: (context) => GameBloc(),
