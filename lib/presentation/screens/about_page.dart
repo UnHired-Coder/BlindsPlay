@@ -5,10 +5,10 @@ class AboutPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('About Page'),
+        title: Text('About'),
       ),
       body: Center(
-        child: Text('About Page', style: TextStyle(fontSize: 24)),
+        child: Text('About', style: TextStyle(fontSize: 24)),
       ),
     );
   }

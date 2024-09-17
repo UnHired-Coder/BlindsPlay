@@ -6,10 +6,10 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile Page'),
+        title: Text('Profile'),
       ),
       body: Center(
-        child: Text('Profile Page', style: TextStyle(fontSize: 24)),
+        child: Text('Profile', style: TextStyle(fontSize: 24)),
       ),
     );
   }

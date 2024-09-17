@@ -10,7 +10,7 @@ class GamePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Game Page'),
+        title: Text('Game'),
       ),
       body: BlocProvider(
         create: (context) => GameBloc(),

@@ -1,4 +1,3 @@
-
 import 'package:blindsplay/presentation/screens/about_page.dart';
 import 'package:blindsplay/presentation/screens/game_page.dart';
 import 'package:blindsplay/presentation/screens/profile_page.dart';
@@ -6,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../config/button_styles.dart';
+import '../../config/icon_sizes.dart';
 import '../../config/text_styles.dart';
 import '../../logic/blocks/game/game_bloc.dart';
 import 'home_page.dart';
@@ -13,12 +13,7 @@ import 'leaderboard_page.dart';
 
 final List<Map<String, dynamic>> pages = [
   {
-    'title': 'About Page',
-    'icon': Icons.info,
-    'page': AboutPage(),
-  },
-  {
-    'title': 'Game',
+    'title': 'Play Game',
     'icon': Icons.gamepad,
     'page': BlocProvider(
       create: (context) => GameBloc(),
@@ -34,6 +29,11 @@ final List<Map<String, dynamic>> pages = [
     'title': 'Profile',
     'icon': Icons.person,
     'page': ProfilePage(),
+  },
+  {
+    'title': 'Help',
+    'icon': Icons.question_mark,
+    'page': AboutPage(),
   },
 ];
 
@@ -72,6 +72,7 @@ class _MainScreenState extends State<MainScreen> {
         }),
     LeaderboardPage(),
     ProfilePage(),
+    AboutPage()
   ];
 
   void _onTabSelected(int index) {
@@ -95,9 +96,7 @@ class _MainScreenState extends State<MainScreen> {
           ),
           centerTitle: !kIsWeb, // Center on mobile, start-aligned on web
         ),
-        body: kIsWeb
-            ? _buildWebLayout(context)
-            : _buildMobileLayout(context));
+        body: kIsWeb ? _buildWebLayout(context) : _buildMobileLayout(context));
   }
 
   Widget _buildWebLayout(BuildContext context) {
@@ -106,6 +105,7 @@ class _MainScreenState extends State<MainScreen> {
         NavigationRail(
           selectedIndex: _selectedIndex,
           onDestinationSelected: _onTabSelected,
+          useIndicator: false,
           labelType: NavigationRailLabelType.selected,
           destinations: const <NavigationRailDestination>[
             NavigationRailDestination(
@@ -119,14 +119,14 @@ class _MainScreenState extends State<MainScreen> {
               label: Text('Leaderboard'),
             ),
             NavigationRailDestination(
-              icon: Icon(Icons.help),
-              selectedIcon: Icon(Icons.help_outline),
-              label: Text('Help'),
-            ),
-            NavigationRailDestination(
               icon: Icon(Icons.person),
               selectedIcon: Icon(Icons.person_outline),
               label: Text('Profile'),
+            ),
+            NavigationRailDestination(
+              icon: Icon(Icons.help),
+              selectedIcon: Icon(Icons.help_outline),
+              label: Text('Help'),
             ),
           ],
         ),
@@ -161,13 +161,13 @@ class _MainScreenState extends State<MainScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(pages[index]['icon']),
-                const SizedBox(width: 10),
                 Text(
                   pages[index]['title'],
                   style: AppTextStyles.button,
                   textAlign: TextAlign.center,
                 ),
+                const SizedBox(width: 10),
+                Icon(pages[index]['icon']),
               ],
             ),
           ),

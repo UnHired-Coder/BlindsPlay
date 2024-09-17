@@ -14,10 +14,10 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('About Page'),
+        title: Text('Home'),
       ),
       body: Center(
-        child: Text('About Page', style: TextStyle(fontSize: 24)),
+        child: Text('Home', style: TextStyle(fontSize: 24)),
       ),
     );
   }
