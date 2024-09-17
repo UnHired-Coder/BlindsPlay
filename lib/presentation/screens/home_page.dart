@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../config/colors.dart';
 import '../../config/text_styles.dart';
-import '../ui/widgets/RoundedCornnerButton.dart';
+import '../ui/widgets/RoundedCornerButton.dart';
 
 class HomePage extends StatelessWidget {
   final List<Map<String, dynamic>> pages;
@@ -12,7 +12,6 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
         backgroundColor: AppColors.primary,
@@ -20,7 +19,7 @@ class HomePage extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: RadialGradient(
                 colors: [Colors.black.withOpacity(0.3), AppColors.primary.withOpacity(0.5), AppColors.primary],
-                stops: [0.3, 0.7, 1.0],
+                stops: const [0.3, 0.7, 1.0],
                 center: Alignment.center,
                 radius: 1,
                 // Applying GradientTransform to create an elliptical gradient

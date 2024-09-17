@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../config/button_styles.dart';
 import '../../../config/colors.dart';
 
 class RoundedCornerButton extends StatelessWidget {
@@ -9,11 +8,11 @@ class RoundedCornerButton extends StatelessWidget {
   final VoidCallback onPressed;
 
   const RoundedCornerButton({
-    Key? key,
+    super.key,
     required this.text,
     required this.icon,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
