@@ -94,6 +94,7 @@ class _MainScreenState extends State<MainScreen> {
                 ? EdgeInsets.symmetric(horizontal: 150, vertical: 20)
                 : EdgeInsets.zero,
             child: AppBar(
+              scrolledUnderElevation: 0,
               backgroundColor: AppColors.primary,
               title: Text('Blind Moves',
                   style:
