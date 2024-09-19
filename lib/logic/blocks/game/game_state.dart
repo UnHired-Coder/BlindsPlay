@@ -1,5 +1,3 @@
-// business/blocs/game/game_state.dart
-
 import 'package:equatable/equatable.dart';
 
 abstract class GameState extends Equatable {
@@ -10,13 +8,14 @@ abstract class GameState extends Equatable {
 class GameInitial extends GameState {}
 
 class GameInProgress extends GameState {
-  final List<List<String>> board;
+  final List<List<String>> board;       // Holds the actual board state (Xs and Os)
+  final List<List<String>> visibleBoard; // Holds the visible board with red boxes for hidden Xs and Os
   final String currentPlayer;
 
-  GameInProgress(this.board, this.currentPlayer);
+  GameInProgress(this.board, this.visibleBoard, this.currentPlayer);
 
   @override
-  List<Object?> get props => [board, currentPlayer];
+  List<Object?> get props => [board, visibleBoard, currentPlayer];
 }
 
 class GameOver extends GameState {

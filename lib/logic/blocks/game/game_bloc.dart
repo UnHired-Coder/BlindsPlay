@@ -15,18 +15,25 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   void _onStartGame(StartGame event, Emitter<GameState> emit) {
     // Initialize an empty 3x3 board and set the current player to "X"
     List<List<String>> initialBoard = List.generate(3, (_) => List.generate(3, (_) => ""));
-    emit(GameInProgress(initialBoard, "X"));
+    // The visible board will hide the actual X and O after each move with a red box.
+    List<List<String>> visibleBoard = List.generate(3, (_) => List.generate(3, (_) => ""));
+
+    emit(GameInProgress(initialBoard, visibleBoard, "X"));
   }
 
   // Event handler for MakeMove event
   void _onMakeMove(MakeMove event, Emitter<GameState> emit) {
     final currentState = state;
     if (currentState is GameInProgress) {
-      // Update the board with the current player's move
+      // Update the actual board with the player's move
       final updatedBoard = List<List<String>>.from(currentState.board);
+      final updatedVisibleBoard = List<List<String>>.from(currentState.visibleBoard);
 
       if (updatedBoard[event.x][event.y].isEmpty) {
         updatedBoard[event.x][event.y] = currentState.currentPlayer;
+
+        // Hide the move on the visible board by setting it to "red"
+        updatedVisibleBoard[event.x][event.y] = "red";  // Represent the hidden X or O as a red box
 
         // Check if there's a winner or a draw
         if (_checkWinner(updatedBoard, currentState.currentPlayer)) {
@@ -36,7 +43,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         } else {
           // Switch the turn to the next player
           final nextPlayer = currentState.currentPlayer == "X" ? "O" : "X";
-          emit(GameInProgress(updatedBoard, nextPlayer));
+          emit(GameInProgress(updatedBoard, updatedVisibleBoard, nextPlayer));
         }
       }
     }
@@ -44,7 +51,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
   // Event handler for UpdateBoard event
   void _onUpdateBoard(UpdateBoard event, Emitter<GameState> emit) {
-    emit(GameInProgress(event.board, "X"));  // Assume "X" starts the game
+    List<List<String>> visibleBoard = List.generate(3, (_) => List.generate(3, (_) => "red")); // Everything is hidden
+    emit(GameInProgress(event.board, visibleBoard, "X"));  // Assume "X" starts the game
   }
 
   // Event handler for EndGame event
