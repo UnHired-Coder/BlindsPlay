@@ -19,7 +19,7 @@ final List<Map<String, dynamic>> pages = [
     'icon': 'assets/ic_play.png',
     'page': BlocProvider(
       create: (context) => GameBloc(),
-      child: GamePage(),
+      child: GamePage(boardSize:3),
     ),
   },
   {

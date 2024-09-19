@@ -87,7 +87,7 @@ class HomePage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => GamePage() as Widget,
+                        builder: (context) => GamePage(boardSize: 3) as Widget,
                       ),
                     );
                   },
@@ -100,7 +100,7 @@ class HomePage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => GamePage() as Widget,
+                        builder: (context) => GamePage(boardSize: 3) as Widget,
                       ),
                     );
                   },

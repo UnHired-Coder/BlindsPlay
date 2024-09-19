@@ -6,7 +6,9 @@ import '../../logic/blocks/game/game_event.dart';
 import '../../logic/blocks/game/game_state.dart';
 
 class GamePage extends StatelessWidget {
-  const GamePage({Key? key}) : super(key: key);
+  final int boardSize; // Dynamic board size
+
+  const GamePage({Key? key, required this.boardSize}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,8 +16,9 @@ class GamePage extends StatelessWidget {
       backgroundColor: AppColors.primary,
       appBar: _buildAppBar(),
       body: BlocProvider(
-        create: (context) => GameBloc()..add(StartGame()), // Start game when the page is created
-        child: _GameContent(),
+        create: (context) =>
+            GameBloc()..add(StartGame()), // Start game when the page is created
+        child: _GameContent(boardSize: boardSize),
       ),
     );
   }
@@ -30,6 +33,10 @@ class GamePage extends StatelessWidget {
 }
 
 class _GameContent extends StatelessWidget {
+  final int boardSize;
+
+  const _GameContent({required this.boardSize});
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<GameBloc, GameState>(
@@ -37,7 +44,7 @@ class _GameContent extends StatelessWidget {
         if (state is GameInitial) {
           return _buildMessage('Start a new game!');
         } else if (state is GameInProgress) {
-          return _GameBoard(state: state);
+          return _GameBoard(state: state, boardSize: boardSize);
         } else if (state is GameOver) {
           return _buildMessage('Game Over: ${state.result}');
         } else if (state is GameError) {
@@ -61,51 +68,96 @@ class _GameContent extends StatelessWidget {
 
 class _GameBoard extends StatelessWidget {
   final GameInProgress state;
+  final int boardSize; // Dynamic board size
 
-  const _GameBoard({required this.state});
+  const _GameBoard({required this.state, required this.boardSize});
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        padding: const EdgeInsets.all(16.0),
-        width: 300, // Fixed width for the board
-        child: GridView.builder(
-          shrinkWrap: true,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            crossAxisSpacing: 4.0,
-            mainAxisSpacing: 4.0,
-          ),
-          itemCount: 9,
-          itemBuilder: (context, index) {
-            final x = index % 3;
-            final y = index ~/ 3;
-            final visibleBoard = state.visibleBoard;
+    const double cellWidth = 100;
+    final double boardWidth = boardSize * cellWidth;
+    const double barWidth = 10;
 
-            return _GameTile(
-              x: x,
-              y: y,
-              tileState: visibleBoard[x][y],
-              onTap: () {
-                BlocProvider.of<GameBloc>(context).add(MakeMove(x, y));
-              },
-            );
-          },
-        ),
-      ),
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Container(
+              width: boardWidth,
+              // Define a dynamic width for the board if needed
+              height: boardWidth,
+              // Define a dynamic width for the board if needed
+              child: Stack(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisSize: MainAxisSize.min,
+                    children: List.generate(boardSize, (row) {
+                      return _buildRow(context, row, cellWidth);
+                    }),
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisSize: MainAxisSize.max,
+                    children: List.generate(boardSize - 1, (index) {
+                      return Container(
+                          width: boardWidth,
+                          height: barWidth,
+                          color: AppColors.accent);
+                    }),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisSize: MainAxisSize.max,
+                    children: List.generate(boardSize - 1, (index) {
+                      return Container(
+                          width: barWidth,
+                          height: boardWidth,
+                          color: AppColors.accent);
+                    }),
+                  ),
+                ],
+              ),
+            )
+          ],
+        )
+      ],
+    );
+  }
+
+  // Build each row
+  Widget _buildRow(BuildContext context, int rowIndex, double cellWidth) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisSize: MainAxisSize.min,
+      children: List.generate(boardSize, (columnIndex) {
+        return _GameTile(
+            x: rowIndex,
+            y: columnIndex,
+            cellWidth: cellWidth,
+            tileState: state.visibleBoard[rowIndex][columnIndex],
+            onTap: () {
+              BlocProvider.of<GameBloc>(context)
+                  .add(MakeMove(rowIndex, columnIndex));
+            });
+      }),
     );
   }
 }
 
 class _GameTile extends StatelessWidget {
   final int x, y;
+  final double cellWidth;
   final TileState tileState;
   final VoidCallback onTap;
 
   const _GameTile({
     required this.x,
     required this.y,
+    required this.cellWidth,
     required this.tileState,
     required this.onTap,
   });
@@ -115,13 +167,16 @@ class _GameTile extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
+        width: cellWidth, // Adjust tile width based on board size if needed
+        height: cellWidth, // Adjust tile height based on board size if needed
         decoration: BoxDecoration(
-          color: tileState == TileState.red ? Colors.red : AppColors.onPrimary,
-          border: Border.all(color: Colors.black),
+          color: tileState == TileState.red ? Colors.red : AppColors.primary,
+          //border: Border.all(color: Colors.black, width: 2),
         ),
         child: Center(
           child: Text(
-            tileState == TileState.red ? "" : tileState.symbol, // Hide the symbol if the box is red
+            tileState == TileState.red ? "" : tileState.symbol,
+            // Hide the symbol if the box is red
             style: const TextStyle(
               fontSize: 32,
               fontWeight: FontWeight.bold,
