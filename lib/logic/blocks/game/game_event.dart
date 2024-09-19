@@ -1,8 +1,8 @@
-// business/blocs/game/game_event.dart
-
 import 'package:equatable/equatable.dart';
 
 abstract class GameEvent extends Equatable {
+  const GameEvent();
+
   @override
   List<Object?> get props => [];
 }
@@ -10,39 +10,40 @@ abstract class GameEvent extends Equatable {
 class StartGame extends GameEvent {}
 
 class MakeMove extends GameEvent {
-  final int x;
-  final int y;
-
-  MakeMove(this.x, this.y);
+  final int x, y;
+  const MakeMove(this.x, this.y);
 
   @override
   List<Object?> get props => [x, y];
 }
 
-class UpdateBoard extends GameEvent {
-  final List<List<String>> board;
-
-  UpdateBoard(this.board);
+class HideMove extends GameEvent {   // NEW EVENT to handle turning box red
+  final int x, y;
+  const HideMove(this.x, this.y);
 
   @override
-  List<Object?> get props => [board];
+  List<Object?> get props => [x, y];
 }
 
 class EndGame extends GameEvent {
   final String result;
-
-  EndGame(this.result);
+  const EndGame(this.result);
 
   @override
   List<Object?> get props => [result];
 }
 
-class FetchGameState extends GameEvent {}
+class UpdateBoard extends GameEvent {
+  final List<List<String>> board;
+  const UpdateBoard(this.board);
+
+  @override
+  List<Object?> get props => [board];
+}
 
 class ConnectionError extends GameEvent {
   final String error;
-
-  ConnectionError(this.error);
+  const ConnectionError(this.error);
 
   @override
   List<Object?> get props => [error];

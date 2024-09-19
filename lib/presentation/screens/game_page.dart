@@ -57,7 +57,7 @@ class GamePage extends StatelessWidget {
   }
 
   Widget _buildGameBoard(BuildContext context, GameInProgress state) {
-    // Example: a simple 3x3 grid where users can tap to make a move
+    // Render a 3x3 grid using the visible board
     return GridView.builder(
       padding: const EdgeInsets.all(16.0),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -69,7 +69,7 @@ class GamePage extends StatelessWidget {
       itemBuilder: (context, index) {
         final x = index % 3;
         final y = index ~/ 3;
-        final board = state.board; // Access the current board state
+        final visibleBoard = state.visibleBoard; // Use the visible board
 
         return GestureDetector(
           onTap: () {
@@ -77,10 +77,10 @@ class GamePage extends StatelessWidget {
             BlocProvider.of<GameBloc>(context).add(MakeMove(x, y));
           },
           child: Container(
-            color: AppColors.onPrimary,
+            color: visibleBoard[x][y] == "red" ? Colors.red : AppColors.onPrimary,
             child: Center(
               child: Text(
-                board[x][y], // Display X or O based on the current state of the board
+                visibleBoard[x][y] == "red" ? "" : visibleBoard[x][y], // Show X/O or red box
                 style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
               ),
             ),
