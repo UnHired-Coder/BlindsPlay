@@ -1,6 +1,7 @@
 import 'package:blindsplay/config/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../config/text_styles.dart';
 import '../../logic/blocks/game/game_bloc.dart';
 import '../../logic/blocks/game/game_event.dart';
 import '../../logic/blocks/game/game_state.dart';
@@ -74,9 +75,9 @@ class _GameBoard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const double cellWidth = 100;
+    const double cellWidth = 150;
     final double boardWidth = boardSize * cellWidth;
-    const double barWidth = 10;
+    const double barWidth = 15;
 
     return Row(
       mainAxisSize: MainAxisSize.max,
@@ -84,6 +85,7 @@ class _GameBoard extends StatelessWidget {
       children: [
         Column(
           mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Container(
               width: boardWidth,
@@ -106,7 +108,15 @@ class _GameBoard extends StatelessWidget {
                       return Container(
                           width: boardWidth,
                           height: barWidth,
-                          color: AppColors.accent);
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [Color(0xff7e664c), Color(0xfff4b059)],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                            ),
+                            borderRadius: BorderRadius.circular(
+                                5), // Set the circular radius here
+                          ));
                     }),
                   ),
                   Row(
@@ -116,11 +126,25 @@ class _GameBoard extends StatelessWidget {
                       return Container(
                           width: barWidth,
                           height: boardWidth,
-                          color: AppColors.accent);
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [Color(0xff7e664c), Color(0xfff4b059)],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                            ),
+                            borderRadius: BorderRadius.circular(
+                                5), // Set the circular radius here
+                          ));
                     }),
                   ),
                 ],
               ),
+            ),
+            Text(
+              "finding your opponent...",
+              textAlign: TextAlign.center,
+              style: AppTextStyles.bodyTextLarge
+                  .copyWith(color: AppColors.onPrimary),
             )
           ],
         )
@@ -171,20 +195,53 @@ class _GameTile extends StatelessWidget {
         height: cellWidth, // Adjust tile height based on board size if needed
         decoration: BoxDecoration(
           color: tileState == TileState.red ? Colors.red : AppColors.primary,
-          //border: Border.all(color: Colors.black, width: 2),
         ),
         child: Center(
-          child: Text(
-            tileState == TileState.red ? "" : tileState.symbol,
-            // Hide the symbol if the box is red
-            style: const TextStyle(
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-          ),
+          child:
+              _buildTileContent(tileState), // Use custom UI based on tileState
         ),
       ),
     );
+  }
+
+  // Custom UI for each TileState
+  Widget _buildTileContent(TileState tileState) {
+    switch (tileState) {
+      case TileState.X:
+        return _buildCustomXUI(); // Custom UI for X
+      case TileState.O:
+        return _buildCustomOUI(); // Custom UI for O
+      case TileState.red:
+        return _buildRedBoxUI(); // Custom UI for red state
+      case TileState.empty:
+      default:
+        return _buildEmptyUI(); // Custom UI for empty state
+    }
+  }
+
+  // Custom UI for X state
+  Widget _buildCustomXUI() {
+    return Icon(Icons.close,
+        size: 60, color: Color(0xffFF2A2A)); // Example: X icon
+  }
+
+  // Custom UI for O state
+  Widget _buildCustomOUI() {
+    return Icon(Icons.radio_button_unchecked,
+        size: 60, color: Color(0xff8EFE82)); // Example: O icon
+  }
+
+  // Custom UI for red state (this could be a red background or different layout)
+  Widget _buildRedBoxUI() {
+    return Container(
+      width: 40,
+      height: 40,
+      color: Colors.redAccent, // This can be any custom design you want
+    );
+  }
+
+  // Custom UI for empty state
+  Widget _buildEmptyUI() {
+    return Container(); // Empty container or any placeholder UI for an empty state
   }
 }

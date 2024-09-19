@@ -1,23 +1,28 @@
 import 'dart:async';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'game_event.dart';
 import 'game_state.dart';
 
 class GameBloc extends Bloc<GameEvent, GameState> {
-  GameBloc() : super(GameInitial()) {
+  GameBloc() : super(GameInitial(false)) {
     // Register the event handlers
     on<StartGame>(_onStartGame);
     on<MakeMove>(_onMakeMove);
     on<HideMove>(_onHideMove);
     on<EndGame>(_onEndGame);
     on<UpdateBoard>(_onUpdateBoard);
+    on<PlaySound>(_onPlaySound);
   }
 
   // Event handler for StartGame event
   void _onStartGame(StartGame event, Emitter<GameState> emit) {
-    List<List<TileState>> initialBoard = List.generate(3, (_) => List.generate(3, (_) => TileState.empty));
-    List<List<TileState>> visibleBoard = List.generate(3, (_) => List.generate(3, (_) => TileState.empty));
-    emit(GameInProgress(initialBoard, visibleBoard, TileState.X));
+    List<List<TileState>> initialBoard =
+        List.generate(3, (_) => List.generate(3, (_) => TileState.empty));
+    List<List<TileState>> visibleBoard =
+        List.generate(3, (_) => List.generate(3, (_) => TileState.empty));
+    emit(GameInProgress(initialBoard, visibleBoard, TileState.X,
+        (state as GameInitial).onlineMode));
   }
 
   // Event handler for MakeMove event
@@ -25,20 +30,31 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     final currentState = state;
     if (currentState is GameInProgress) {
       final updatedBoard = List<List<TileState>>.from(currentState.board);
-      final updatedVisibleBoard = List<List<TileState>>.from(currentState.visibleBoard);
+      final updatedVisibleBoard =
+          List<List<TileState>>.from(currentState.visibleBoard);
 
       if (updatedBoard[event.x][event.y] == TileState.empty) {
         updatedBoard[event.x][event.y] = currentState.currentPlayer;
         updatedVisibleBoard[event.x][event.y] = currentState.currentPlayer;
 
         // Emit the state immediately so the UI updates
-        emit(GameInProgress(updatedBoard, updatedVisibleBoard, currentState.currentPlayer));
+        emit(GameInProgress(updatedBoard, updatedVisibleBoard,
+            currentState.currentPlayer, currentState.onlineMode));
+
+        // Dispatch the PlaySound event when placing an X or O
+
+        add(PlaySound(currentState.currentPlayer == TileState.X ? "X" : "O"));
+
         await Future.microtask(() {});
 
-        // Dispatch the HideMove event after 3 seconds
-        Future.delayed(Duration(seconds: 1)).then((_) {
+        if(currentState.onlineMode) {
+          // Dispatch the HideMove event after 3 seconds
+          Future.delayed(Duration(seconds: 1)).then((_) {
+            add(HideMove(event.x, event.y));
+          });
+        }else {
           add(HideMove(event.x, event.y));
-        });
+        }
 
         // Dispatch the CheckWinner event
         _onCheckWinner(emit);
@@ -50,15 +66,18 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   void _onHideMove(HideMove event, Emitter<GameState> emit) {
     final currentState = state;
     if (currentState is GameInProgress) {
-      final updatedVisibleBoard = List<List<TileState>>.from(currentState.board);
+      final updatedVisibleBoard =
+          List<List<TileState>>.from(currentState.board);
 
       // Turn the selected box red after the delay
       // updatedVisibleBoard[event.x][event.y] = TileState.red;
 
       // Switch to the next player only after the move is hidden (red box)
-      final nextPlayer = currentState.currentPlayer == TileState.X ? TileState.O : TileState.X;
+      final nextPlayer =
+          currentState.currentPlayer == TileState.X ? TileState.O : TileState.X;
 
-      emit(GameInProgress(currentState.board, updatedVisibleBoard, nextPlayer));
+      emit(GameInProgress(currentState.board, updatedVisibleBoard, nextPlayer,
+          currentState.onlineMode));
     }
   }
 
@@ -89,26 +108,36 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
   // Event handler for UpdateBoard event
   void _onUpdateBoard(UpdateBoard event, Emitter<GameState> emit) {
-    List<List<TileState>> visibleBoard = List.generate(3, (_) => List.generate(3, (_) => TileState.empty));
-    emit(GameInProgress(event.board, visibleBoard, TileState.X));
+    List<List<TileState>> visibleBoard =
+        List.generate(3, (_) => List.generate(3, (_) => TileState.empty));
+    emit(GameInProgress(event.board, visibleBoard, TileState.X,
+        (state as GameInProgress).onlineMode));
   }
 
   TileState _getWinner(List<List<TileState>> board) {
     // Check rows and columns
     for (int i = 0; i < 3; i++) {
-      if (board[i][0] != TileState.empty && board[i][0] == board[i][1] && board[i][1] == board[i][2]) {
+      if (board[i][0] != TileState.empty &&
+          board[i][0] == board[i][1] &&
+          board[i][1] == board[i][2]) {
         return board[i][0];
       }
-      if (board[0][i] != TileState.empty && board[0][i] == board[1][i] && board[1][i] == board[2][i]) {
+      if (board[0][i] != TileState.empty &&
+          board[0][i] == board[1][i] &&
+          board[1][i] == board[2][i]) {
         return board[0][i];
       }
     }
 
     // Check diagonals
-    if (board[0][0] != TileState.empty && board[0][0] == board[1][1] && board[1][1] == board[2][2]) {
+    if (board[0][0] != TileState.empty &&
+        board[0][0] == board[1][1] &&
+        board[1][1] == board[2][2]) {
       return board[0][0];
     }
-    if (board[0][2] != TileState.empty && board[0][2] == board[1][1] && board[1][1] == board[2][0]) {
+    if (board[0][2] != TileState.empty &&
+        board[0][2] == board[1][1] &&
+        board[1][1] == board[2][0]) {
       return board[0][2];
     }
 
@@ -122,5 +151,23 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       }
     }
     return true;
+  }
+
+  // Event handler for PlaySound event
+  void _onPlaySound(PlaySound event, Emitter<GameState> emit) async {
+    // Use a sound package like audioplayers to play the sound
+    await _playSound(event.soundType);
+  }
+
+// Method to play the sound
+  Future<void> _playSound(String soundType) async {
+    // Logic to play sound using audioplayers or any other sound package
+    final player =
+        AudioPlayer(); // assuming you're using the audioplayers package
+    if (soundType == "X") {
+      await player.play('assets/placed_bait.mp3', isLocal: true, volume: 0.6);
+    } else {
+      await player.play('assets/placed_bait.mp3', isLocal: true, volume: 0.6);
+    }
   }
 }

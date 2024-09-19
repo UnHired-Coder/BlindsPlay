@@ -49,3 +49,13 @@ class ConnectionError extends GameEvent {
   @override
   List<Object?> get props => [error];
 }
+
+class PlaySound extends GameEvent {
+  final String soundType; // You can define different sound types for X and O if needed
+
+  const PlaySound(this.soundType);
+
+  @override
+  List<Object?> get props => [soundType];
+}
+

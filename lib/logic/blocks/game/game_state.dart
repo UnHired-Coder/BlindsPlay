@@ -22,14 +22,23 @@ abstract class GameState extends Equatable {
   List<Object?> get props => [];
 }
 
-class GameInitial extends GameState {}
+class GameInitial extends GameState {
+  final bool onlineMode;
+
+  GameInitial(this.onlineMode);
+
+  @override
+  List<Object?> get props => [onlineMode];
+}
 
 class GameInProgress extends GameState {
-  final List<List<TileState>> board;       // Holds the actual board state (Xs and Os)
-  final List<List<TileState>> visibleBoard; // Holds the visible board with red boxes for hidden Xs and Os
+  final List<List<TileState>> board; // Holds the actual board state (Xs and Os)
+  final List<List<TileState>>
+      visibleBoard; // Holds the visible board with red boxes for hidden Xs and Os
   final TileState currentPlayer;
+  final bool onlineMode;
 
-  GameInProgress(this.board, this.visibleBoard, this.currentPlayer);
+  GameInProgress(this.board, this.visibleBoard, this.currentPlayer, this.onlineMode);
 
   @override
   List<Object?> get props => [board, visibleBoard, currentPlayer];
