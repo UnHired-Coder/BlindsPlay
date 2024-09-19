@@ -1,4 +1,5 @@
 import 'package:blindsplay/config/colors.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../config/text_styles.dart';
@@ -15,7 +16,7 @@ class GamePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.primary,
-      appBar: _buildAppBar(),
+      appBar: !kIsWeb ? _buildAppBar() : null,
       body: BlocProvider(
         create: (context) =>
             GameBloc()..add(StartGame()), // Start game when the page is created
