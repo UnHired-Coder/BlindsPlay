@@ -1,7 +1,6 @@
 import 'package:blindsplay/config/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../logic/blocks/game/game_bloc.dart';
 import '../../logic/blocks/game/game_event.dart';
 import '../../logic/blocks/game/game_state.dart';
@@ -15,8 +14,8 @@ class GamePage extends StatelessWidget {
       backgroundColor: AppColors.primary,
       appBar: _buildAppBar(),
       body: BlocProvider(
-        create: (context) => GameBloc()..add(StartGame()), // Fire StartGame event when the screen loads
-        child: _buildGameContent(),
+        create: (context) => GameBloc()..add(StartGame()), // Start game when the page is created
+        child: _GameContent(),
       ),
     );
   }
@@ -28,14 +27,17 @@ class GamePage extends StatelessWidget {
       title: const SizedBox.shrink(),
     );
   }
+}
 
-  Widget _buildGameContent() {
+class _GameContent extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     return BlocBuilder<GameBloc, GameState>(
       builder: (context, state) {
         if (state is GameInitial) {
           return _buildMessage('Start a new game!');
         } else if (state is GameInProgress) {
-          return _buildGameBoard(context, state);
+          return _GameBoard(state: state);
         } else if (state is GameOver) {
           return _buildMessage('Game Over: ${state.result}');
         } else if (state is GameError) {
@@ -55,38 +57,79 @@ class GamePage extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildGameBoard(BuildContext context, GameInProgress state) {
-    // Render a 3x3 grid using the visible board
-    return GridView.builder(
-      padding: const EdgeInsets.all(16.0),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        crossAxisSpacing: 4.0,
-        mainAxisSpacing: 4.0,
-      ),
-      itemCount: 9,
-      itemBuilder: (context, index) {
-        final x = index % 3;
-        final y = index ~/ 3;
-        final visibleBoard = state.visibleBoard; // Use the visible board
+class _GameBoard extends StatelessWidget {
+  final GameInProgress state;
 
-        return GestureDetector(
-          onTap: () {
-            // Fire MakeMove event when a tile is tapped
-            BlocProvider.of<GameBloc>(context).add(MakeMove(x, y));
+  const _GameBoard({required this.state});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        padding: const EdgeInsets.all(16.0),
+        width: 300, // Fixed width for the board
+        child: GridView.builder(
+          shrinkWrap: true,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            crossAxisSpacing: 4.0,
+            mainAxisSpacing: 4.0,
+          ),
+          itemCount: 9,
+          itemBuilder: (context, index) {
+            final x = index % 3;
+            final y = index ~/ 3;
+            final visibleBoard = state.visibleBoard;
+
+            return _GameTile(
+              x: x,
+              y: y,
+              tileState: visibleBoard[x][y],
+              onTap: () {
+                BlocProvider.of<GameBloc>(context).add(MakeMove(x, y));
+              },
+            );
           },
-          child: Container(
-            color: visibleBoard[x][y] == TileState.red ? Colors.red : AppColors.onPrimary,
-            child: Center(
-              child: Text(
-                visibleBoard[x][y] == TileState.red ? "" : visibleBoard[x][y].symbol, // Show X/O or red box
-                style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-              ),
+        ),
+      ),
+    );
+  }
+}
+
+class _GameTile extends StatelessWidget {
+  final int x, y;
+  final TileState tileState;
+  final VoidCallback onTap;
+
+  const _GameTile({
+    required this.x,
+    required this.y,
+    required this.tileState,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          color: tileState == TileState.red ? Colors.red : AppColors.onPrimary,
+          border: Border.all(color: Colors.black),
+        ),
+        child: Center(
+          child: Text(
+            tileState == TileState.red ? "" : tileState.symbol, // Hide the symbol if the box is red
+            style: const TextStyle(
+              fontSize: 32,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

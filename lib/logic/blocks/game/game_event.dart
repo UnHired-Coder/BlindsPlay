@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-
 import 'game_state.dart';
 
 abstract class GameEvent extends Equatable {
@@ -19,7 +18,7 @@ class MakeMove extends GameEvent {
   List<Object?> get props => [x, y];
 }
 
-class HideMove extends GameEvent {   // NEW EVENT to handle turning box red
+class HideMove extends GameEvent {
   final int x, y;
   const HideMove(this.x, this.y);
 

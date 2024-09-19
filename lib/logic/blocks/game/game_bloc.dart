@@ -8,7 +8,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     // Register the event handlers
     on<StartGame>(_onStartGame);
     on<MakeMove>(_onMakeMove);
-    on<HideMove>(_onHideMove);  // New handler for HideMove event
+    on<HideMove>(_onHideMove);
     on<EndGame>(_onEndGame);
     on<UpdateBoard>(_onUpdateBoard);
   }
@@ -36,9 +36,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         await Future.microtask(() {});
 
         // Dispatch the HideMove event after 3 seconds
-        Future.delayed(Duration(seconds: 3)).then((_) {
+        Future.delayed(Duration(seconds: 1)).then((_) {
           add(HideMove(event.x, event.y));
         });
+
+        // Dispatch the CheckWinner event
+        _onCheckWinner(emit);
       }
     }
   }
@@ -47,14 +50,35 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   void _onHideMove(HideMove event, Emitter<GameState> emit) {
     final currentState = state;
     if (currentState is GameInProgress) {
-      final updatedVisibleBoard = List<List<TileState>>.from(currentState.visibleBoard);
+      final updatedVisibleBoard = List<List<TileState>>.from(currentState.board);
 
       // Turn the selected box red after the delay
-      updatedVisibleBoard[event.x][event.y] = TileState.red;
+      // updatedVisibleBoard[event.x][event.y] = TileState.red;
 
-      // Check if the game should continue or end (in case of winner or draw)
+      // Switch to the next player only after the move is hidden (red box)
       final nextPlayer = currentState.currentPlayer == TileState.X ? TileState.O : TileState.X;
+
       emit(GameInProgress(currentState.board, updatedVisibleBoard, nextPlayer));
+    }
+  }
+
+  // Event handler for CheckWinner event
+  void _onCheckWinner(Emitter<GameState> emit) {
+    final currentState = state;
+    if (currentState is GameInProgress) {
+      final board = currentState.board;
+
+      // Check for winner in rows, columns, and diagonals
+      TileState winner = _getWinner(board);
+
+      if (winner != TileState.empty) {
+        emit(GameOver("Player ${winner.symbol} wins!"));
+      } else if (_isBoardFull(board)) {
+        emit(GameOver("It's a draw!"));
+      } else {
+        // Do nothing here to switch the player.
+        // Player switch is handled in HideMove.
+      }
     }
   }
 
@@ -67,5 +91,36 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   void _onUpdateBoard(UpdateBoard event, Emitter<GameState> emit) {
     List<List<TileState>> visibleBoard = List.generate(3, (_) => List.generate(3, (_) => TileState.empty));
     emit(GameInProgress(event.board, visibleBoard, TileState.X));
+  }
+
+  TileState _getWinner(List<List<TileState>> board) {
+    // Check rows and columns
+    for (int i = 0; i < 3; i++) {
+      if (board[i][0] != TileState.empty && board[i][0] == board[i][1] && board[i][1] == board[i][2]) {
+        return board[i][0];
+      }
+      if (board[0][i] != TileState.empty && board[0][i] == board[1][i] && board[1][i] == board[2][i]) {
+        return board[0][i];
+      }
+    }
+
+    // Check diagonals
+    if (board[0][0] != TileState.empty && board[0][0] == board[1][1] && board[1][1] == board[2][2]) {
+      return board[0][0];
+    }
+    if (board[0][2] != TileState.empty && board[0][2] == board[1][1] && board[1][1] == board[2][0]) {
+      return board[0][2];
+    }
+
+    return TileState.empty; // No winner
+  }
+
+  bool _isBoardFull(List<List<TileState>> board) {
+    for (var row in board) {
+      for (var tile in row) {
+        if (tile == TileState.empty) return false;
+      }
+    }
+    return true;
   }
 }
