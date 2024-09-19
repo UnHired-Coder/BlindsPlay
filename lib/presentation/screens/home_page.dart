@@ -54,8 +54,8 @@ class HomePage extends StatelessWidget {
                             Text(
                               "Played classic tic-tac-toe?",
                               textAlign: TextAlign.center,
-                              style: AppTextStyles.bodyTextLarge
-                                  .copyWith(color: AppColors.onPrimary),
+                              style: AppTextStyles.bodyText
+                                  .copyWith(color: Color(0xFF9F9898)),
                               softWrap: true,
                             ),
                             SizedBox(height: 20),
@@ -63,7 +63,7 @@ class HomePage extends StatelessWidget {
                               "Get ready for a new challenge!, after each move, the board hides the marks, showing only neutral indicators"
                               " instead of Xs and Os. Players must rely on memory to track their own and their opponent's moves.",
                               textAlign: TextAlign.center,
-                              style: AppTextStyles.bodyTextLarge
+                              style: AppTextStyles.bodyText
                                   .copyWith(color: AppColors.accent),
                               softWrap: true,
                             ),
@@ -71,8 +71,8 @@ class HomePage extends StatelessWidget {
                             Text(
                               "Plan your strategy, remember your placements, and outsmart your opponent to win!",
                               textAlign: TextAlign.center,
-                              style: AppTextStyles.bodyTextLarge
-                                  .copyWith(color: AppColors.onPrimary),
+                              style: AppTextStyles.bodyText
+                                  .copyWith(color: Color(0xFF9F9898)),
                               softWrap: true,
                             )
                           ],
