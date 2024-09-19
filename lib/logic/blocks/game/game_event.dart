@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import 'game_state.dart';
+
 abstract class GameEvent extends Equatable {
   const GameEvent();
 
@@ -34,7 +36,7 @@ class EndGame extends GameEvent {
 }
 
 class UpdateBoard extends GameEvent {
-  final List<List<String>> board;
+  final List<List<TileState>> board;
   const UpdateBoard(this.board);
 
   @override

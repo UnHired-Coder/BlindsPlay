@@ -77,10 +77,10 @@ class GamePage extends StatelessWidget {
             BlocProvider.of<GameBloc>(context).add(MakeMove(x, y));
           },
           child: Container(
-            color: visibleBoard[x][y] == "red" ? Colors.red : AppColors.onPrimary,
+            color: visibleBoard[x][y] == TileState.red ? Colors.red : AppColors.onPrimary,
             child: Center(
               child: Text(
-                visibleBoard[x][y] == "red" ? "" : visibleBoard[x][y], // Show X/O or red box
+                visibleBoard[x][y] == TileState.red ? "" : visibleBoard[x][y].symbol, // Show X/O or red box
                 style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
               ),
             ),
