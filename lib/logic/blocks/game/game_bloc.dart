@@ -5,7 +5,7 @@ import 'game_event.dart';
 import 'game_state.dart';
 
 class GameBloc extends Bloc<GameEvent, GameState> {
-  GameBloc() : super(GameInitial(false)) {
+  GameBloc() : super(GameInitial(onlineMode: true)) {
     // Register the event handlers
     on<StartGame>(_onStartGame);
     on<MakeMove>(_onMakeMove);
@@ -25,38 +25,35 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         (state as GameInitial).onlineMode));
   }
 
-  // Event handler for MakeMove event
   Future<void> _onMakeMove(MakeMove event, Emitter<GameState> emit) async {
     final currentState = state;
     if (currentState is GameInProgress) {
-      final updatedBoard = List<List<TileState>>.from(currentState.board);
-      final updatedVisibleBoard =
-          List<List<TileState>>.from(currentState.visibleBoard);
+      // Create a deep copy of the current state
+      final newState = GameInProgress.copy(currentState, false);
 
-      if (updatedBoard[event.x][event.y] == TileState.empty) {
-        updatedBoard[event.x][event.y] = currentState.currentPlayer;
-        updatedVisibleBoard[event.x][event.y] = currentState.currentPlayer;
+      // Modify the copied board and visibleBoard
+      if (newState.board[event.x][event.y] == TileState.empty) {
+        newState.board[event.x][event.y] = newState.currentPlayer;
+        newState.visibleBoard[event.x][event.y] = newState.currentPlayer;
 
-        // Emit the state immediately so the UI updates
-        emit(GameInProgress(updatedBoard, updatedVisibleBoard,
-            currentState.currentPlayer, currentState.onlineMode));
+        // Emit the updated state (this ensures immutability and triggers UI update)
+        emit(newState);
 
-        // Dispatch the PlaySound event when placing an X or O
-
-        add(PlaySound(currentState.currentPlayer == TileState.X ? "X" : "O"));
+        // Dispatch the PlaySound event
+        add(PlaySound(newState.currentPlayer == TileState.X ? "X" : "O"));
 
         await Future.microtask(() {});
 
-        if(currentState.onlineMode) {
-          // Dispatch the HideMove event after 3 seconds
-          Future.delayed(Duration(seconds: 1)).then((_) {
+        // Dispatch the HideMove event based on the mode
+        if (newState.onlineMode) {
+          Future.delayed(const Duration(seconds: 1), () {
             add(HideMove(event.x, event.y));
           });
-        }else {
+        } else {
           add(HideMove(event.x, event.y));
         }
 
-        // Dispatch the CheckWinner event
+        // Dispatch the CheckWinner event after the move
         _onCheckWinner(emit);
       }
     }
@@ -67,17 +64,17 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     final currentState = state;
     if (currentState is GameInProgress) {
       final updatedVisibleBoard =
-          List<List<TileState>>.from(currentState.board);
+          List<List<TileState>>.from(currentState.visibleBoard);
 
       // Turn the selected box red after the delay
-      // updatedVisibleBoard[event.x][event.y] = TileState.red;
+      updatedVisibleBoard[event.x][event.y] = TileState.red;
 
       // Switch to the next player only after the move is hidden (red box)
       final nextPlayer =
           currentState.currentPlayer == TileState.X ? TileState.O : TileState.X;
 
       emit(GameInProgress(currentState.board, updatedVisibleBoard, nextPlayer,
-          currentState.onlineMode));
+          currentState.onlineMode, active: true));
     }
   }
 
@@ -94,9 +91,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         emit(GameOver("Player ${winner.symbol} wins!"));
       } else if (_isBoardFull(board)) {
         emit(GameOver("It's a draw!"));
-      } else {
-        // Do nothing here to switch the player.
-        // Player switch is handled in HideMove.
       }
     }
   }

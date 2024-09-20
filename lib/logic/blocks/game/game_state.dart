@@ -25,7 +25,7 @@ abstract class GameState extends Equatable {
 class GameInitial extends GameState {
   final bool onlineMode;
 
-  GameInitial(this.onlineMode);
+  GameInitial({required this.onlineMode});
 
   @override
   List<Object?> get props => [onlineMode];
@@ -37,11 +37,22 @@ class GameInProgress extends GameState {
       visibleBoard; // Holds the visible board with red boxes for hidden Xs and Os
   final TileState currentPlayer;
   final bool onlineMode;
+  final bool active;
 
-  GameInProgress(this.board, this.visibleBoard, this.currentPlayer, this.onlineMode);
+  GameInProgress(
+      this.board, this.visibleBoard, this.currentPlayer, this.onlineMode,
+      {this.active = true});
 
   @override
   List<Object?> get props => [board, visibleBoard, currentPlayer];
+
+  GameInProgress.copy(GameInProgress other, isActive)
+      : board = other.board.map((row) => List<TileState>.from(row)).toList(),
+        visibleBoard =
+            other.visibleBoard.map((row) => List<TileState>.from(row)).toList(),
+        currentPlayer = other.currentPlayer,
+        onlineMode = other.onlineMode,
+        active = isActive;
 }
 
 class GameOver extends GameState {

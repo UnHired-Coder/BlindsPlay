@@ -88,59 +88,78 @@ class _GameBoard extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Container(
-              width: boardWidth,
-              // Define a dynamic width for the board if needed
-              height: boardWidth,
-              // Define a dynamic width for the board if needed
-              child: Stack(
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    mainAxisSize: MainAxisSize.min,
-                    children: List.generate(boardSize, (row) {
-                      return _buildRow(context, row, cellWidth);
-                    }),
+            AnimatedOpacity(
+                duration: Duration(milliseconds: 500),
+                // Duration of the animation
+                opacity: state.active ? 1 : 0.5,
+                child: Container(
+                  width: boardWidth,
+                  // Define a dynamic width for the board if needed
+                  height: boardWidth,
+                  // Define a dynamic width for the board if needed
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisSize: MainAxisSize.min,
+                        children: List.generate(boardSize, (row) {
+                          return _buildRow(context, row, cellWidth);
+                        }),
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisSize: MainAxisSize.max,
+                        children: List.generate(boardSize - 1, (index) {
+                          return Container(
+                              width: boardWidth,
+                              height: barWidth,
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Color(0xff7e664c),
+                                    Color(0xfff4b059)
+                                  ],
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                ),
+                                borderRadius: BorderRadius.circular(
+                                    5), // Set the circular radius here
+                              ));
+                        }),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisSize: MainAxisSize.max,
+                        children: List.generate(boardSize - 1, (index) {
+                          return Container(
+                              width: barWidth,
+                              height: boardWidth,
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Color(0xff7e664c),
+                                    Color(0xfff4b059)
+                                  ],
+                                  begin: Alignment.centerLeft,
+                                  end: Alignment.centerRight,
+                                ),
+                                borderRadius: BorderRadius.circular(
+                                    5), // Set the circular radius here
+                              ));
+                        }),
+                      ),
+                      !state.active
+                          ? Text(
+                              "...",
+                              textAlign: TextAlign.center,
+                              style: AppTextStyles.heading1
+                                  .copyWith(color: AppColors.onPrimary),
+                            )
+                          : Text("")
+                    ],
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    mainAxisSize: MainAxisSize.max,
-                    children: List.generate(boardSize - 1, (index) {
-                      return Container(
-                          width: boardWidth,
-                          height: barWidth,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [Color(0xff7e664c), Color(0xfff4b059)],
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                            ),
-                            borderRadius: BorderRadius.circular(
-                                5), // Set the circular radius here
-                          ));
-                    }),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    mainAxisSize: MainAxisSize.max,
-                    children: List.generate(boardSize - 1, (index) {
-                      return Container(
-                          width: barWidth,
-                          height: boardWidth,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [Color(0xff7e664c), Color(0xfff4b059)],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                            ),
-                            borderRadius: BorderRadius.circular(
-                                5), // Set the circular radius here
-                          ));
-                    }),
-                  ),
-                ],
-              ),
-            ),
+                )),
             Text(
               "finding your opponent...",
               textAlign: TextAlign.center,
@@ -165,8 +184,10 @@ class _GameBoard extends StatelessWidget {
             cellWidth: cellWidth,
             tileState: state.visibleBoard[rowIndex][columnIndex],
             onTap: () {
-              BlocProvider.of<GameBloc>(context)
-                  .add(MakeMove(rowIndex, columnIndex));
+              if (state.active) {
+                BlocProvider.of<GameBloc>(context)
+                    .add(MakeMove(rowIndex, columnIndex));
+              }
             });
       }),
     );
