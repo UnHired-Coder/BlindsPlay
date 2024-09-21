@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'colors.dart'; // Import your color definitions
 
 class AppTextStyles {
+  static const TextStyle textVeryLarge = TextStyle(
+    fontSize: 64,
+    fontWeight: FontWeight.bold,
+  );
+
   // Headings
   static const TextStyle heading1 = TextStyle(
     fontSize: 32,

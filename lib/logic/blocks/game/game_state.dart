@@ -20,15 +20,17 @@ extension TileStateExtension on TileState {
 abstract class GameState extends Equatable {
   @override
   List<Object?> get props => [];
+
+  final bool onlineMode;
+  const GameState({this.onlineMode = true});
 }
 
 class GameInitial extends GameState {
-  final bool onlineMode;
-
-  GameInitial({required this.onlineMode});
+  const GameInitial({required super.onlineMode});
 
   @override
-  List<Object?> get props => [onlineMode];
+  List<Object?> get props =>
+      [onlineMode]; // This is optional, already inherited
 }
 
 class GameInProgress extends GameState {
@@ -36,11 +38,9 @@ class GameInProgress extends GameState {
   final List<List<TileState>>
       visibleBoard; // Holds the visible board with red boxes for hidden Xs and Os
   final TileState currentPlayer;
-  final bool onlineMode;
   final bool active;
 
-  GameInProgress(
-      this.board, this.visibleBoard, this.currentPlayer, this.onlineMode,
+  const GameInProgress(this.board, this.visibleBoard, this.currentPlayer,
       {this.active = true});
 
   @override
@@ -51,7 +51,6 @@ class GameInProgress extends GameState {
         visibleBoard =
             other.visibleBoard.map((row) => List<TileState>.from(row)).toList(),
         currentPlayer = other.currentPlayer,
-        onlineMode = other.onlineMode,
         active = isActive;
 }
 
@@ -61,7 +60,8 @@ class GameOver extends GameState {
   final int elapsedTime; // Elapsed time in seconds
   final int moveCount; // Total moves made
 
-  GameOver(this.result, this.finalBoard, this.elapsedTime, this.moveCount);
+  const GameOver(
+      this.result, this.finalBoard, this.elapsedTime, this.moveCount);
 
   @override
   List<Object?> get props => [result, finalBoard, elapsedTime, moveCount];
@@ -70,7 +70,7 @@ class GameOver extends GameState {
 class GameError extends GameState {
   final String error;
 
-  GameError(this.error);
+  const GameError(this.error);
 
   @override
   List<Object?> get props => [error];

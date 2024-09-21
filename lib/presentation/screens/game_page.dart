@@ -5,7 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../logic/blocks/game/game_bloc.dart';
 import '../../logic/blocks/game/game_event.dart';
 import '../../logic/blocks/game/game_state.dart';
+import '../ui/effects/fade_in_widget.dart';
 import '../ui/widgets/gameboard/active_game_board.dart';
+import '../ui/widgets/gameboard/finished_game_board.dart';
 
 class GamePage extends StatelessWidget {
   final int boardSize; // Dynamic board size
@@ -47,9 +49,8 @@ class _GameContent extends StatelessWidget {
           return _buildMessage('Start a new game!');
         } else if (state is GameInProgress) {
           return ActiveGameBoard(state: state, boardSize: boardSize);
-        } else if (state is  GameOver) {
-          return _buildMessage(
-              'Game Over: ${state.result}, Time: ${state.elapsedTime}, Moves: ${state.moveCount} ');
+        } else if (state is GameOver) {
+          return FadeInWidget(child: FinishedGameBoard(state: state));
         } else if (state is GameError) {
           return _buildMessage('Error: ${state.error}');
         } else {

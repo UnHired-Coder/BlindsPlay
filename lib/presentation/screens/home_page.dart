@@ -1,9 +1,9 @@
+import 'package:blindsplay/presentation/ui/widgets/base_cta_ui.dart';
 import 'package:flutter/material.dart';
 import '../../config/colors.dart';
 import '../ui/effects/game_rules_background_gradient.dart';
 import '../ui/sections/game_rules_section.dart';
 import '../ui/sections/home_screen_banner.dart';
-import '../ui/widgets/rounded_corner_cta_button.dart';
 import 'game_page.dart';
 
 class HomePage extends StatelessWidget {
@@ -50,22 +50,23 @@ class HomePage extends StatelessWidget {
   }
 
   Widget CompeteOnlineCta(context) {
-    return RoundedCornerButton(
+    return BaseCtaUi(
+        context: context,
         text: "Compete online!",
-        icon: const AssetImage("assets/ic_lightning.png"),
-        onPressed: () {
+        icon: "assets/ic_lightning.png",
+        onTap: () {
           launchGame(context);
         });
   }
 
   Widget PlayNowCta(context) {
-    return RoundedCornerButton(
-      text: "Play now!",
-      icon: const AssetImage("assets/ic_play.png"),
-      onPressed: () {
-        launchGame(context);
-      },
-    );
+    return BaseCtaUi(
+        context: context,
+        text: "Play now!",
+        icon: "assets/ic_play.png",
+        onTap: () {
+          launchGame(context);
+        });
   }
 
   void launchGame(context) {
