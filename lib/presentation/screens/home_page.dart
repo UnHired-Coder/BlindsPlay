@@ -42,34 +42,38 @@ class HomePage extends StatelessWidget {
                 const SizedBox(height: 16),
                 GameRulesSection(),
                 const SizedBox(height: 60),
-                RoundedCornerButton(
-                  text: "Compete online!",
-                  icon: const AssetImage("assets/ic_lightning.png"),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            const GamePage(boardSize: 3) as Widget,
-                      ),
-                    );
-                  },
-                ),
+                CompeteOnlineCta(context),
                 const SizedBox(height: 30),
-                RoundedCornerButton(
-                  text: "Play now!",
-                  icon: const AssetImage("assets/ic_play.png"),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            const GamePage(boardSize: 3) as Widget,
-                      ),
-                    );
-                  },
-                )
+                PlayNowCta(context)
               ],
             )));
+  }
+
+  Widget CompeteOnlineCta(context) {
+    return RoundedCornerButton(
+        text: "Compete online!",
+        icon: const AssetImage("assets/ic_lightning.png"),
+        onPressed: () {
+          launchGame(context);
+        });
+  }
+
+  Widget PlayNowCta(context) {
+    return RoundedCornerButton(
+      text: "Play now!",
+      icon: const AssetImage("assets/ic_play.png"),
+      onPressed: () {
+        launchGame(context);
+      },
+    );
+  }
+
+  void launchGame(context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const GamePage(boardSize: 3) as Widget,
+      ),
+    );
   }
 }
