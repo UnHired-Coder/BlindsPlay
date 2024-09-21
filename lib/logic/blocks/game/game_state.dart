@@ -57,11 +57,14 @@ class GameInProgress extends GameState {
 
 class GameOver extends GameState {
   final String result;
+  final List<List<TileState>> finalBoard; // Include the final board state
+  final int elapsedTime; // Elapsed time in seconds
+  final int moveCount; // Total moves made
 
-  GameOver(this.result);
+  GameOver(this.result, this.finalBoard, this.elapsedTime, this.moveCount);
 
   @override
-  List<Object?> get props => [result];
+  List<Object?> get props => [result, finalBoard, elapsedTime, moveCount];
 }
 
 class GameError extends GameState {

@@ -1,13 +1,11 @@
 import 'package:blindsplay/config/colors.dart';
-import 'package:blindsplay/config/constants.dart';
-import 'package:blindsplay/presentation/ui/widgets/gameboard/game_board.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../config/text_styles.dart';
 import '../../logic/blocks/game/game_bloc.dart';
 import '../../logic/blocks/game/game_event.dart';
 import '../../logic/blocks/game/game_state.dart';
+import '../ui/widgets/gameboard/active_game_board.dart';
 
 class GamePage extends StatelessWidget {
   final int boardSize; // Dynamic board size
@@ -48,9 +46,10 @@ class _GameContent extends StatelessWidget {
         if (state is GameInitial) {
           return _buildMessage('Start a new game!');
         } else if (state is GameInProgress) {
-          return _GameBoard(state: state, boardSize: boardSize);
+          return ActiveGameBoard(state: state, boardSize: boardSize);
         } else if (state is  GameOver) {
-          return _buildMessage('Game Over: ${state.result}');
+          return _buildMessage(
+              'Game Over: ${state.result}, Time: ${state.elapsedTime}, Moves: ${state.moveCount} ');
         } else if (state is GameError) {
           return _buildMessage('Error: ${state.error}');
         } else {
@@ -66,61 +65,6 @@ class _GameContent extends StatelessWidget {
         message,
         style: const TextStyle(fontSize: 24),
       ),
-    );
-  }
-}
-
-class _GameBoard extends StatelessWidget {
-  final GameInProgress state;
-  final int boardSize; // Dynamic board size
-
-  const _GameBoard({required this.state, required this.boardSize});
-
-  @override
-  Widget build(BuildContext context) {
-    final double boardWidth = boardSize * AppConstants.cellWidth;
-
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            AnimatedOpacity(
-                duration: const Duration(milliseconds: 500),
-                // Duration of the animation
-                opacity: state.active ? 1 : 0.5,
-                child: Container(
-                  width: boardWidth,
-                  // Define a dynamic width for the board if needed
-                  height: boardWidth,
-                  // Define a dynamic width for the board if needed
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      GameBoard(state: state),
-                      !state.active
-                          ? Text(
-                              "...",
-                              textAlign: TextAlign.center,
-                              style: AppTextStyles.heading1
-                                  .copyWith(color: AppColors.onPrimary),
-                            )
-                          : Text("")
-                    ],
-                  ),
-                )),
-            Text(
-              "${state.currentPlayer.symbol}'s move...",
-              textAlign: TextAlign.center,
-              style: AppTextStyles.bodyTextLarge
-                  .copyWith(color: AppColors.onPrimary),
-            )
-          ],
-        )
-      ],
     );
   }
 }
