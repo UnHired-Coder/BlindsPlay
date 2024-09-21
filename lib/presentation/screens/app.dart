@@ -7,9 +7,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../config/button_styles.dart';
+import '../../config/screen_size.dart';
 import '../../config/text_styles.dart';
 import '../../logic/blocks/game/game_bloc.dart';
-import '../ui/widgets/CustomNavItemUi.dart';
+import '../ui/widgets/customer_nav_item_ui.dart';
 import 'home_page.dart';
 import 'leaderboard_page.dart';
 
@@ -42,6 +43,8 @@ final List<Map<String, dynamic>> pages = [
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    ScreenSize.init(context);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Blind Moves',

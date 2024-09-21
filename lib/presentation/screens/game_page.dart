@@ -1,4 +1,5 @@
 import 'package:blindsplay/config/colors.dart';
+import 'package:blindsplay/presentation/ui/widgets/gameboard/game_board.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -89,7 +90,7 @@ class _GameBoard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             AnimatedOpacity(
-                duration: Duration(milliseconds: 500),
+                duration: const Duration(milliseconds: 500),
                 // Duration of the animation
                 opacity: state.active ? 1 : 0.5,
                 child: Container(
@@ -100,55 +101,7 @@ class _GameBoard extends StatelessWidget {
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        mainAxisSize: MainAxisSize.min,
-                        children: List.generate(boardSize, (row) {
-                          return _buildRow(context, row, cellWidth);
-                        }),
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        mainAxisSize: MainAxisSize.max,
-                        children: List.generate(boardSize - 1, (index) {
-                          return Container(
-                              width: boardWidth,
-                              height: barWidth,
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    Color(0xff7e664c),
-                                    Color(0xfff4b059)
-                                  ],
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter,
-                                ),
-                                borderRadius: BorderRadius.circular(
-                                    5), // Set the circular radius here
-                              ));
-                        }),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        mainAxisSize: MainAxisSize.max,
-                        children: List.generate(boardSize - 1, (index) {
-                          return Container(
-                              width: barWidth,
-                              height: boardWidth,
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    Color(0xff7e664c),
-                                    Color(0xfff4b059)
-                                  ],
-                                  begin: Alignment.centerLeft,
-                                  end: Alignment.centerRight,
-                                ),
-                                borderRadius: BorderRadius.circular(
-                                    5), // Set the circular radius here
-                              ));
-                        }),
-                      ),
+                      GameBoard(state: state),
                       !state.active
                           ? Text(
                               "...",
@@ -170,100 +123,5 @@ class _GameBoard extends StatelessWidget {
         )
       ],
     );
-  }
-
-  // Build each row
-  Widget _buildRow(BuildContext context, int rowIndex, double cellWidth) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      mainAxisSize: MainAxisSize.min,
-      children: List.generate(boardSize, (columnIndex) {
-        return _GameTile(
-            x: rowIndex,
-            y: columnIndex,
-            cellWidth: cellWidth,
-            tileState: state.visibleBoard[rowIndex][columnIndex],
-            onTap: () {
-              if (state.active) {
-                BlocProvider.of<GameBloc>(context)
-                    .add(MakeMove(rowIndex, columnIndex));
-              }
-            });
-      }),
-    );
-  }
-}
-
-class _GameTile extends StatelessWidget {
-  final int x, y;
-  final double cellWidth;
-  final TileState tileState;
-  final VoidCallback onTap;
-
-  const _GameTile({
-    required this.x,
-    required this.y,
-    required this.cellWidth,
-    required this.tileState,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: cellWidth, // Adjust tile width based on board size if needed
-        height: cellWidth, // Adjust tile height based on board size if needed
-        decoration: BoxDecoration(
-          color: tileState == TileState.red ? Colors.red : AppColors.primary,
-        ),
-        child: Center(
-          child:
-              _buildTileContent(tileState), // Use custom UI based on tileState
-        ),
-      ),
-    );
-  }
-
-  // Custom UI for each TileState
-  Widget _buildTileContent(TileState tileState) {
-    switch (tileState) {
-      case TileState.X:
-        return _buildCustomXUI(); // Custom UI for X
-      case TileState.O:
-        return _buildCustomOUI(); // Custom UI for O
-      case TileState.red:
-        return _buildRedBoxUI(); // Custom UI for red state
-      case TileState.empty:
-      default:
-        return _buildEmptyUI(); // Custom UI for empty state
-    }
-  }
-
-  // Custom UI for X state
-  Widget _buildCustomXUI() {
-    return Icon(Icons.close,
-        size: 60, color: Color(0xffFF2A2A)); // Example: X icon
-  }
-
-  // Custom UI for O state
-  Widget _buildCustomOUI() {
-    return Icon(Icons.radio_button_unchecked,
-        size: 60, color: Color(0xff8EFE82)); // Example: O icon
-  }
-
-  // Custom UI for red state (this could be a red background or different layout)
-  Widget _buildRedBoxUI() {
-    return Container(
-      width: 40,
-      height: 40,
-      color: Colors.redAccent, // This can be any custom design you want
-    );
-  }
-
-  // Custom UI for empty state
-  Widget _buildEmptyUI() {
-    return Container(); // Empty container or any placeholder UI for an empty state
   }
 }

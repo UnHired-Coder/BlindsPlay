@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../config/colors.dart';
 import '../../config/text_styles.dart';
-import '../ui/widgets/RoundedCornerButton.dart';
+import '../ui/widgets/home_screen_banner.dart';
+import '../ui/widgets/rounded_corner_cta_button.dart';
 import 'game_page.dart';
 
 class HomePage extends StatelessWidget {
@@ -32,16 +33,7 @@ class HomePage extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image(
-                      image: AssetImage('assets/tic_tac_toe_anim.png'),
-                      width: screenWidth / 4,
-                    ),
-                  ],
-                ),
+                const HomeScreenBanner(),
                 SizedBox(height: 16),
                 Row(
                   mainAxisSize: MainAxisSize.min,
