@@ -52,13 +52,13 @@ class GameTile extends StatelessWidget {
 
   // Custom UI for X state
   Widget _buildCustomXUI() {
-    return Icon(Icons.close,
+    return const Icon(Icons.close,
         size: 60, color: Color(0xffFF2A2A)); // Example: X icon
   }
 
   // Custom UI for O state
   Widget _buildCustomOUI() {
-    return Icon(Icons.radio_button_unchecked,
+    return const Icon(Icons.radio_button_unchecked,
         size: 60, color: Color(0xff8EFE82)); // Example: O icon
   }
 

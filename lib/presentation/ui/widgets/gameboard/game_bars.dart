@@ -30,7 +30,7 @@ class HorizontalGameBar extends StatelessWidget {
         width: AppConstants.barWidth,
         height: AppConstants.boardWidth,
         decoration: BoxDecoration(
-          gradient: LinearGradient(
+          gradient: const LinearGradient(
             colors: [Color(0xff7e664c), Color(0xfff4b059)],
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,

@@ -1,4 +1,5 @@
 import 'package:blindsplay/config/colors.dart';
+import 'package:blindsplay/config/constants.dart';
 import 'package:blindsplay/presentation/ui/widgets/gameboard/game_board.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,7 @@ class GamePage extends StatelessWidget {
 
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
-      iconTheme: IconThemeData(color: AppColors.onPrimary),
+      iconTheme: const IconThemeData(color: AppColors.onPrimary),
       backgroundColor: AppColors.primary,
       title: const SizedBox.shrink(),
     );
@@ -48,7 +49,7 @@ class _GameContent extends StatelessWidget {
           return _buildMessage('Start a new game!');
         } else if (state is GameInProgress) {
           return _GameBoard(state: state, boardSize: boardSize);
-        } else if (state is GameOver) {
+        } else if (state is  GameOver) {
           return _buildMessage('Game Over: ${state.result}');
         } else if (state is GameError) {
           return _buildMessage('Error: ${state.error}');
@@ -77,9 +78,7 @@ class _GameBoard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const double cellWidth = 150;
-    final double boardWidth = boardSize * cellWidth;
-    const double barWidth = 15;
+    final double boardWidth = boardSize * AppConstants.cellWidth;
 
     return Row(
       mainAxisSize: MainAxisSize.max,
@@ -114,7 +113,7 @@ class _GameBoard extends StatelessWidget {
                   ),
                 )),
             Text(
-              "finding your opponent...",
+              "${state.currentPlayer.symbol}'s move...",
               textAlign: TextAlign.center,
               style: AppTextStyles.bodyTextLarge
                   .copyWith(color: AppColors.onPrimary),
