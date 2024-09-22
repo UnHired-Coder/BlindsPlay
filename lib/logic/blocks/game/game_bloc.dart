@@ -7,6 +7,7 @@ import 'game_state.dart';
 
 class GameBloc extends Bloc<GameEvent, GameState> {
   final TimerBloc timerBloc = TimerBloc();
+  StreamSubscription<int>? _timerSubscription;
   int _moveCount = 0;
 
   GameBloc() : super(const GameInitial(onlineMode: true)) {
@@ -18,6 +19,17 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     on<UpdateBoard>(_onUpdateBoard);
     on<PlaySound>(_onPlaySound);
     on<WaitingToStart>(_onStartWaiting);
+
+    // Listen to TimerBloc state and emit new elapsed time
+    _timerSubscription = timerBloc.stream.listen((elapsedTime) {
+      if (state is GameInProgress) {
+        final currentState = state as GameInProgress;
+        // Emit updated state with new elapsed time
+        final newState = GameInProgress.copy(currentState, elapsedTime: elapsedTime);
+        print(newState.elapsedTime);
+        emit(newState);
+      }
+    });
   }
 
   // Event handler for StartGame event
@@ -45,6 +57,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     List.generate(3, (_) => List.generate(3, (_) => TileState.empty));
 
     emit(GameInProgress(initialBoard, visibleBoard, TileState.X));
+    timerBloc.startCountdown(const Duration(days: 1));
   }
 
 
@@ -53,7 +66,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     final currentState = state;
     if (currentState is GameInProgress) {
       // Create a deep copy of the current state
-      final newState = GameInProgress.copy(currentState, false);
+      final newState = GameInProgress.copy(currentState, isActive: false);
 
       // Modify the copied board and visibleBoard
       if (newState.board[event.x][event.y] == TileState.empty) {
