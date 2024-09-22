@@ -46,11 +46,13 @@ class _GameContent extends StatelessWidget {
     return BlocBuilder<GameBloc, GameState>(
       builder: (context, state) {
         if (state is GameInitial) {
-          return _buildMessage('Start a new game!');
+          return FadeInWidget(key: Key("GameStart"), child:  _buildMessage('Getting ready...'));
+        } else if (state is GameWaiting) {
+          return FadeInWidget(key: Key("GameStart"), child:  _buildMessage('Game starts in : ${state.countdown}s'));
         } else if (state is GameInProgress) {
-          return ActiveGameBoard(state: state, boardSize: boardSize);
+          return FadeInWidget(key: Key("ActiveGameBoard"),child: ActiveGameBoard(state: state, boardSize: boardSize));
         } else if (state is GameOver) {
-          return FadeInWidget(child: FinishedGameBoard(state: state));
+          return FadeInWidget(key: Key("FinishedGameBoard"), child: FinishedGameBoard(state: state));
         } else if (state is GameError) {
           return _buildMessage('Error: ${state.error}');
         } else {
@@ -64,7 +66,7 @@ class _GameContent extends StatelessWidget {
     return Center(
       child: Text(
         message,
-        style: const TextStyle(fontSize: 24),
+        style: const TextStyle(fontSize: 24, color: AppColors.onPrimary),
       ),
     );
   }

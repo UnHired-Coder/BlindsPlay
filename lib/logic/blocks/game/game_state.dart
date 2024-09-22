@@ -33,6 +33,15 @@ class GameInitial extends GameState {
       [onlineMode]; // This is optional, already inherited
 }
 
+class GameWaiting extends GameState {
+  final int countdown;
+
+  const GameWaiting(this.countdown, {bool onlineMode = true}) : super(onlineMode: onlineMode);
+
+  @override
+  List<Object?> get props => [countdown, onlineMode];
+}
+
 class GameInProgress extends GameState {
   final List<List<TileState>> board; // Holds the actual board state (Xs and Os)
   final List<List<TileState>>

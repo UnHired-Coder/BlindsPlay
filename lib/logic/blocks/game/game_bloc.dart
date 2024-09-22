@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:blindsplay/logic/blocks/util/timer_block.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'game_event.dart';
 import 'game_state.dart';
 
 class GameBloc extends Bloc<GameEvent, GameState> {
-  Timer? _timer;
-  int _elapsedTime = 0; // Track elapsed time in seconds
-  int _moveCount = 0; // Track number of moves made
+  final TimerBloc timerBloc = TimerBloc();
+  int _moveCount = 0;
 
   GameBloc() : super(const GameInitial(onlineMode: true)) {
     // Register the event handlers
@@ -17,30 +17,36 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     on<EndGame>(_onEndGame);
     on<UpdateBoard>(_onUpdateBoard);
     on<PlaySound>(_onPlaySound);
+    on<WaitingToStart>(_onStartWaiting);
   }
 
   // Event handler for StartGame event
   Future<void> _onStartGame(StartGame event, Emitter<GameState> emit) async {
     emit(const GameInitial(onlineMode: true));
 
+    // Start waiting state with a countdown
+    add(const WaitingToStart(5));
+  }
+
+  // Event handler for StartWaiting event
+  Future<void> _onStartWaiting(WaitingToStart event, Emitter<GameState> emit) async {
+    // Start the countdown timer
+    timerBloc.startCountdown(Duration(seconds: event.countdown));
+
+    // Emit the waiting state
+    for (int i = 0; i < event.countdown; i++) {
+      await Future.delayed(const Duration(seconds: 1));
+      emit(GameWaiting(event.countdown - i - 1));
+    }
+
     List<List<TileState>> initialBoard =
     List.generate(3, (_) => List.generate(3, (_) => TileState.empty));
     List<List<TileState>> visibleBoard =
     List.generate(3, (_) => List.generate(3, (_) => TileState.empty));
 
-    // Start the timer
-    _startTimer();
-
     emit(GameInProgress(initialBoard, visibleBoard, TileState.X));
   }
 
-  void _startTimer() {
-    _elapsedTime = 0; // Reset elapsed time
-    _timer?.cancel();
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      _elapsedTime++;
-    });
-  }
 
   // Event handler for MakeMove event
   Future<void> _onMakeMove(MakeMove event, Emitter<GameState> emit) async {
@@ -107,9 +113,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
       if (winner != TileState.empty) {
         emit(GameOver(
-            "Player ${winner.symbol} wins!", board, _elapsedTime, _moveCount));
+            "Player ${winner.symbol} wins!", board, timerBloc.state, _moveCount));
       } else if (_isBoardFull(board)) {
-        emit(GameOver("It's a draw!", board, _elapsedTime, _moveCount));
+        emit(GameOver("It's a draw!", board, timerBloc.state, _moveCount));
       }
     }
   }
@@ -118,7 +124,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   Future<void> _onEndGame(EndGame event, Emitter<GameState> emit) async {
     final currentState = state;
     if (currentState is GameInProgress) {
-      emit(GameOver(event.result, currentState.board, _elapsedTime,
+      emit(GameOver(event.result, currentState.board, timerBloc.state,
           _moveCount)); // Reset values for GameOver
     }
   }
@@ -177,16 +183,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   // Method to play the sound
   Future<void> _playSound(String soundType) async {
     final player = AudioPlayer(); // assuming you're using the audio players package
-    if (soundType == "X") {
-      await player.play('assets/placed_bait.mp3', isLocal: true, volume: 0.6);
-    } else {
-      await player.play('assets/placed_bait.mp3', isLocal: true, volume: 0.6);
-    }
+    await player.play('assets/placed_bait.mp3', isLocal: true, volume: 0.6);
   }
 
   @override
   Future<void> close() {
-    _timer?.cancel();
+    timerBloc.close();
     return super.close();
   }
 }

@@ -8,6 +8,15 @@ abstract class GameEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+class WaitingToStart extends GameEvent {
+  final int countdown;
+
+  const WaitingToStart(this.countdown);
+
+  @override
+  List<Object?> get props => [countdown];
+}
+
 class StartGame extends GameEvent {}
 
 class MakeMove extends GameEvent {
