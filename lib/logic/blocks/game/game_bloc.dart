@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:blindsplay/logic/blocks/util/timer_block.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../config/constants.dart';
 import 'game_event.dart';
 import 'game_state.dart';
 
@@ -98,7 +99,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           await Future.delayed(const Duration(seconds: 1));
         }
 
-        await Future.delayed(Duration(seconds: 1)); //Simulate API/ Socket
+        await Future.delayed(const Duration(
+            milliseconds: AppConstants.delayToHide)); //Simulate API/ Socket
         add(HideMove(event.x, event.y));
 
         // Check for winner after the move
