@@ -50,7 +50,7 @@ class _GameContent extends StatelessWidget {
         } else if (state is GameWaiting) {
           return FadeInWidget(key: Key("GameStart"), child:  _buildMessage('Game starts in : ${state.countdown}s'));
         } else if (state is GameInProgress) {
-          return FadeInWidget(key: Key("ActiveGameBoard"),child: Container(color: AppColors.accent,width: double.infinity, child: ActiveGameBoard(state: state, boardSize: boardSize)),);
+          return FadeInWidget(key: Key("ActiveGameBoard"),child: ActiveGameBoard(state: state, boardSize: boardSize));
         } else if (state is GameOver) {
           return FadeInWidget(key: Key("FinishedGameBoard"), child: FinishedGameBoard(state: state));
         } else if (state is GameError) {
