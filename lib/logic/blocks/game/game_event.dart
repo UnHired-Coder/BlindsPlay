@@ -17,7 +17,14 @@ class WaitingToStart extends GameEvent {
   List<Object?> get props => [countdown];
 }
 
-class StartGame extends GameEvent {}
+class StartGame extends GameEvent {
+  final GameMode gameMode;
+
+  const StartGame(this.gameMode);
+
+  @override
+  List<Object?> get props => [gameMode];
+}
 
 class MakeMove extends GameEvent {
   final int x, y;

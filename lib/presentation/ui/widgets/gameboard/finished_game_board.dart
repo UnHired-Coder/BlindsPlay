@@ -59,7 +59,7 @@ class FinishedGameBoard extends StatelessWidget {
         text: "Compete online!",
         icon: "assets/ic_lightning.png",
         onTap: () {
-          launchGame(context);
+          launchGame(context, GameMode.onlineMultiplayer);
         });
   }
 
@@ -69,11 +69,11 @@ class FinishedGameBoard extends StatelessWidget {
         text: "Play now!",
         icon: "assets/ic_play.png",
         onTap: () {
-          launchGame(context);
+          launchGame(context, GameMode.offline2Players);
         });
   }
 
-  void launchGame(context) {
-    BlocProvider.of<GameBloc>(context).add(StartGame());
+  void launchGame(context, GameMode gameMode) {
+    BlocProvider.of<GameBloc>(context).add(StartGame(gameMode));
   }
 }

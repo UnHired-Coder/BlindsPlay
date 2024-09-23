@@ -1,3 +1,4 @@
+import 'package:blindsplay/logic/blocks/game/game_state.dart';
 import 'package:blindsplay/presentation/ui/widgets/base_cta_ui.dart';
 import 'package:flutter/material.dart';
 import '../../config/colors.dart';
@@ -55,7 +56,7 @@ class HomePage extends StatelessWidget {
         text: "Compete online!",
         icon: "assets/ic_lightning.png",
         onTap: () {
-          launchGame(context);
+          launchGame(context, GameMode.onlineMultiplayer);
         });
   }
 
@@ -65,15 +66,16 @@ class HomePage extends StatelessWidget {
         text: "Play now!",
         icon: "assets/ic_play.png",
         onTap: () {
-          launchGame(context);
+          launchGame(context, GameMode.offline2Players);
         });
   }
 
-  void launchGame(context) {
+  void launchGame(context, GameMode gameMode) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const GamePage(boardSize: 3) as Widget,
+        builder: (context) =>
+            GamePage(boardSize: 3, gameMode: gameMode) as Widget,
       ),
     );
   }

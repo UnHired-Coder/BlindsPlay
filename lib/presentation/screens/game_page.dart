@@ -11,8 +11,10 @@ import '../ui/widgets/gameboard/finished_game_board.dart';
 
 class GamePage extends StatelessWidget {
   final int boardSize; // Dynamic board size
+  final GameMode gameMode;
 
-  const GamePage({Key? key, required this.boardSize}) : super(key: key);
+  const GamePage({Key? key, required this.boardSize, required this.gameMode})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,7 @@ class GamePage extends StatelessWidget {
       appBar: !kIsWeb ? _buildAppBar() : null,
       body: BlocProvider(
         create: (context) =>
-            GameBloc()..add(StartGame()), // Start game when the page is created
+            GameBloc(gameMode: gameMode)..add(StartGame(gameMode)), // Start game when the page is created
         child: _GameContent(boardSize: boardSize),
       ),
     );

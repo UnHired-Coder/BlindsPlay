@@ -17,7 +17,7 @@ class _FadeInWidgetState extends State<FadeInWidget> {
     super.initState();
 
     // Trigger the opacity change after a delay to make it visible
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(const Duration(milliseconds: 500), () {
       setState(() {
         _opacity = 1.0; // Set to fully visible
       });
@@ -28,7 +28,7 @@ class _FadeInWidgetState extends State<FadeInWidget> {
   Widget build(BuildContext context) {
     return AnimatedOpacity(
       opacity: _opacity,
-      duration: Duration(seconds: 2),
+      duration: const Duration(milliseconds: 500),
       curve: Curves.easeIn, // Optional: Add a curve for the animation
       child: widget.child, // Use the child passed to FadeInWidget
     );

@@ -1,4 +1,5 @@
 import 'package:blindsplay/config/colors.dart';
+import 'package:blindsplay/logic/blocks/game/game_state.dart';
 import 'package:blindsplay/presentation/screens/about_page.dart';
 import 'package:blindsplay/presentation/screens/game_page.dart';
 import 'package:blindsplay/presentation/screens/profile_page.dart';
@@ -19,8 +20,10 @@ final List<Map<String, dynamic>> pages = [
     'title': 'Play Game',
     'icon': 'assets/ic_play.png',
     'page': BlocProvider(
-      create: (context) => GameBloc(),
-      child: GamePage(boardSize:3),
+      create: (context) => GameBloc(
+        gameMode: GameMode.offline2Players,
+      ),
+      child: GamePage(boardSize: 3, gameMode: GameMode.offline2Players),
     ),
   },
   {
@@ -186,7 +189,9 @@ class _MainScreenState extends State<MainScreen> {
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(width: 10),
-                    Image(image: AssetImage(pages[index]['icon']),),
+                    Image(
+                      image: AssetImage(pages[index]['icon']),
+                    ),
                   ],
                 ),
               ),

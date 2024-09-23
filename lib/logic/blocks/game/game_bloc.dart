@@ -7,10 +7,12 @@ import 'game_state.dart';
 
 class GameBloc extends Bloc<GameEvent, GameState> {
   final TimerBloc timerBloc = TimerBloc();
+  GameMode gameMode; // Add GameMode as a final property
+
   StreamSubscription<int>? _timerSubscription;
   int _moveCount = 0;
 
-  GameBloc() : super(const GameInitial(onlineMode: true)) {
+  GameBloc({required this.gameMode}) : super(const GameInitial()) {
     // Register the event handlers
     on<StartGame>(_onStartGame);
     on<MakeMove>(_onMakeMove);
@@ -25,8 +27,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       if (state is GameInProgress) {
         final currentState = state as GameInProgress;
         // Emit updated state with new elapsed time
-        final newState = GameInProgress.copy(currentState, elapsedTime: elapsedTime);
-        print(newState.elapsedTime);
+        final newState =
+            GameInProgress.copy(currentState, elapsedTime: elapsedTime);
         emit(newState);
       }
     });
@@ -34,14 +36,22 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
   // Event handler for StartGame event
   Future<void> _onStartGame(StartGame event, Emitter<GameState> emit) async {
-    emit(const GameInitial(onlineMode: true));
+    gameMode = event.gameMode;
+
+    emit(const GameInitial());
+
+    // API CALL IN ONLINE MODE
+    /*if(gameMode == GameMode.onlineMultiplayer){
+
+    }*/
 
     // Start waiting state with a countdown
     add(const WaitingToStart(5));
   }
 
   // Event handler for StartWaiting event
-  Future<void> _onStartWaiting(WaitingToStart event, Emitter<GameState> emit) async {
+  Future<void> _onStartWaiting(
+      WaitingToStart event, Emitter<GameState> emit) async {
     // Start the countdown timer
     timerBloc.startCountdown(Duration(seconds: event.countdown));
 
@@ -52,17 +62,31 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     }
 
     List<List<TileState>> initialBoard =
-    List.generate(3, (_) => List.generate(3, (_) => TileState.empty));
+        List.generate(3, (_) => List.generate(3, (_) => TileState.empty));
     List<List<TileState>> visibleBoard =
-    List.generate(3, (_) => List.generate(3, (_) => TileState.empty));
+        List.generate(3, (_) => List.generate(3, (_) => TileState.empty));
 
     emit(GameInProgress(initialBoard, visibleBoard, TileState.X));
     timerBloc.startCountdown(const Duration(days: 1));
   }
 
+  Future<void> _onMakeMoveAgainstPC(
+      MakeMove event, Emitter<GameState> emit) async {}
+
+  Future<void> _onMakeMoveAgainstOnlinePlayer(
+      MakeMove event, Emitter<GameState> emit) async {}
+
+  Future<void> _onMakeMoveAgainstPlayer(
+      MakeMove event, Emitter<GameState> emit) async {}
 
   // Event handler for MakeMove event
   Future<void> _onMakeMove(MakeMove event, Emitter<GameState> emit) async {
+    switch (gameMode) {
+      case GameMode.onlineMultiplayer:
+      case GameMode.offline2Players:
+      case GameMode.offlineAgainstPC:
+    }
+
     final currentState = state;
     if (currentState is GameInProgress) {
       // Create a deep copy of the current state
@@ -85,7 +109,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         await Future.microtask(() {});
 
         // Dispatch the HideMove event based on the mode
-        if (newState.onlineMode) {
+        if (gameMode == GameMode.onlineMultiplayer) {
           await Future.delayed(const Duration(seconds: 1));
         }
         add(HideMove(event.x, event.y));
@@ -101,14 +125,14 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     final currentState = state;
     if (currentState is GameInProgress) {
       final updatedVisibleBoard =
-      List<List<TileState>>.from(currentState.visibleBoard);
+          List<List<TileState>>.from(currentState.visibleBoard);
 
       // Turn the selected box red after the delay
       updatedVisibleBoard[event.x][event.y] = TileState.red;
 
       // Switch to the next player
       final nextPlayer =
-      currentState.currentPlayer == TileState.X ? TileState.O : TileState.X;
+          currentState.currentPlayer == TileState.X ? TileState.O : TileState.X;
 
       emit(GameInProgress(currentState.board, updatedVisibleBoard, nextPlayer,
           active: true));
@@ -125,8 +149,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       TileState winner = _getWinner(board);
 
       if (winner != TileState.empty) {
-        emit(GameOver(
-            "Player ${winner.symbol} wins!", board, timerBloc.state, _moveCount));
+        emit(GameOver("Player ${winner.symbol} wins!", board, timerBloc.state,
+            _moveCount));
       } else if (_isBoardFull(board)) {
         emit(GameOver("It's a draw!", board, timerBloc.state, _moveCount));
       }
@@ -143,9 +167,10 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   }
 
   // Event handler for UpdateBoard event
-  Future<void> _onUpdateBoard(UpdateBoard event, Emitter<GameState> emit) async {
+  Future<void> _onUpdateBoard(
+      UpdateBoard event, Emitter<GameState> emit) async {
     List<List<TileState>> visibleBoard =
-    List.generate(3, (_) => List.generate(3, (_) => TileState.empty));
+        List.generate(3, (_) => List.generate(3, (_) => TileState.empty));
     emit(GameInProgress(event.board, visibleBoard, TileState.X));
   }
 
@@ -195,7 +220,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
   // Method to play the sound
   Future<void> _playSound(String soundType) async {
-    final player = AudioPlayer(); // assuming you're using the audio players package
+    final player =
+        AudioPlayer(); // assuming you're using the audio players package
     await player.play('assets/placed_bait.mp3', isLocal: true, volume: 0.6);
   }
 
