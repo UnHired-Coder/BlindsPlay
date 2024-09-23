@@ -70,23 +70,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     timerBloc.startCountdown(const Duration(days: 1));
   }
 
-  Future<void> _onMakeMoveAgainstPC(
-      MakeMove event, Emitter<GameState> emit) async {}
-
-  Future<void> _onMakeMoveAgainstOnlinePlayer(
-      MakeMove event, Emitter<GameState> emit) async {}
-
-  Future<void> _onMakeMoveAgainstPlayer(
-      MakeMove event, Emitter<GameState> emit) async {}
-
   // Event handler for MakeMove event
   Future<void> _onMakeMove(MakeMove event, Emitter<GameState> emit) async {
-    switch (gameMode) {
-      case GameMode.onlineMultiplayer:
-      case GameMode.offline2Players:
-      case GameMode.offlineAgainstPC:
-    }
-
     final currentState = state;
     if (currentState is GameInProgress) {
       // Create a deep copy of the current state
@@ -112,6 +97,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         if (gameMode == GameMode.onlineMultiplayer) {
           await Future.delayed(const Duration(seconds: 1));
         }
+
+        await Future.delayed(Duration(seconds: 1)); //Simulate API/ Socket
         add(HideMove(event.x, event.y));
 
         // Check for winner after the move
@@ -130,12 +117,67 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       // Turn the selected box red after the delay
       updatedVisibleBoard[event.x][event.y] = TileState.red;
 
-      // Switch to the next player
       final nextPlayer =
           currentState.currentPlayer == TileState.X ? TileState.O : TileState.X;
 
       emit(GameInProgress(currentState.board, updatedVisibleBoard, nextPlayer,
+          active: false));
+
+      switch (gameMode) {
+        case GameMode.offlineAgainstPC:
+          await _onPCMakesMove(emit);
+        case GameMode.onlineMultiplayer:
+          await _onOnlineOpponentMakesMove(emit);
+        case GameMode.offline2Players:
+          await _onOpponentMakesMove(emit);
+      }
+    }
+  }
+
+  Future<void> _onPCMakesMove(Emitter<GameState> emit) async {
+    // Switch to the next player
+    final currentState = state;
+    if (currentState is GameInProgress) {
+      emit(GameInProgress(currentState.board, currentState.visibleBoard,
+          currentState.currentPlayer,
           active: true));
+    }
+  }
+
+  Future<void> _onOnlineOpponentMakesMove(Emitter<GameState> emit) async {
+    final currentState = state;
+    if (currentState is GameInProgress) {
+      await Future.delayed(Duration(seconds: 4)); //Simulate API/ Socket
+
+      emit(GameInProgress(currentState.board, currentState.visibleBoard,
+          currentState.currentPlayer,
+          active: true));
+    }
+  }
+
+  Future<void> _onOpponentMakesMove(Emitter<GameState> emit) async {
+    final currentState = state;
+    if (currentState is GameInProgress) {
+      emit(GameInProgress(currentState.board, currentState.visibleBoard,
+          currentState.currentPlayer,
+          active: true));
+    }
+  }
+
+  // Computer's move after player's turn and red delay
+  Future<void> _computerMove(Emitter<GameState> emit) async {
+    final currentState = state;
+    if (currentState is GameInProgress) {
+      // Simple AI logic to make a move (could be enhanced to be smarter)
+      for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+          if (currentState.board[i][j] == TileState.empty) {
+            // Make the computer's move
+            add(MakeMove(i, j));
+            return;
+          }
+        }
+      }
     }
   }
 
