@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../config/constants.dart';
 import '../../../../logic/blocks/game/game_state.dart';
 
 class GameTile extends StatelessWidget {
@@ -7,15 +8,17 @@ class GameTile extends StatelessWidget {
   final double cellWidth;
   final TileState tileState;
   final VoidCallback onTap;
+  final String placeHolder;
 
-  const GameTile({
-    super.key,
-    required this.x,
-    required this.y,
-    required this.cellWidth,
-    required this.tileState,
-    required this.onTap,
-  });
+  // Refactored constructor to initialize placeHolder with randomIcon
+  const GameTile(
+      {super.key,
+      required this.x,
+      required this.y,
+      required this.cellWidth,
+      required this.tileState,
+      required this.onTap,
+      required this.placeHolder}); // Initialize placeHolder with randomIcon
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +28,7 @@ class GameTile extends StatelessWidget {
         width: cellWidth, // Adjust tile width based on board size if needed
         height: cellWidth, // Adjust tile height based on board size if needed
         decoration: BoxDecoration(
-          color: tileState == TileState.red ? Colors.red : null,
+          color: Colors.transparent,
         ),
         child: Center(
           child:
@@ -64,10 +67,11 @@ class GameTile extends StatelessWidget {
 
   // Custom UI for red state (this could be a red background or different layout)
   Widget _buildRedBoxUI() {
-    return Container(
-      width: 40,
-      height: 40,
-      color: Colors.redAccent, // This can be any custom design you want
+    return SizedBox(
+      width: AppConstants.cellWidth,
+      height: AppConstants.cellWidth, // This can be any custom design you want
+      child:
+          Image(image: AssetImage(placeHolder)), // Use randomized placeholder
     );
   }
 

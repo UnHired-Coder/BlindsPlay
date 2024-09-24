@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:blindsplay/logic/blocks/util/timer_block.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,7 +11,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   final TimerBloc timerBloc = TimerBloc();
   GameMode gameMode; // Add GameMode as a final property
 
-  StreamSubscription<int>? _timerSubscription;
+  late List<List<String>> placeHolders =  List.generate(3, (_) => List.generate(3, (_) => ""));
   int _moveCount = 0;
 
   GameBloc({required this.gameMode}) : super(const GameInitial()) {
@@ -23,8 +24,10 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     on<PlaySound>(_onPlaySound);
     on<WaitingToStart>(_onStartWaiting);
 
+    randomizePlaceholders();
+
     // Listen to TimerBloc state and emit new elapsed time
-    _timerSubscription = timerBloc.stream.listen((elapsedTime) {
+    timerBloc.stream.listen((elapsedTime) {
       if (state is GameInProgress) {
         final currentState = state as GameInProgress;
         // Emit updated state with new elapsed time
@@ -42,12 +45,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     emit(const GameInitial());
 
     // API CALL IN ONLINE MODE
-    /*if(gameMode == GameMode.onlineMultiplayer){
-
-    }*/
+    if(gameMode == GameMode.onlineMultiplayer){
+     //Todo:: Online call
+    }
 
     // Start waiting state with a countdown
-    add(const WaitingToStart(5));
+    add(const WaitingToStart(AppConstants.waitingToStartTime));
   }
 
   // Event handler for StartWaiting event
@@ -67,7 +70,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     List<List<TileState>> visibleBoard =
         List.generate(3, (_) => List.generate(3, (_) => TileState.empty));
 
-    emit(GameInProgress(initialBoard, visibleBoard, TileState.X));
+    emit(GameInProgress(initialBoard, visibleBoard, TileState.X,
+        placeHolders: placeHolders));
     timerBloc.startCountdown(const Duration(days: 1));
   }
 
@@ -123,7 +127,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           currentState.currentPlayer == TileState.X ? TileState.O : TileState.X;
 
       emit(GameInProgress(currentState.board, updatedVisibleBoard, nextPlayer,
-          active: false));
+          active: false, placeHolders: placeHolders));
 
       switch (gameMode) {
         case GameMode.offlineAgainstPC:
@@ -142,7 +146,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     if (currentState is GameInProgress) {
       emit(GameInProgress(currentState.board, currentState.visibleBoard,
           currentState.currentPlayer,
-          active: true));
+          active: true, placeHolders: placeHolders));
     }
   }
 
@@ -153,7 +157,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
       emit(GameInProgress(currentState.board, currentState.visibleBoard,
           currentState.currentPlayer,
-          active: true));
+          active: true, placeHolders: placeHolders));
     }
   }
 
@@ -162,7 +166,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     if (currentState is GameInProgress) {
       emit(GameInProgress(currentState.board, currentState.visibleBoard,
           currentState.currentPlayer,
-          active: true));
+          active: true, placeHolders: placeHolders));
     }
   }
 
@@ -215,7 +219,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       UpdateBoard event, Emitter<GameState> emit) async {
     List<List<TileState>> visibleBoard =
         List.generate(3, (_) => List.generate(3, (_) => TileState.empty));
-    emit(GameInProgress(event.board, visibleBoard, TileState.X));
+    emit(GameInProgress(event.board, visibleBoard, TileState.X,
+        placeHolders: placeHolders));
   }
 
   TileState _getWinner(List<List<TileState>> board) {
@@ -273,5 +278,20 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   Future<void> close() {
     timerBloc.close();
     return super.close();
+  }
+
+  randomizePlaceholders() {
+    placeHolders =
+        List.generate(3, (_) => List.generate(3, (_) => getRandomIcon()));
+
+    Timer.periodic(const Duration(seconds: AppConstants.refreshPlaceholdersDuration), (timer){
+      placeHolders =
+          List.generate(3, (_) => List.generate(3, (_) => getRandomIcon()));
+    });
+  }
+
+  String getRandomIcon(){
+    var rng = Random();
+    return "meme/${rng.nextInt(11) + 1}.png";
   }
 }

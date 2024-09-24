@@ -48,7 +48,7 @@ class _GameContent extends StatelessWidget {
     return BlocBuilder<GameBloc, GameState>(
       builder: (context, state) {
         if (state is GameInitial) {
-          return FadeInWidget(key: Key("GameStart"), child:  _buildMessage('Getting ready...'));
+          return FadeInWidget(key: Key("GameStart"), child:  _buildMessage('Get ready...'));
         } else if (state is GameWaiting) {
           return FadeInWidget(key: Key("GameStart"), child:  _buildMessage('Game starts in : ${state.countdown}s'));
         } else if (state is GameInProgress) {

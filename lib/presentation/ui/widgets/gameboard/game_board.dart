@@ -53,6 +53,7 @@ class GameBoard extends StatelessWidget {
             y: columnIndex,
             cellWidth: AppConstants.cellWidth,
             tileState: state.visibleBoard[rowIndex][columnIndex],
+            placeHolder: state.placeHolders[rowIndex][columnIndex],
             onTap: () {
               if (state.active) {
                 BlocProvider.of<GameBloc>(context)

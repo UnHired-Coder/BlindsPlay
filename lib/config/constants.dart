@@ -5,4 +5,6 @@ class AppConstants {
   static const double barWidth = 15.0;
 
   static const int delayToHide = 500;
+  static const int waitingToStartTime = 1;
+  static const int refreshPlaceholdersDuration = 3;
 }
