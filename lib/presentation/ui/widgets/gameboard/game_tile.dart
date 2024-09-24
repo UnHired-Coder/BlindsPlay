@@ -8,7 +8,7 @@ class GameTile extends StatelessWidget {
   final double cellWidth;
   final TileState tileState;
   final VoidCallback onTap;
-  final String placeHolder;
+  final String? placeHolder;
 
   // Refactored constructor to initialize placeHolder with randomIcon
   const GameTile(
@@ -70,8 +70,7 @@ class GameTile extends StatelessWidget {
     return SizedBox(
       width: AppConstants.cellWidth,
       height: AppConstants.cellWidth, // This can be any custom design you want
-      child:
-          Image(image: AssetImage(placeHolder)), // Use randomized placeholder
+      child: Image(image: AssetImage(placeHolder!)), // Use randomized placeholder
     );
   }
 

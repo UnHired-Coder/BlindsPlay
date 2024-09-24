@@ -36,7 +36,7 @@ class ActiveGameBoard extends StatelessWidget {
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      GameBoard(state: state),
+                      GameBoard(visibleBoard: state.visibleBoard, placeHolders: state.placeHolders, active: state.active,),
                       !state.active
                           ? Text(
                               "...",

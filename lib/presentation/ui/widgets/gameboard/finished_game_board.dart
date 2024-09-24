@@ -1,4 +1,6 @@
+import 'package:blindsplay/config/constants.dart';
 import 'package:blindsplay/logic/blocks/game/game_event.dart';
+import 'package:blindsplay/presentation/ui/widgets/gameboard/game_board.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,7 +26,15 @@ class FinishedGameBoard extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            HomeScreenBanner(),
+            Container(
+              width: AppConstants.boardWidth,
+              // Define a dynamic width for the board if needed
+              height: AppConstants.boardWidth,
+              child: GameBoard(
+                  visibleBoard: state.finalBoard,
+                  placeHolders: null,
+                  active: true),
+            ),
             const SizedBox(height: 24),
             Text(
               state.result,

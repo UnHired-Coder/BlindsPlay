@@ -9,9 +9,13 @@ import 'game_bars.dart';
 import 'game_tile.dart';
 
 class GameBoard extends StatelessWidget {
-  GameInProgress state;
+  final List<List<TileState>>
+  visibleBoard;
+  final List<List<String>>? placeHolders;
+  final bool active;
 
-  GameBoard({super.key, required this.state});
+
+  GameBoard({super.key, required this.visibleBoard, required this.placeHolders, required this.active});
 
   @override
   Widget build(BuildContext context) {
@@ -52,10 +56,10 @@ class GameBoard extends StatelessWidget {
             x: rowIndex,
             y: columnIndex,
             cellWidth: AppConstants.cellWidth,
-            tileState: state.visibleBoard[rowIndex][columnIndex],
-            placeHolder: state.placeHolders[rowIndex][columnIndex],
+            tileState: visibleBoard[rowIndex][columnIndex],
+            placeHolder: placeHolders?[rowIndex][columnIndex],
             onTap: () {
-              if (state.active) {
+              if (active) {
                 BlocProvider.of<GameBloc>(context)
                     .add(MakeMove(rowIndex, columnIndex));
               }
