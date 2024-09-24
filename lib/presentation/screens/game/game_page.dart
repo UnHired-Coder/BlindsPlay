@@ -2,12 +2,12 @@ import 'package:blindsplay/config/colors.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../logic/blocks/game/game_bloc.dart';
-import '../../logic/blocks/game/game_event.dart';
-import '../../logic/blocks/game/game_state.dart';
-import '../ui/effects/fade_in_widget.dart';
-import '../ui/widgets/gameboard/active_game_board.dart';
-import '../ui/widgets/gameboard/finished_game_board.dart';
+import '../../../logic/blocks/game/game_bloc.dart';
+import '../../../logic/blocks/game/game_event.dart';
+import '../../../logic/blocks/game/game_state.dart';
+import '../../ui/effects/fade_in_widget.dart';
+import '../../ui/widgets/gameboard/active_game_board.dart';
+import '../../ui/widgets/gameboard/finished_game_board.dart';
 
 class GamePage extends StatelessWidget {
   final int boardSize; // Dynamic board size

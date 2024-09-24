@@ -2,6 +2,8 @@ import 'package:blindsplay/config/colors.dart';
 import 'package:flutter/material.dart';
 
 class AboutPage extends StatelessWidget {
+  const AboutPage();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -12,4 +14,3 @@ class AboutPage extends StatelessWidget {
     );
   }
 }
-

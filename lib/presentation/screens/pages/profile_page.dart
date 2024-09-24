@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../config/colors.dart';
-
+import '../../../config/colors.dart';
 
 class ProfilePage extends StatelessWidget {
+  const ProfilePage();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,4 +15,3 @@ class ProfilePage extends StatelessWidget {
     );
   }
 }
-
