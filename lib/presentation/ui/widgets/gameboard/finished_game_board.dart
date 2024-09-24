@@ -27,7 +27,7 @@ class FinishedGameBoard extends StatelessWidget {
             HomeScreenBanner(),
             const SizedBox(height: 24),
             Text(
-              "You Won!",
+              state.result,
               textAlign: TextAlign.center,
               style: AppTextStyles.textVeryLarge
                   .copyWith(color: AppColors.onPrimary),
