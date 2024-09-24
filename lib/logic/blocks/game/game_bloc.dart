@@ -2,8 +2,10 @@ import 'dart:async';
 import 'dart:math';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:blindsplay/logic/blocks/util/timer_block.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../config/constants.dart';
+import '../util/TicTacToeHelper.dart';
 import 'game_event.dart';
 import 'game_state.dart';
 
@@ -11,7 +13,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   final TimerBloc timerBloc = TimerBloc();
   GameMode gameMode; // Add GameMode as a final property
 
-  late List<List<String>> placeHolders =  List.generate(3, (_) => List.generate(3, (_) => ""));
+  late List<List<String>> placeHolders =
+      List.generate(3, (_) => List.generate(3, (_) => ""));
   int _moveCount = 0;
 
   GameBloc({required this.gameMode}) : super(const GameInitial()) {
@@ -45,8 +48,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     emit(const GameInitial());
 
     // API CALL IN ONLINE MODE
-    if(gameMode == GameMode.onlineMultiplayer){
-     //Todo:: Online call
+    if (gameMode == GameMode.onlineMultiplayer) {
+      //Todo:: Online call
     }
 
     // Start waiting state with a countdown
@@ -141,13 +144,71 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   }
 
   Future<void> _onPCMakesMove(Emitter<GameState> emit) async {
-    // Switch to the next player
     final currentState = state;
+
     if (currentState is GameInProgress) {
-      emit(GameInProgress(currentState.board, currentState.visibleBoard,
-          currentState.currentPlayer,
-          active: true, placeHolders: placeHolders));
+      // Get the best move based on the smart move maker logic
+      final move = _getBestMove(currentState.board, currentState.currentPlayer);
+
+      if (move != null) {
+        // Apply the move and update the state
+        await _applyMove(emit, move.x.toInt(), move.y.toInt(), currentState);
+      }
+
+      await _onCheckWinner(emit);
     }
+  }
+
+// Step 1: Select the best move using smart move logic
+  Point? _getBestMove(List<List<TileState>> board, TileState currentPlayer) {
+    // Call the smart move maker logic defined earlier
+    return TicTacToeHelper().getSmartMove(board, currentPlayer);
+  }
+
+// Step 2: Apply the move and update the game state
+  Future<void> _applyMove(Emitter<GameState> emit, int row, int col, GameInProgress currentState) async {
+    // Create a new game state with PC's move
+    final newState = GameInProgress.copy(currentState, isActive: false);
+
+    // Simulate a delay before applying the move (for UX purposes)
+    await Future.delayed(const Duration(milliseconds: AppConstants.delayToHide));
+
+    // Update the board with the PC's move
+    newState.board[row][col] = newState.currentPlayer;
+    newState.visibleBoard[row][col] = newState.currentPlayer;
+
+    // Increment the move count
+    _moveCount++;
+
+    // Emit the updated game state with PC's move
+    emit(newState);
+
+    // Play sound associated with the move (X or O)
+    _playMoveSound(newState.currentPlayer);
+
+    // Simulate a delay before hiding the move
+    await Future.delayed(const Duration(milliseconds: AppConstants.delayToHide));
+
+    // Update the board to show the red marker for the move
+    await _highlightMove(emit, row, col, newState);
+  }
+
+// Step 3: Play sound based on the player's move
+  void _playMoveSound(TileState player) {
+    add(PlaySound(player == TileState.X ? "X" : "O"));
+  }
+
+// Step 4: Highlight the move and switch to the next player
+  Future<void> _highlightMove(Emitter<GameState> emit, int row, int col, GameInProgress currentState) async {
+    // Update the visible board to highlight the last move
+    final updatedVisibleBoard = List<List<TileState>>.from(currentState.visibleBoard);
+    updatedVisibleBoard[row][col] = TileState.red;
+
+    // Switch to the next player
+    final nextPlayer = currentState.currentPlayer == TileState.X ? TileState.O : TileState.X;
+
+    // Emit the new state with updated board and switch to the next player
+    emit(GameInProgress(currentState.board, updatedVisibleBoard, nextPlayer, active: true, placeHolders: placeHolders));
   }
 
   Future<void> _onOnlineOpponentMakesMove(Emitter<GameState> emit) async {
@@ -167,23 +228,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       emit(GameInProgress(currentState.board, currentState.visibleBoard,
           currentState.currentPlayer,
           active: true, placeHolders: placeHolders));
-    }
-  }
-
-  // Computer's move after player's turn and red delay
-  Future<void> _computerMove(Emitter<GameState> emit) async {
-    final currentState = state;
-    if (currentState is GameInProgress) {
-      // Simple AI logic to make a move (could be enhanced to be smarter)
-      for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
-          if (currentState.board[i][j] == TileState.empty) {
-            // Make the computer's move
-            add(MakeMove(i, j));
-            return;
-          }
-        }
-      }
     }
   }
 
@@ -284,13 +328,15 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     placeHolders =
         List.generate(3, (_) => List.generate(3, (_) => getRandomIcon()));
 
-    Timer.periodic(const Duration(seconds: AppConstants.refreshPlaceholdersDuration), (timer){
+    Timer.periodic(
+        const Duration(seconds: AppConstants.refreshPlaceholdersDuration),
+        (timer) {
       placeHolders =
           List.generate(3, (_) => List.generate(3, (_) => getRandomIcon()));
     });
   }
 
-  String getRandomIcon(){
+  String getRandomIcon() {
     var rng = Random();
     return "meme/${rng.nextInt(11) + 1}.png";
   }
