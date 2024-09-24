@@ -56,7 +56,7 @@ class HomePage extends StatelessWidget {
         text: "Compete online!",
         icon: "assets/ic_lightning.png",
         onTap: () {
-          launchGame(context, GameMode.onlineMultiplayer);
+          launchGame(context, GameMode.offlineAgainstPC);
         });
   }
 

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:math';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:blindsplay/logic/blocks/util/timer_block.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../config/constants.dart';
 import '../util/TicTacToeHelper.dart';
@@ -34,8 +33,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       if (state is GameInProgress) {
         final currentState = state as GameInProgress;
         // Emit updated state with new elapsed time
-        final newState =
-            GameInProgress.copy(currentState, elapsedTime: elapsedTime);
+        final newState = currentState.copyWith(elapsedTime: elapsedTime);
         emit(newState);
       }
     });
@@ -73,8 +71,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     List<List<TileState>> visibleBoard =
         List.generate(3, (_) => List.generate(3, (_) => TileState.empty));
 
-    emit(GameInProgress(initialBoard, visibleBoard, TileState.X,
+    emit(GameInProgress(
+        board: initialBoard,
+        visibleBoard: visibleBoard,
+        currentPlayer: TileState.X,
         placeHolders: placeHolders));
+
     timerBloc.startCountdown(const Duration(days: 1));
   }
 
@@ -82,22 +84,18 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   Future<void> _onMakeMove(MakeMove event, Emitter<GameState> emit) async {
     final currentState = state;
     if (currentState is GameInProgress) {
-      // Create a deep copy of the current state
-      final newState = GameInProgress.copy(currentState, isActive: false);
-
-      // Modify the copied board and visibleBoard
-      if (newState.board[event.x][event.y] == TileState.empty) {
+      if (currentState.board[event.x][event.y] == TileState.empty) {
+        final newState = currentState.copyWith(active: false);
         newState.board[event.x][event.y] = newState.currentPlayer;
         newState.visibleBoard[event.x][event.y] = newState.currentPlayer;
-
-        // Increment the move count
-        _moveCount++;
-
         // Emit the updated state
         emit(newState);
 
         // Dispatch the PlaySound event
         add(PlaySound(newState.currentPlayer == TileState.X ? "X" : "O"));
+
+        // Increment the move count
+        _moveCount++;
 
         await Future.microtask(() {});
 
@@ -129,8 +127,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       final nextPlayer =
           currentState.currentPlayer == TileState.X ? TileState.O : TileState.X;
 
-      emit(GameInProgress(currentState.board, updatedVisibleBoard, nextPlayer,
-          active: false, placeHolders: placeHolders));
+      final newState = currentState.copyWith(
+          visibleBoard: updatedVisibleBoard,
+          currentPlayer: nextPlayer,
+          active: false,
+          placeHolders: placeHolders);
+
+      emit(newState);
 
       switch (gameMode) {
         case GameMode.offlineAgainstPC:
@@ -166,12 +169,14 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   }
 
 // Step 2: Apply the move and update the game state
-  Future<void> _applyMove(Emitter<GameState> emit, int row, int col, GameInProgress currentState) async {
+  Future<void> _applyMove(Emitter<GameState> emit, int row, int col,
+      GameInProgress currentState) async {
     // Create a new game state with PC's move
-    final newState = GameInProgress.copy(currentState, isActive: false);
+    final newState = currentState.copyWith(active: false);
 
     // Simulate a delay before applying the move (for UX purposes)
-    await Future.delayed(const Duration(milliseconds: AppConstants.delayToHide));
+    await Future.delayed(
+        const Duration(milliseconds: AppConstants.delayToHide));
 
     // Update the board with the PC's move
     newState.board[row][col] = newState.currentPlayer;
@@ -187,7 +192,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     _playMoveSound(newState.currentPlayer);
 
     // Simulate a delay before hiding the move
-    await Future.delayed(const Duration(milliseconds: AppConstants.delayToHide));
+    await Future.delayed(
+        const Duration(milliseconds: AppConstants.delayToHide));
 
     // Update the board to show the red marker for the move
     await _highlightMove(emit, row, col, newState);
@@ -199,16 +205,24 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   }
 
 // Step 4: Highlight the move and switch to the next player
-  Future<void> _highlightMove(Emitter<GameState> emit, int row, int col, GameInProgress currentState) async {
+  Future<void> _highlightMove(Emitter<GameState> emit, int row, int col,
+      GameInProgress currentState) async {
     // Update the visible board to highlight the last move
-    final updatedVisibleBoard = List<List<TileState>>.from(currentState.visibleBoard);
+    final updatedVisibleBoard =
+        List<List<TileState>>.from(currentState.visibleBoard);
     updatedVisibleBoard[row][col] = TileState.red;
 
     // Switch to the next player
-    final nextPlayer = currentState.currentPlayer == TileState.X ? TileState.O : TileState.X;
+    final nextPlayer =
+        currentState.currentPlayer == TileState.X ? TileState.O : TileState.X;
 
     // Emit the new state with updated board and switch to the next player
-    emit(GameInProgress(currentState.board, updatedVisibleBoard, nextPlayer, active: true, placeHolders: placeHolders));
+    final newState = currentState.copyWith(
+        visibleBoard: updatedVisibleBoard,
+        currentPlayer: nextPlayer,
+        active: true);
+
+    emit(newState);
   }
 
   Future<void> _onOnlineOpponentMakesMove(Emitter<GameState> emit) async {
@@ -216,18 +230,16 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     if (currentState is GameInProgress) {
       await Future.delayed(Duration(seconds: 4)); //Simulate API/ Socket
 
-      emit(GameInProgress(currentState.board, currentState.visibleBoard,
-          currentState.currentPlayer,
-          active: true, placeHolders: placeHolders));
+      final newState = currentState.copyWith(active: true);
+      emit(newState);
     }
   }
 
   Future<void> _onOpponentMakesMove(Emitter<GameState> emit) async {
     final currentState = state;
     if (currentState is GameInProgress) {
-      emit(GameInProgress(currentState.board, currentState.visibleBoard,
-          currentState.currentPlayer,
-          active: true, placeHolders: placeHolders));
+      final newState = currentState.copyWith(active: true);
+      emit(newState);
     }
   }
 
@@ -240,11 +252,16 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       // Check for winner in rows, columns, and diagonals
       TileState winner = _getWinner(board);
 
-      if (winner != TileState.empty) {
-        emit(GameOver("Player ${winner.symbol} wins!", board, timerBloc.state,
-            _moveCount));
-      } else if (_isBoardFull(board)) {
-        emit(GameOver("It's a draw!", board, timerBloc.state, _moveCount));
+      final result = winner != TileState.empty
+          ? "Player ${winner.symbol} wins!"
+          : "It's a draw!";
+
+      if (winner != TileState.empty || _isBoardFull(board)) {
+        emit(GameOver(
+            result: result,
+            finalBoard: board,
+            elapsedTime: timerBloc.state,
+            moveCount: _moveCount));
       }
     }
   }
@@ -253,8 +270,11 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   Future<void> _onEndGame(EndGame event, Emitter<GameState> emit) async {
     final currentState = state;
     if (currentState is GameInProgress) {
-      emit(GameOver(event.result, currentState.board, timerBloc.state,
-          _moveCount)); // Reset values for GameOver
+      emit(GameOver(
+          result: event.result,
+          finalBoard: currentState.board,
+          elapsedTime: timerBloc.state,
+          moveCount: _moveCount)); // Reset values for GameOver
     }
   }
 
@@ -263,7 +283,10 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       UpdateBoard event, Emitter<GameState> emit) async {
     List<List<TileState>> visibleBoard =
         List.generate(3, (_) => List.generate(3, (_) => TileState.empty));
-    emit(GameInProgress(event.board, visibleBoard, TileState.X,
+    emit(GameInProgress(
+        board: event.board,
+        visibleBoard: visibleBoard,
+        currentPlayer: TileState.X,
         placeHolders: placeHolders));
   }
 
