@@ -25,33 +25,36 @@ class MobileLayout extends StatelessWidget {
       color: AppColors.primary,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          // Aligns elements between top and bottom
-          crossAxisAlignment: CrossAxisAlignment.center,
+        child: Stack( // Use Stack for positioning elements freely
           children: [
             Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Positioned.fill(
-                    child: Align(
-                  alignment: Alignment.centerRight,
-                  child: Image.asset(
-                    "assets/ic_user.png",
-                    width: 32,
-                    height: 32,
-                  ),
-                )), // Aligns to the bottom
-                const SizedBox(height: 20),
-                HomeScreenBanner(),
-                const SizedBox(height: 20),
-                GameRulesSection(),
-                const SizedBox(height: 60),
-                CompeteOnlineCta(context),
-                const SizedBox(height: 30),
-                PlayNowCta(context),
+                Column(
+                  children: [
+                    const SizedBox(height: 100),
+                    HomeScreenBanner(),
+                    const SizedBox(height: 20),
+                    GameRulesSection(),
+                    const SizedBox(height: 60),
+                    CompeteOnlineCta(context),
+                    const SizedBox(height: 30),
+                    PlayNowCta(context),
+                  ],
+                ),
+                CustomAppBar(false), // Aligns to the bottom
               ],
             ),
-            CustomAppBar(false), // Aligns to the bottom
+            Positioned( // Positioned widget inside Stack to align the image
+              top: 10,
+              right: 10,
+              child: Image.asset(
+                "assets/ic_user.png",
+                width: 32,
+                height: 32,
+              ),
+            ), // Image aligned to top right with 10 padding
           ],
         ),
       ),
