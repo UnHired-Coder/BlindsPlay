@@ -4,7 +4,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:blindsplay/logic/blocks/util/timer_block.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../config/constants.dart';
-import '../util/TicTacToeHelper.dart';
+import '../util/tic_tac_toe_pc_move_helper.dart';
 import 'game_event.dart';
 import 'game_state.dart';
 
