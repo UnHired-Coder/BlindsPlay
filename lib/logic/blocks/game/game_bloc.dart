@@ -130,7 +130,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       final newState = currentState.copyWith(
           visibleBoard: updatedVisibleBoard,
           currentPlayer: nextPlayer,
-          active: false);
+          active: false,
+      placeHolders: placeHolders);
 
       emit(newState);
 
