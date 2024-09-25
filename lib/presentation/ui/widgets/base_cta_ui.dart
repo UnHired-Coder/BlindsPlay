@@ -10,6 +10,6 @@ Widget BaseCtaUi({
   return RoundedCornerButton(
     text: text,                 // Use the passed text
     icon: AssetImage(icon),     // Convert the string to AssetImage
-    onPressed: onTap,           // Use the passed onTap function
+    onPressed: onTap, // Use the passed onTap function
   );
 }

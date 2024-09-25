@@ -2,6 +2,7 @@ import 'package:blindsplay/config/colors.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../config/constants.dart';
 import '../../../logic/blocks/game/game_bloc.dart';
 import '../../../logic/blocks/game/game_event.dart';
 import '../../../logic/blocks/game/game_state.dart';
@@ -22,8 +23,8 @@ class GamePage extends StatelessWidget {
       backgroundColor: AppColors.primary,
       appBar: !kIsWeb ? _buildAppBar() : null,
       body: BlocProvider(
-        create: (context) =>
-            GameBloc(gameMode: gameMode)..add(StartGame(gameMode)), // Start game when the page is created
+        create: (context) => GameBloc(gameMode: gameMode)
+          ..add(StartGame(gameMode)), // Start game when the page is created
         child: _GameContent(boardSize: boardSize),
       ),
     );
@@ -48,13 +49,20 @@ class _GameContent extends StatelessWidget {
     return BlocBuilder<GameBloc, GameState>(
       builder: (context, state) {
         if (state is GameInitial) {
-          return FadeInWidget(key: Key("GameStart"), child:  _buildMessage('Get ready...'));
+          return FadeInWidget(
+              key: Key("GameStart"), child: _buildMessage('Get ready...'));
         } else if (state is GameWaiting) {
-          return FadeInWidget(key: Key("GameStart"), child:  _buildMessage('Game starts in : ${state.countdown}s'));
+          return FadeInWidget(
+              key: Key("GameStart"),
+              child: _buildMessage('Game starts in : ${state.countdown}s'));
         } else if (state is GameInProgress) {
-          return FadeInWidget(key: Key("ActiveGameBoard"),child: ActiveGameBoard(state: state, boardSize: boardSize));
+          return FadeInWidget(
+              key: Key("ActiveGameBoard"),
+              child: ActiveGameBoard(state: state, boardSize: boardSize));
         } else if (state is GameOver) {
-          return FadeInWidget(key: Key("FinishedGameBoard"), child: FinishedGameBoard(state: state));
+          return FadeInWidget(
+              key: Key("FinishedGameBoard"),
+              child: FinishedGameBoard(state: state));
         } else if (state is GameError) {
           return _buildMessage('Error: ${state.error}');
         } else {
@@ -68,7 +76,10 @@ class _GameContent extends StatelessWidget {
     return Center(
       child: Text(
         message,
-        style: const TextStyle(fontSize: 24, color: AppColors.onPrimary),
+        style: const TextStyle(
+            fontSize: 24,
+            color: AppColors.onPrimary,
+            fontFamily:  AppConstants.fontFamily1),
       ),
     );
   }

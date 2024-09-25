@@ -1,6 +1,8 @@
 import 'package:blindsplay/config/colors.dart';
 import 'package:flutter/material.dart';
 
+import '../../../config/constants.dart';
+
 class CustomNavItemUi extends StatelessWidget {
   final bool isSelected;
   final String label;
@@ -34,9 +36,10 @@ class CustomNavItemUi extends StatelessWidget {
                 label,
                 maxLines: 1,
                 style: TextStyle(
-                  color: isSelected ? AppColors.accent : AppColors.surface,
-                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                ),
+                    color: isSelected ? AppColors.accent : AppColors.surface,
+                    fontWeight:
+                        isSelected ? FontWeight.bold : FontWeight.normal,
+                    fontFamily:  AppConstants.fontFamily1),
               )
             ],
           ),

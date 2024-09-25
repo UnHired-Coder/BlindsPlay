@@ -1,6 +1,4 @@
-import 'package:blindsplay/config/spacing.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 
 import '../../../../config/colors.dart';
 import '../../../../config/constants.dart';

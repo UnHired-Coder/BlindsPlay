@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../config/colors.dart';
+import '../../../config/constants.dart';
 
 class RoundedCornerButton extends StatelessWidget {
   final String text;
@@ -38,10 +39,9 @@ class RoundedCornerButton extends StatelessWidget {
           Text(
             text,
             style: TextStyle(
-              fontSize: 16, // Text size
-              fontWeight: FontWeight.w400,
-              fontFamily: 'Itim', // Specify the font family if needed
-            ),
+                fontSize: 16, // Text size
+                fontWeight: FontWeight.w400,
+                fontFamily:  AppConstants.fontFamily1),
           ),
         ],
       ),
