@@ -25,7 +25,7 @@ class _MainScreenState extends State<MainScreen> {
       scrolledUnderElevation: 0,
       backgroundColor: AppColors.primary,
       title: Text(
-        'Blind Moves',
+        'TicTac Memo',
         style: AppTextStyles.heading2.copyWith(color: AppColors.accent),
       ),
       leading: Padding(

@@ -10,10 +10,7 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Blind Moves',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      title: 'TicTac Memo',
       home: Center(child: MainScreen()),
     );
   }
