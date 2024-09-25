@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import '../../../../config/colors.dart';
 import '../../../../config/text_styles.dart';
 import '../../../model/PageModel.dart';
+import '../../../ui/sections/game_rules_section.dart';
+import '../../../ui/sections/home_screen_banner.dart';
+import '../../../ui/widgets/common.dart';
 
 class MobileLayout extends StatelessWidget {
   final ValueChanged<int> onTabSelected; // To handle tab selection
@@ -20,48 +23,37 @@ class MobileLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: AppColors.primary,
-      child: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.all(40.0),
-              itemCount: pageNavDestinations.length,
-              itemBuilder: (context, index) {
-                PageNavModel pageModel = pageNavDestinations[index]; // Use PageModel
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Update the selected index
-                      onTabSelected(index);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => pageModel.page, // Access page from PageModel
-                        ),
-                      );
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          pageModel.title, // Access title from PageModel
-                          style: AppTextStyles.button,
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(width: 10),
-                        Image(
-                          image: AssetImage(pageModel.icon), // Access icon from PageModel
-                        ),
-                      ],
-                    ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          // Aligns elements between top and bottom
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Column(
+              children: [
+                Positioned.fill(
+                    child: Align(
+                  alignment: Alignment.centerRight,
+                  child: Image.asset(
+                    "assets/ic_user.png",
+                    width: 32,
+                    height: 32,
                   ),
-                );
-              },
+                )), // Aligns to the bottom
+                const SizedBox(height: 20),
+                HomeScreenBanner(),
+                const SizedBox(height: 20),
+                GameRulesSection(),
+                const SizedBox(height: 60),
+                CompeteOnlineCta(context),
+                const SizedBox(height: 30),
+                PlayNowCta(context),
+              ],
             ),
-          ),
-          // Optionally add a footer or any additional elements here
-        ],
+            CustomAppBar(false), // Aligns to the bottom
+          ],
+        ),
       ),
     );
   }

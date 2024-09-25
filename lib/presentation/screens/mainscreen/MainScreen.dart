@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../../config/colors.dart';
 import '../../../config/text_styles.dart';
+import '../../ui/widgets/common.dart';
 import '../pages.dart';
 
 class MainScreen extends StatefulWidget {
@@ -21,62 +22,37 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-  AppBar _buildAppBar() {
-    return AppBar(
-      scrolledUnderElevation: 0,
-      backgroundColor: AppColors.primary,
-      title: Row(
-        children: [
-          Image.asset(
-            "assets/favicon.png",
-            width: 57.4,
-            height: 37.9,
-          ),
-          Text(
-            'Tic Tac Memo',
-            style: AppTextStyles.bodyText.copyWith(color: AppColors.onPrimary),
-          )
-        ],
-      ),
-      leading: null,
-      centerTitle: !kIsWeb,
-    );
-  }
-
-  Widget _buildLayout() {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        if (constraints.maxWidth > 1000) {
-          return WebLayout(
+  Widget _buildLayout(isWeb) {
+    return isWeb
+        ? WebLayout(
             selectedIndex: _selectedIndex,
             onTabSelected: _onTabSelected,
             tabs: APP_TABS,
-          );
-        } else {
-          return MobileLayout(
+          )
+        : MobileLayout(
             selectedIndex: _selectedIndex,
             onTabSelected: _onTabSelected,
             pageWidgets: APP_TABS,
           );
-        }
-      },
-    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.primary,
-      appBar: PreferredSize(
-        preferredSize: kIsWeb ? Size.fromHeight(100) : Size.zero,
-        child: Padding(
-          padding: kIsWeb
-              ? EdgeInsets.symmetric(horizontal: 100, vertical: 20)
-              : EdgeInsets.zero,
-          child: _buildAppBar(),
+    return LayoutBuilder(builder: (context, constraints) {
+      final isWeb = (constraints.maxWidth > 1000);
+
+      return Scaffold(
+        backgroundColor: AppColors.primary,
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(100),
+          child: isWeb
+              ? Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 100, vertical: 20),
+                  child: CustomAppBar(isWeb))
+              : const SizedBox.shrink(),
         ),
-      ),
-      body: _buildLayout(),
-    );
+        body: _buildLayout(isWeb),
+      );
+    });
   }
 }

@@ -9,13 +9,19 @@ import 'game_bars.dart';
 import 'game_tile.dart';
 
 class GameBoard extends StatelessWidget {
-  final List<List<TileState>>
-  visibleBoard;
+  final List<List<TileState>> visibleBoard;
   final List<List<String>>? placeHolders;
   final bool active;
+  final double cellWidth;
+  final int boardSize;
 
-
-  GameBoard({super.key, required this.visibleBoard, required this.placeHolders, required this.active});
+  GameBoard(
+      {super.key,
+      required this.visibleBoard,
+      required this.placeHolders,
+      required this.active,
+      required this.cellWidth,
+      required this.boardSize});
 
   @override
   Widget build(BuildContext context) {
@@ -25,21 +31,21 @@ class GameBoard extends StatelessWidget {
         Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           mainAxisSize: MainAxisSize.min,
-          children: List.generate(AppConstants.boardSize, (row) {
+          children: List.generate(boardSize, (row) {
             return _buildRow(context, row);
           }),
         ),
         Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           mainAxisSize: MainAxisSize.max,
-          children: List.generate(AppConstants.boardSize - 1, (index) {
+          children: List.generate(boardSize - 1, (index) {
             return const VerticalGameBar();
           }),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           mainAxisSize: MainAxisSize.max,
-          children: List.generate(AppConstants.boardSize - 1, (index) {
+          children: List.generate(boardSize - 1, (index) {
             return const HorizontalGameBar();
           }),
         )
@@ -51,11 +57,11 @@ class GameBoard extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       mainAxisSize: MainAxisSize.min,
-      children: List.generate(AppConstants.boardSize, (columnIndex) {
+      children: List.generate(boardSize, (columnIndex) {
         return GameTile(
             x: rowIndex,
             y: columnIndex,
-            cellWidth: AppConstants.cellWidth,
+            cellWidth: cellWidth,
             tileState: visibleBoard[rowIndex][columnIndex],
             placeHolder: placeHolders?[rowIndex][columnIndex],
             onTap: () {

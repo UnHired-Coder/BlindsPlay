@@ -8,7 +8,6 @@ import '../../../../config/colors.dart';
 import '../../../../config/text_styles.dart';
 import '../../../../logic/blocks/game/game_bloc.dart';
 import '../../../../logic/blocks/game/game_state.dart';
-import '../../sections/home_screen_banner.dart';
 import '../base_cta_ui.dart';
 
 class FinishedGameBoard extends StatelessWidget {
@@ -31,9 +30,12 @@ class FinishedGameBoard extends StatelessWidget {
               // Define a dynamic width for the board if needed
               height: AppConstants.boardWidth,
               child: GameBoard(
-                  visibleBoard: state.finalBoard,
-                  placeHolders: null,
-                  active: true),
+                visibleBoard: state.finalBoard,
+                placeHolders: null,
+                active: true,
+                cellWidth: AppConstants.cellWidth,
+                boardSize: AppConstants.boardSize,
+              ),
             ),
             const SizedBox(height: 24),
             Text(

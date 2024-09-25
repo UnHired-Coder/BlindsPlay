@@ -43,6 +43,8 @@ class ActiveGameBoard extends StatelessWidget {
                               visibleBoard: state.visibleBoard,
                               placeHolders: state.placeHolders,
                               active: state.active,
+                              cellWidth: AppConstants.cellWidth,
+                              boardSize: AppConstants.boardSize,
                             ),
                             !state.active
                                 ? Text(
@@ -71,7 +73,7 @@ class ActiveGameBoard extends StatelessWidget {
             child: Padding(
                 padding: constraints.maxWidth > 1000
                     ? const EdgeInsets.all(100)
-                    : EdgeInsets.zero,
+                    : const EdgeInsets.all(20),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,

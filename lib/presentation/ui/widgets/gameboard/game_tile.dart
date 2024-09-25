@@ -68,8 +68,8 @@ class GameTile extends StatelessWidget {
   // Custom UI for red state (this could be a red background or different layout)
   Widget _buildRedBoxUI() {
     return SizedBox(
-      width: AppConstants.cellWidth,
-      height: AppConstants.cellWidth, // This can be any custom design you want
+      width: cellWidth,
+      height: cellWidth, // This can be any custom design you want
       child: Image(image: AssetImage(placeHolder!)), // Use randomized placeholder
     );
   }

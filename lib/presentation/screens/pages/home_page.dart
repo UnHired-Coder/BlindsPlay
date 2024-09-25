@@ -6,6 +6,7 @@ import '../../model/PageModel.dart';
 import '../../ui/effects/game_rules_background_gradient.dart';
 import '../../ui/sections/game_rules_section.dart';
 import '../../ui/sections/home_screen_banner.dart';
+import '../../ui/widgets/common.dart';
 import '../game/game_page.dart';
 
 class HomePage extends StatelessWidget {
@@ -52,37 +53,6 @@ class HomePage extends StatelessWidget {
             PlayNowCta(context),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget CompeteOnlineCta(BuildContext context) {
-    return BaseCtaUi(
-      context: context,
-      text: "Compete online!",
-      icon: "assets/ic_lightning.png",
-      onTap: () {
-        launchGame(context, GameMode.offlineAgainstPC);
-      },
-    );
-  }
-
-  Widget PlayNowCta(BuildContext context) {
-    return BaseCtaUi(
-      context: context,
-      text: "Play now!",
-      icon: "assets/ic_play.png",
-      onTap: () {
-        launchGame(context, GameMode.offline2Players);
-      },
-    );
-  }
-
-  void launchGame(BuildContext context, GameMode gameMode) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => GamePage(boardSize: 3, gameMode: gameMode),
       ),
     );
   }
