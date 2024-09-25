@@ -14,6 +14,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
+
   void _onTabSelected(int index) {
     setState(() {
       _selectedIndex = index;
@@ -24,18 +25,20 @@ class _MainScreenState extends State<MainScreen> {
     return AppBar(
       scrolledUnderElevation: 0,
       backgroundColor: AppColors.primary,
-      title: Text(
-        'TicTac Memo',
-        style: AppTextStyles.heading2.copyWith(color: AppColors.accent),
+      title: Row(
+        children: [
+          Image.asset(
+            "assets/favicon.png",
+            width: 57.4,
+            height: 37.9,
+          ),
+          Text(
+            'Tic Tac Memo',
+            style: AppTextStyles.bodyText.copyWith(color: AppColors.onPrimary),
+          )
+        ],
       ),
-      leading: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Image.asset(
-          "assets/favicon.png",
-          width: 40,
-          height: 30,
-        ),
-      ),
+      leading: null,
       centerTitle: !kIsWeb,
     );
   }
@@ -68,7 +71,7 @@ class _MainScreenState extends State<MainScreen> {
         preferredSize: kIsWeb ? Size.fromHeight(100) : Size.zero,
         child: Padding(
           padding: kIsWeb
-              ? EdgeInsets.symmetric(horizontal: 150, vertical: 20)
+              ? EdgeInsets.symmetric(horizontal: 100, vertical: 20)
               : EdgeInsets.zero,
           child: _buildAppBar(),
         ),

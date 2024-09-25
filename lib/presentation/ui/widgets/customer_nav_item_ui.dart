@@ -30,13 +30,11 @@ class CustomNavItemUi extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              /*Image(image: AssetImage(imageUrl)),
-              SizedBox(width: 20),*/
               Text(
                 label,
                 maxLines: 1,
                 style: TextStyle(
-                    color: isSelected ? AppColors.accent : AppColors.surface,
+                    color: AppColors.surface,
                     fontWeight:
                         isSelected ? FontWeight.bold : FontWeight.normal,
                     fontFamily:  AppConstants.fontFamily1),

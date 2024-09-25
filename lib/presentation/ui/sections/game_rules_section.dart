@@ -16,17 +16,17 @@ Widget GameRulesSection() {
               Text.rich(
                 TextSpan(
                   text: "Plan your strategy, ",
-                  style: AppTextStyles.heading3
+                  style: AppTextStyles.bodyTextLarge
                       .copyWith(color: const Color(0xFF9F9898)),
                   children: [
                     TextSpan(
                       text: "remember your placements",
-                      style: AppTextStyles.heading3
+                      style: AppTextStyles.bodyTextLarge
                           .copyWith(color: AppColors.accent),
                     ),
                     TextSpan(
-                      text: ", and outsmart your opponent to win!",
-                      style: AppTextStyles.heading3
+                      text: ", and\n outsmart your opponent to win!",
+                      style: AppTextStyles.bodyTextLarge
                           .copyWith(color: const Color(0xFF9F9898)),
                     ),
                   ],

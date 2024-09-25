@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'TicTac Memo',
+      title: 'Tic Tac Memo',
       home: Center(child: MainScreen()),
     );
   }

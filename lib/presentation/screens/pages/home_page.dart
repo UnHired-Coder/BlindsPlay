@@ -26,8 +26,8 @@ class HomePage extends StatelessWidget {
         decoration: BoxDecoration(
           gradient: RadialGradient(
             colors: [
-              Colors.black.withOpacity(0.3),
-              AppColors.primary.withOpacity(0.5),
+              Colors.black.withOpacity(0.2),
+              AppColors.primary.withOpacity(0.3),
               AppColors.primary
             ],
             stops: const [0.3, 0.7, 1.0],
