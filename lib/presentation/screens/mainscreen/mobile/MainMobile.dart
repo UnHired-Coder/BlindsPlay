@@ -60,7 +60,7 @@ class MobileLayout extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => pageNavDestinations[2].page,
+                        builder: (context) => pageNavDestinations[3].page,
                       ),
                     );
                   },
