@@ -25,7 +25,8 @@ class MobileLayout extends StatelessWidget {
       color: AppColors.primary,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-        child: Stack( // Use Stack for positioning elements freely
+        child: Stack(
+          // Use Stack for positioning elements freely
           children: [
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -46,15 +47,24 @@ class MobileLayout extends StatelessWidget {
                 CustomAppBar(false), // Aligns to the bottom
               ],
             ),
-            Positioned( // Positioned widget inside Stack to align the image
-              top: 10,
-              right: 10,
-              child: Image.asset(
-                "assets/ic_user.png",
-                width: 32,
-                height: 32,
-              ),
-            ), // Image aligned to top right with 10 padding
+            Positioned(
+                top: 10,
+                right: 10,
+                child: InkWell(
+                  child: Image.asset(
+                    "assets/ic_user.png",
+                    width: 32,
+                    height: 32,
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => pageNavDestinations[2].page,
+                      ),
+                    );
+                  },
+                )), // Image aligned to top right with 10 padding
           ],
         ),
       ),
