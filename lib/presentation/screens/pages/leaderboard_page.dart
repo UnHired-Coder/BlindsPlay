@@ -33,22 +33,56 @@ class LeaderboardPage extends StatelessWidget {
             } else if (state is LeaderboardLoaded) {
               return Padding(
                 padding: EdgeInsets.all(AppSpacing.large),
-                child: ListView.builder(
-                  itemCount: state.leaderboard.length,
-                  itemBuilder: (context, index) {
-                    final entry = state.leaderboard[index];
-                    return ListTile(
-                      leading: Text('${entry.rank}',
-                          style: AppTextStyles.bodyTextSmall
-                              .copyWith(color: AppColors.onPrimary)),
-                      title: Text(entry.name,
-                          style: AppTextStyles.bodyTextSmall
-                              .copyWith(color: AppColors.onPrimary)),
-                      trailing: Text('${entry.rating}',
-                          style: AppTextStyles.bodyTextSmall
-                              .copyWith(color: AppColors.onPrimary)),
-                    );
-                  },
+                child: Column(
+                  children: [
+                    // Fixed Top Item
+                    Container(
+                      padding: EdgeInsets.all(16.0),
+                      decoration: BoxDecoration(
+                          color: AppColors.secondary,
+                          borderRadius: BorderRadius.all(Radius.circular(12)),
+                          border:
+                              Border.all(width: 2, color: AppColors.accent)),
+                      child: Column(
+                        children: [
+                          ListTile(
+                            leading: Text("${state.leaderboard[0].rank}",
+                                style: AppTextStyles.bodyTextSmall
+                                    .copyWith(color: AppColors.onPrimary)),
+                            title: Text(state.leaderboard[0].name,
+                                style: AppTextStyles.bodyTextSmall
+                                    .copyWith(color: AppColors.onPrimary)),
+                            trailing: Text('${state.leaderboard[0].rating}',
+                                style: AppTextStyles.bodyTextSmall
+                                    .copyWith(color: AppColors.onPrimary)),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // Scrollable List Below
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: ListView.builder(
+                          itemCount: state.leaderboard.length,
+                          itemBuilder: (context, index) {
+                            final entry = state.leaderboard[index];
+                            return ListTile(
+                              leading: Text('${entry.rank}',
+                                  style: AppTextStyles.bodyTextSmall
+                                      .copyWith(color: AppColors.onPrimary)),
+                              title: Text(entry.name,
+                                  style: AppTextStyles.bodyTextSmall
+                                      .copyWith(color: AppColors.onPrimary)),
+                              trailing: Text('${entry.rating}',
+                                  style: AppTextStyles.bodyTextSmall
+                                      .copyWith(color: AppColors.onPrimary)),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               );
             } else if (state is LeaderboardError) {
