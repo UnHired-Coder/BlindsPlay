@@ -2,6 +2,7 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'data/profile.dart';
+import 'data/recent_game.dart';
 import 'profile_event.dart';
 import 'profile_state.dart';
 
@@ -45,6 +46,11 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       name: 'John Doe',
       rating: 1500,
       rank: 5,
+      recentGames: [
+        RecentGame(opponentName: 'Alice', ratingBeforeGame: 1490, ratingChange: 10, win: true),
+        RecentGame(opponentName: 'Bob', ratingBeforeGame: 1510, ratingChange: -10, win: false),
+      ],
     );
   }
+
 }

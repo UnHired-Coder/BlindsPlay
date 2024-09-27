@@ -10,8 +10,8 @@ class AppColors {
   static const Color onSecondary = Color(0xFF4F772D);
 
   // Additional colors for text
-  static const Color error = Color(0xFFFF0000); // Red for errors
-  static const Color success = Color(0xFF00FF00); // Green for success
+  static const Color error = Color(0xFFD15353); // Red for errors
+  static const Color success = Color(0xFF77EA77); // Green for success
   static const Color grey = Color(0xFF9E9E9E); // Grey for captions
   static const Color greyDark = Color(0xFF616161); // Darker grey for over line
 }
