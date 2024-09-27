@@ -88,7 +88,11 @@ class LeaderboardPage extends StatelessWidget {
             } else if (state is LeaderboardError) {
               return Center(child: Text(state.message));
             } else {
-              return Center(child: Text('Press to load leaderboard'));
+              return Center(
+                  child: Text(
+                'Reload leaderboard',
+                style: AppTextStyles.heading3.copyWith(color: AppColors.accent),
+              ));
             }
           },
         ),
