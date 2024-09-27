@@ -35,6 +35,36 @@ class LeaderboardPage extends StatelessWidget {
                 padding: EdgeInsets.all(AppSpacing.large),
                 child: Column(
                   children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(12))),
+                      child: Column(
+                        children: [
+                          ListTile(
+                            leading: Text("RANK",
+                                style: AppTextStyles.bodyTextSmall
+                                    .copyWith(color: AppColors.onPrimary)),
+                            title: Row(
+                              children: [
+                                SizedBox(
+                                  width: AppSpacing.large,
+                                ),
+                                Text("NAME",
+                                    style: AppTextStyles.bodyTextSmall
+                                        .copyWith(color: AppColors.onPrimary))
+                              ],
+                            ),
+                            trailing: Text("RATING",
+                                style: AppTextStyles.bodyTextSmall
+                                    .copyWith(color: AppColors.onPrimary)),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: AppSpacing.large,
+                    ),
                     // Fixed Top Item
                     Container(
                       padding: EdgeInsets.all(16.0),
@@ -42,16 +72,23 @@ class LeaderboardPage extends StatelessWidget {
                           color: AppColors.secondary,
                           borderRadius: BorderRadius.all(Radius.circular(12)),
                           border:
-                              Border.all(width: 2, color: AppColors.accent)),
+                              Border.all(width: 0.5, color: AppColors.accent)),
                       child: Column(
                         children: [
                           ListTile(
                             leading: Text("${state.leaderboard[0].rank}",
                                 style: AppTextStyles.bodyTextSmall
                                     .copyWith(color: AppColors.onPrimary)),
-                            title: Text(state.leaderboard[0].name,
-                                style: AppTextStyles.bodyTextSmall
-                                    .copyWith(color: AppColors.onPrimary)),
+                            title: Row(
+                              children: [
+                                SizedBox(
+                                  width: AppSpacing.large,
+                                ),
+                                Text(state.leaderboard[0].name,
+                                    style: AppTextStyles.bodyTextSmall
+                                        .copyWith(color: AppColors.onPrimary))
+                              ],
+                            ),
                             trailing: Text('${state.leaderboard[0].rating}',
                                 style: AppTextStyles.bodyTextSmall
                                     .copyWith(color: AppColors.onPrimary)),
@@ -59,10 +96,11 @@ class LeaderboardPage extends StatelessWidget {
                         ],
                       ),
                     ),
+
                     // Scrollable List Below
                     Expanded(
                       child: Padding(
-                        padding: EdgeInsets.all(16.0),
+                        padding: EdgeInsets.all(16),
                         child: ListView.builder(
                           itemCount: state.leaderboard.length,
                           itemBuilder: (context, index) {
@@ -71,9 +109,16 @@ class LeaderboardPage extends StatelessWidget {
                               leading: Text('${entry.rank}',
                                   style: AppTextStyles.bodyTextSmall
                                       .copyWith(color: AppColors.onPrimary)),
-                              title: Text(entry.name,
-                                  style: AppTextStyles.bodyTextSmall
-                                      .copyWith(color: AppColors.onPrimary)),
+                              title: Row(
+                                children: [
+                                  SizedBox(
+                                    width: AppSpacing.large,
+                                  ),
+                                  Text(entry.name,
+                                      style: AppTextStyles.bodyTextSmall
+                                          .copyWith(color: AppColors.onPrimary))
+                                ],
+                              ),
                               trailing: Text('${entry.rating}',
                                   style: AppTextStyles.bodyTextSmall
                                       .copyWith(color: AppColors.onPrimary)),
