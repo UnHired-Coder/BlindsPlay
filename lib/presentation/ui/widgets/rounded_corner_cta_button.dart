@@ -5,7 +5,7 @@ import '../../../config/constants.dart';
 
 class RoundedCornerButton extends StatelessWidget {
   final String text;
-  final ImageProvider icon;
+  final ImageProvider? icon;
   final VoidCallback onPressed;
 
   const RoundedCornerButton({
@@ -30,11 +30,13 @@ class RoundedCornerButton extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min, // To match content width
         children: [
+          if(icon!=null)
           Image(
-            image: icon,
+            image: icon!,
             width: 24,
             height: 24,
           ), // Leading icon
+          if(icon!=null)
           SizedBox(width: 8), // Space between icon and text
           Text(
             text,

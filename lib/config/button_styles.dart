@@ -33,7 +33,8 @@ final ButtonStyle accentButtonStyle = ElevatedButton.styleFrom(
 );
 
 final ButtonStyle textButtonStyle = TextButton.styleFrom(
-  foregroundColor: AppColors.primary,
+  foregroundColor: AppColors.onPrimary,
+  backgroundColor: AppColors.secondary,
   textStyle: const TextStyle(
       fontSize: 16,
       fontWeight: FontWeight.normal,

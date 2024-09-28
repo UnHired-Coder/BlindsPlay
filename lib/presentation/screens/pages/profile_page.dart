@@ -1,14 +1,16 @@
+import 'package:blindsplay/presentation/screens/pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../../config/colors.dart';
 import '../../../config/spacing.dart';
 import '../../../config/text_styles.dart';
 import '../../../logic/blocks/profile/profile_bloc.dart';
 import '../../../logic/blocks/profile/profile_event.dart';
 import '../../../logic/blocks/profile/profile_state.dart';
+import '../../model/PageModel.dart';
 import '../../ui/sections/profile_header.dart';
 import '../../ui/sections/recent_games.dart';
+import '../../ui/widgets/base_cta_ui.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage();
@@ -42,22 +44,27 @@ class ProfileView extends StatelessWidget {
         if (state is ProfileLoading) {
           return const Center(child: CircularProgressIndicator());
         } else if (state is ProfileLoaded) {
-          return Padding(
-            padding: const EdgeInsets.all(AppSpacing.large),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ProfileHeader(profile: state.profile),
-                const SizedBox(height: AppSpacing.large),
-                ListTile(
-                  leading: Text("RECENT GAMES",
-                      style: AppTextStyles.bodyTextSmall
-                          .copyWith(color: AppColors.onPrimary)),
-                ),
-                RecentGamesSection(recentGames: state.profile.recentGames)
-              ],
-            ),
-          );
+          return LayoutBuilder(builder: (context, constraints) {
+            final isWeb = (constraints.maxWidth > 1000);
+
+            return Padding(
+              padding: const EdgeInsets.all(AppSpacing.large),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ProfileHeader(profile: state.profile),
+                  const SizedBox(height: AppSpacing.large),
+                  if (!isWeb) MobileNavigationButtons(context),
+                  ListTile(
+                    leading: Text("RECENT GAMES",
+                        style: AppTextStyles.bodyTextSmall
+                            .copyWith(color: AppColors.onPrimary)),
+                  ),
+                  RecentGamesSection(recentGames: state.profile.recentGames)
+                ],
+              ),
+            );
+          });
         } else if (state is ProfileError) {
           return Center(child: Text(state.message));
         } else {
@@ -65,5 +72,33 @@ class ProfileView extends StatelessWidget {
         }
       },
     );
+  }
+
+  Widget MobileNavigationButtons(context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        NavigateToPageCta(context, pageNavDestinations[1]),
+        SizedBox(
+          width: AppSpacing.small,
+        ),
+        NavigateToPageCta(context, pageNavDestinations[3]),
+      ],
+    );
+  }
+
+  Widget NavigateToPageCta(context, PageNavModel pageNavDestinations) {
+    return BaseCtaUi(
+        context: context,
+        text: pageNavDestinations.title,
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => pageNavDestinations.page,
+            ),
+          );
+        });
   }
 }
