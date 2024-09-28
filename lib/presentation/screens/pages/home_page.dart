@@ -1,13 +1,10 @@
-import 'package:blindsplay/logic/blocks/game/game_state.dart';
-import 'package:blindsplay/presentation/ui/widgets/base_cta_ui.dart';
 import 'package:flutter/material.dart';
 import '../../../config/colors.dart';
 import '../../model/PageModel.dart';
 import '../../ui/effects/game_rules_background_gradient.dart';
-import '../../ui/sections/game_rules_section.dart';
+import '../../ui/sections/game_rules.dart';
 import '../../ui/sections/home_screen_banner.dart';
 import '../../ui/widgets/common.dart';
-import '../game/game_page.dart';
 
 class HomePage extends StatelessWidget {
   final List<PageNavModel> pages; // Change to List<PageModel>

@@ -7,8 +7,8 @@ import '../../../config/text_styles.dart';
 import '../../../logic/blocks/profile/profile_bloc.dart';
 import '../../../logic/blocks/profile/profile_event.dart';
 import '../../../logic/blocks/profile/profile_state.dart';
-import '../../ui/sections/profile_header_section.dart';
-import '../../ui/sections/recent_games_section.dart';
+import '../../ui/sections/profile_header.dart';
+import '../../ui/sections/recent_games.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage();

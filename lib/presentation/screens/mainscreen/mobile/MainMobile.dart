@@ -1,9 +1,7 @@
 import 'package:blindsplay/presentation/screens/pages.dart';
 import 'package:flutter/material.dart';
 import '../../../../config/colors.dart';
-import '../../../../config/text_styles.dart';
-import '../../../model/PageModel.dart';
-import '../../../ui/sections/game_rules_section.dart';
+import '../../../ui/sections/game_rules.dart';
 import '../../../ui/sections/home_screen_banner.dart';
 import '../../../ui/widgets/common.dart';
 

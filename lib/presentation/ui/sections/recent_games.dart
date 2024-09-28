@@ -15,7 +15,7 @@ class RecentGamesSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: ListView.separated(
           itemCount: recentGames.length * 20,
           itemBuilder: (context, index) {
