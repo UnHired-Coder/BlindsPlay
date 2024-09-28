@@ -8,5 +8,5 @@ class AppConstants {
   static const int waitingToStartTime = 1;
   static const int refreshPlaceholdersDuration = 3;
 
-  static const String fontFamily1 = "RobotoMono";
+  static const String fontFamily1 = "FiraSans";
 }

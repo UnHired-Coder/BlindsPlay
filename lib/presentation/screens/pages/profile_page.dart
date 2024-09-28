@@ -177,8 +177,11 @@ class ProfileView extends StatelessWidget {
                               ],
                             ),
                             trailing: Container(
+                              width: 30,
+                              height: 30,
+                              alignment: Alignment.center,
                               decoration: BoxDecoration(
-                                  color: colour.withOpacity(0.3),
+                                  color: colour.withOpacity(0.1),
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(6))),
                               padding: const EdgeInsets.symmetric(

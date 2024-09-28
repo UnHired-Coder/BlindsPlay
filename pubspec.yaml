@@ -86,6 +86,9 @@ flutter:
     - family: RobotoMono
       fonts:
         - asset: fonts/static/RobotoMono-VariableFont_wght.ttf
+    - family: FiraSans
+      fonts:
+        - asset: fonts/static/FiraSans-Regular.ttf
   # fonts:
   #   - family: Schyler
   #     fonts:
