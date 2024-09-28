@@ -35,6 +35,7 @@ class GamePage extends StatelessWidget {
       iconTheme: const IconThemeData(color: AppColors.onPrimary),
       backgroundColor: AppColors.primary,
       title: const SizedBox.shrink(),
+      scrolledUnderElevation: 0,
     );
   }
 }

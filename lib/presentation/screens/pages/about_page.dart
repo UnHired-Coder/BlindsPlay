@@ -14,6 +14,7 @@ class AboutPage extends StatelessWidget {
         title: Text('Help & Game Rules',
             style: AppTextStyles.heading3.copyWith(color: AppColors.accent)),
         backgroundColor: AppColors.primary,
+        scrolledUnderElevation: 0,
       ),
       body: Padding(
         padding: const EdgeInsets.all(AppSpacing.large),

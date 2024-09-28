@@ -21,6 +21,7 @@ class LeaderboardPage extends StatelessWidget {
           style: AppTextStyles.heading3.copyWith(color: AppColors.accent),
         ),
         backgroundColor: AppColors.primary,
+        scrolledUnderElevation: 0,
       ),
       body: BlocProvider(
         create: (context) =>
