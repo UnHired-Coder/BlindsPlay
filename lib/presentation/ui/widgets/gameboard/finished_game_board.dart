@@ -9,13 +9,20 @@ import '../common.dart';
 
 class FinishedGameBoard extends StatelessWidget {
   final GameOver state;
+  final int boardSize; // Dynamic board size
 
-  const FinishedGameBoard({required this.state});
+  const FinishedGameBoard({required this.state, required this.boardSize});
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       final isWeb = (constraints.maxWidth > 1000);
+
+      final double boardWidth = (isWeb
+          ? (boardSize * AppConstants.cellWidth)
+          : constraints.maxWidth * 0.8);
+      final double cellWidth = boardWidth / 3;
+
       return Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -25,14 +32,14 @@ class FinishedGameBoard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                width: AppConstants.boardWidth * (isWeb ? 1 : 0.8),
+                width: boardWidth,
                 // Define a dynamic width for the board if needed
-                height: AppConstants.boardWidth * (isWeb ? 1 : 0.8),
+                height: boardWidth,
                 child: GameBoard(
                   visibleBoard: state.finalBoard,
                   placeHolders: null,
                   active: true,
-                  cellWidth: AppConstants.cellWidth * (isWeb ? 1 : 0.8),
+                  cellWidth: cellWidth,
                   boardSize: AppConstants.boardSize,
                 ),
               ),
@@ -58,7 +65,7 @@ class FinishedGameBoard extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   CompeteOnlineCta(context),
-                  const SizedBox(width: 40),
+                  SizedBox(width: isWeb ? 40 : 20),
                   PlayNowCta(context),
                 ],
               )

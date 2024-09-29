@@ -63,7 +63,7 @@ class _GameContent extends StatelessWidget {
         } else if (state is GameOver) {
           return FadeInWidget(
               key: Key("FinishedGameBoard"),
-              child: FinishedGameBoard(state: state));
+              child: FinishedGameBoard(state: state,  boardSize: boardSize));
         } else if (state is GameError) {
           return _buildMessage('Error: ${state.error}');
         } else {

@@ -5,6 +5,7 @@ import '../../../../config/constants.dart';
 import '../../../../config/text_styles.dart';
 import '../../../../logic/blocs/game/game_state.dart';
 import 'game_board.dart';
+import 'package:flutter/foundation.dart';
 
 class ActiveGameBoard extends StatelessWidget {
   final GameInProgress state;
@@ -14,9 +15,14 @@ class ActiveGameBoard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double boardWidth = boardSize * AppConstants.cellWidth;
-
     return LayoutBuilder(builder: (context, constraints) {
+      final isWeb = (constraints.maxWidth > 1000);
+
+      final double boardWidth = (isWeb
+          ? (boardSize * AppConstants.cellWidth)
+          : constraints.maxWidth * 0.8);
+      final double cellWidth = boardWidth / 3;
+
       return Stack(
         children: [
           Row(
@@ -43,7 +49,7 @@ class ActiveGameBoard extends StatelessWidget {
                               visibleBoard: state.visibleBoard,
                               placeHolders: state.placeHolders,
                               active: state.active,
-                              cellWidth: AppConstants.cellWidth,
+                              cellWidth: cellWidth,
                               boardSize: AppConstants.boardSize,
                             ),
                             !state.active
