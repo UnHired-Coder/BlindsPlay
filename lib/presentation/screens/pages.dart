@@ -2,7 +2,7 @@ import 'package:blindsplay/presentation/screens/pages/home_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../logic/blocks/game/game_state.dart';
+import '../../logic/blocs/game/game_state.dart';
 import '../model/PageModel.dart';
 import 'pages/about_page.dart';
 import 'game/game_page.dart';

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../config/colors.dart';
 import '../../../config/spacing.dart';
 import '../../../config/text_styles.dart';
-import '../../../logic/blocks/profile/data/recent_game.dart';
+import '../../../logic/blocs/profile/data/recent_game.dart';
 
 class RecentGamesSection extends StatelessWidget {
   final List<RecentGame> recentGames;

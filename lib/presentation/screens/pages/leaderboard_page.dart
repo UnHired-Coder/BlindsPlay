@@ -4,9 +4,9 @@ import 'package:blindsplay/config/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../logic/blocks/leaderboard/leaderboard_bloc.dart';
-import '../../../logic/blocks/leaderboard/leaderboard_event.dart';
-import '../../../logic/blocks/leaderboard/leaderboard_state.dart';
+import '../../../logic/blocs/leaderboard/leaderboard_bloc.dart';
+import '../../../logic/blocs/leaderboard/leaderboard_event.dart';
+import '../../../logic/blocs/leaderboard/leaderboard_state.dart';
 import '../../ui/sections/leaderboard.dart';
 import '../../ui/sections/leaderboard_header.dart';
 import '../../ui/sections/leaderboard_user_rank.dart';
@@ -19,13 +19,13 @@ class LeaderboardPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.primary,
       appBar: AppBar(
-        title: Text(
-          'Leaderboard',
-          style: AppTextStyles.heading3.copyWith(color: AppColors.accent),
-        ),
-        backgroundColor: AppColors.primary,
-        scrolledUnderElevation: 0,
-      ),
+          title: Text(
+            'Leaderboard',
+            style: AppTextStyles.heading3.copyWith(color: AppColors.accent),
+          ),
+          backgroundColor: AppColors.primary,
+          scrolledUnderElevation: 0,
+          foregroundColor: AppColors.onPrimary),
       body: BlocProvider(
         create: (context) =>
             LeaderboardBloc(apiUrl: 'https://your-api-url/leaderboard')

@@ -4,9 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../config/colors.dart';
 import '../../../config/spacing.dart';
 import '../../../config/text_styles.dart';
-import '../../../logic/blocks/profile/profile_bloc.dart';
-import '../../../logic/blocks/profile/profile_event.dart';
-import '../../../logic/blocks/profile/profile_state.dart';
+import '../../../logic/blocs/profile/profile_bloc.dart';
+import '../../../logic/blocs/profile/profile_event.dart';
+import '../../../logic/blocs/profile/profile_state.dart';
 import '../../model/PageModel.dart';
 import '../../ui/sections/profile_header.dart';
 import '../../ui/sections/recent_games.dart';
@@ -24,6 +24,7 @@ class ProfilePage extends StatelessWidget {
             style: AppTextStyles.heading3.copyWith(color: AppColors.accent)),
         backgroundColor: AppColors.primary,
         scrolledUnderElevation: 0,
+        foregroundColor: AppColors.onPrimary
       ),
       body: BlocProvider(
         create: (context) => ProfileBloc(apiUrl: 'https://api.example.com')

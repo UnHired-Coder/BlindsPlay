@@ -11,11 +11,11 @@ class AboutPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.primary,
       appBar: AppBar(
-        title: Text('Help & Game Rules',
-            style: AppTextStyles.heading3.copyWith(color: AppColors.accent)),
-        backgroundColor: AppColors.primary,
-        scrolledUnderElevation: 0,
-      ),
+          title: Text('Help & Game Rules',
+              style: AppTextStyles.heading3.copyWith(color: AppColors.accent)),
+          backgroundColor: AppColors.primary,
+          scrolledUnderElevation: 0,
+          foregroundColor: AppColors.onPrimary),
       body: Padding(
         padding: const EdgeInsets.all(AppSpacing.large),
         child: SingleChildScrollView(
@@ -25,7 +25,8 @@ class AboutPage extends StatelessWidget {
               // Game Rules Section
               Text(
                 'Game Rules',
-                style: AppTextStyles.heading1.copyWith(color: AppColors.onPrimary),
+                style:
+                    AppTextStyles.heading1.copyWith(color: AppColors.onPrimary),
               ),
               SizedBox(height: 10),
               Text(
@@ -35,18 +36,21 @@ class AboutPage extends StatelessWidget {
 4. The first player to get 3 of their marks in a row (horizontally, vertically, or diagonally) wins the game.
 5. If all 9 squares are filled and neither player has 3 in a row, the game is a draw.
 6. Multiplayer games match you with opponents of similar rating based on previous game performance.''',
-                style: AppTextStyles.bodyTextSmall.copyWith(color: AppColors.onPrimary),
+                style: AppTextStyles.bodyTextSmall
+                    .copyWith(color: AppColors.onPrimary),
               ),
               SizedBox(height: 30),
               // Contact Section
               Text(
                 'Contact Us',
-                style: AppTextStyles.heading2.copyWith(color: AppColors.onPrimary),
+                style:
+                    AppTextStyles.heading2.copyWith(color: AppColors.onPrimary),
               ),
               SizedBox(height: 10),
               Text(
                 'For feedback or issues, please contact us at:',
-                style: AppTextStyles.bodyTextSmall.copyWith(color: AppColors.onPrimary),
+                style: AppTextStyles.bodyTextSmall
+                    .copyWith(color: AppColors.onPrimary),
               ),
               SizedBox(height: 10),
               GestureDetector(
@@ -54,7 +58,7 @@ class AboutPage extends StatelessWidget {
                   // This can trigger an email action if needed
                 },
                 child: Text(
-                  'support@yourgame.com',
+                  'tictacmemo.game@gmail.com',
                   style: AppTextStyles.link.copyWith(color: AppColors.accent),
                 ),
               ),

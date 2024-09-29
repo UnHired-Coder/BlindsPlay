@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../config/constants.dart';
-import '../../../../logic/blocks/game/game_state.dart';
+import '../../../../logic/blocs/game/game_state.dart';
 
 class GameTile extends StatelessWidget {
   final int x, y;

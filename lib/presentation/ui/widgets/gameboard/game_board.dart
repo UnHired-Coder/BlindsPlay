@@ -2,9 +2,9 @@ import 'package:blindsplay/config/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../logic/blocks/game/game_bloc.dart';
-import '../../../../logic/blocks/game/game_event.dart';
-import '../../../../logic/blocks/game/game_state.dart';
+import '../../../../logic/blocs/game/game_bloc.dart';
+import '../../../../logic/blocs/game/game_event.dart';
+import '../../../../logic/blocs/game/game_state.dart';
 import 'game_bars.dart';
 import 'game_tile.dart';
 

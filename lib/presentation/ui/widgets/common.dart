@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../config/colors.dart';
 import '../../../config/text_styles.dart';
-import '../../../logic/blocks/game/game_state.dart';
+import '../../../logic/blocs/game/game_state.dart';
 import '../../screens/game/game_page.dart';
 import 'base_cta_ui.dart';
 
@@ -33,7 +33,9 @@ void launchGame(BuildContext context, GameMode gameMode) {
   Navigator.push(
     context,
     MaterialPageRoute(
-      builder: (context) => GamePage(boardSize: 3, gameMode: gameMode),
+      builder: (context) {
+        return GamePage(boardSize: 3, gameMode: gameMode);
+      },
     ),
   );
 }
@@ -42,8 +44,10 @@ AppBar CustomAppBar(isWeb) {
   return AppBar(
     scrolledUnderElevation: 0,
     backgroundColor: AppColors.primary,
+    foregroundColor: AppColors.onPrimary,
     title: Row(
-      mainAxisAlignment: isWeb? MainAxisAlignment.start : MainAxisAlignment.center,
+      mainAxisAlignment:
+          isWeb ? MainAxisAlignment.start : MainAxisAlignment.center,
       children: [
         Image.asset(
           "assets/favicon.png",

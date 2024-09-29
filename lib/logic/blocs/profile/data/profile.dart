@@ -1,5 +1,5 @@
 // data/profile.dart
-import 'package:blindsplay/logic/blocks/profile/data/recent_game.dart';
+import 'package:blindsplay/logic/blocs/profile/data/recent_game.dart';
 
 class Profile {
   final String name;

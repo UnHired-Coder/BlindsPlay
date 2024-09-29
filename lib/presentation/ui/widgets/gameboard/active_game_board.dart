@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import '../../../../config/colors.dart';
 import '../../../../config/constants.dart';
 import '../../../../config/text_styles.dart';
-import '../../../../logic/blocks/game/game_state.dart';
+import '../../../../logic/blocs/game/game_state.dart';
 import 'game_board.dart';
 
 class ActiveGameBoard extends StatelessWidget {

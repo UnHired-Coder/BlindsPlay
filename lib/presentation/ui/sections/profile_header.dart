@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../config/colors.dart';
 import '../../../config/spacing.dart';
 import '../../../config/text_styles.dart';
-import '../../../logic/blocks/profile/data/profile.dart';
+import '../../../logic/blocs/profile/data/profile.dart';
 
 class ProfileHeader extends StatelessWidget {
   final Profile profile;

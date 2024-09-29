@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../config/colors.dart';
 import '../../../config/spacing.dart';
 import '../../../config/text_styles.dart';
-import '../../../logic/blocks/leaderboard/data/leader_board_entry.dart';
+import '../../../logic/blocs/leaderboard/data/leader_board_entry.dart';
 
 class Leaderboard extends StatelessWidget {
   final List<LeaderboardEntry> leaderboard;

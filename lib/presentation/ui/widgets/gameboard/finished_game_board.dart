@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../../../config/colors.dart';
 import '../../../../config/text_styles.dart';
-import '../../../../logic/blocks/game/game_state.dart';
+import '../../../../logic/blocs/game/game_state.dart';
 import '../common.dart';
 
 class FinishedGameBoard extends StatelessWidget {

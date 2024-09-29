@@ -3,9 +3,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../config/constants.dart';
-import '../../../logic/blocks/game/game_bloc.dart';
-import '../../../logic/blocks/game/game_event.dart';
-import '../../../logic/blocks/game/game_state.dart';
+import '../../../logic/blocs/game/game_bloc.dart';
+import '../../../logic/blocs/game/game_event.dart';
+import '../../../logic/blocs/game/game_state.dart';
 import '../../ui/effects/fade_in_widget.dart';
 import '../../ui/widgets/gameboard/active_game_board.dart';
 import '../../ui/widgets/gameboard/finished_game_board.dart';
@@ -32,11 +32,11 @@ class GamePage extends StatelessWidget {
 
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
-      iconTheme: const IconThemeData(color: AppColors.onPrimary),
-      backgroundColor: AppColors.primary,
-      title: const SizedBox.shrink(),
-      scrolledUnderElevation: 0,
-    );
+        iconTheme: const IconThemeData(color: AppColors.onPrimary),
+        backgroundColor: AppColors.primary,
+        title: const SizedBox.shrink(),
+        scrolledUnderElevation: 0,
+        foregroundColor: AppColors.onPrimary);
   }
 }
 
@@ -80,7 +80,7 @@ class _GameContent extends StatelessWidget {
         style: const TextStyle(
             fontSize: 24,
             color: AppColors.onPrimary,
-            fontFamily:  AppConstants.fontFamily1),
+            fontFamily: AppConstants.fontFamily1),
       ),
     );
   }

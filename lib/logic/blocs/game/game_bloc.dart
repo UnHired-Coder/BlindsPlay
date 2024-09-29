@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:blindsplay/logic/blocks/util/timer_block.dart';
+import 'package:blindsplay/logic/blocs/util/timer_block.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../config/constants.dart';
 import '../util/tic_tac_toe_pc_move_helper.dart';
@@ -338,7 +338,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   Future<void> _playSound(String soundType) async {
     final player =
         AudioPlayer(); // assuming you're using the audio players package
-    await player.play('assets/placed_bait.mp3', isLocal: true, volume: 0.6);
+    await player.play(AssetSource('assets/placed_bait.mp3'), volume: 0.6);
   }
 
   @override
