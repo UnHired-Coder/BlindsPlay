@@ -1,14 +1,11 @@
 import 'package:blindsplay/config/constants.dart';
-import 'package:blindsplay/logic/blocks/game/game_event.dart';
 import 'package:blindsplay/presentation/ui/widgets/gameboard/game_board.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../config/colors.dart';
 import '../../../../config/text_styles.dart';
-import '../../../../logic/blocks/game/game_bloc.dart';
 import '../../../../logic/blocks/game/game_state.dart';
-import '../base_cta_ui.dart';
+import '../common.dart';
 
 class FinishedGameBoard extends StatelessWidget {
   final GameOver state;
@@ -70,29 +67,5 @@ class FinishedGameBoard extends StatelessWidget {
         ],
       );
     });
-  }
-
-  Widget CompeteOnlineCta(context) {
-    return BaseCtaUi(
-        context: context,
-        text: "Compete online!",
-        icon: "assets/ic_lightning.png",
-        onTap: () {
-          launchGame(context, GameMode.onlineMultiplayer);
-        });
-  }
-
-  Widget PlayNowCta(context) {
-    return BaseCtaUi(
-        context: context,
-        text: "Play now!",
-        icon: "assets/ic_play.png",
-        onTap: () {
-          launchGame(context, GameMode.offline2Players);
-        });
-  }
-
-  void launchGame(context, GameMode gameMode) {
-    BlocProvider.of<GameBloc>(context).add(StartGame(gameMode));
   }
 }
