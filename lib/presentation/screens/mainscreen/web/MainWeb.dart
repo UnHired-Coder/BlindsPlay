@@ -1,5 +1,6 @@
-import 'package:blindsplay/presentation/screens/pages.dart';
+import 'package:blindsplay/presentation/screens/tabs/tabs.dart';
 import 'package:flutter/material.dart';
+
 import '../../../../config/colors.dart';
 import '../../../model/PageModel.dart';
 import '../../../ui/widgets/customer_nav_item_ui.dart';

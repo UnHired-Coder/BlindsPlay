@@ -1,6 +1,7 @@
-import 'package:blindsplay/presentation/screens/pages.dart';
+import 'package:blindsplay/presentation/screens/tabs/tabs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../../config/colors.dart';
 import '../../../config/spacing.dart';
 import '../../../config/text_styles.dart';
@@ -20,12 +21,11 @@ class ProfilePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.primary,
       appBar: AppBar(
-        title: Text('Profile',
-            style: AppTextStyles.heading3.copyWith(color: AppColors.accent)),
-        backgroundColor: AppColors.primary,
-        scrolledUnderElevation: 0,
-        foregroundColor: AppColors.onPrimary
-      ),
+          title: Text('Profile',
+              style: AppTextStyles.heading3.copyWith(color: AppColors.accent)),
+          backgroundColor: AppColors.primary,
+          scrolledUnderElevation: 0,
+          foregroundColor: AppColors.onPrimary),
       body: BlocProvider(
         create: (context) => ProfileBloc(apiUrl: 'https://api.example.com')
           ..add(LoadProfile()), // Trigger loading profile on creation

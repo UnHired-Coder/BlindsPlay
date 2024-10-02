@@ -1,5 +1,6 @@
-import 'package:blindsplay/presentation/screens/pages.dart';
+import 'package:blindsplay/presentation/screens/tabs/tabs.dart';
 import 'package:flutter/material.dart';
+
 import '../../../../config/colors.dart';
 import '../../../ui/sections/game_rules.dart';
 import '../../../ui/sections/home_screen_banner.dart';

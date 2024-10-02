@@ -1,13 +1,12 @@
-import 'package:blindsplay/presentation/screens/pages/home_page.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:blindsplay/presentation/screens/tabs/about_page.dart';
+import 'package:blindsplay/presentation/screens/tabs/home_page.dart';
 import 'package:flutter/material.dart';
 
-import '../../logic/blocs/game/game_state.dart';
-import '../model/PageModel.dart';
-import 'pages/about_page.dart';
-import 'game/game_page.dart';
-import 'pages/leaderboard_page.dart';
-import 'pages/profile_page.dart';
+import '../../../logic/blocs/game/game_state.dart';
+import '../../model/PageModel.dart';
+import '../game/game_page.dart';
+import 'leaderboard_page.dart';
+import 'profile_page.dart';
 
 const List<PageNavModel> pageNavDestinations = [
   PageNavModel(

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "807824387546",
+    "project_id": "tictacmemo-123e7",
+    "storage_bucket": "tictacmemo-123e7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:807824387546:android:ef6dc7cda420762074a4e3",
+        "android_client_info": {
+          "package_name": "com.blindsplay.blindsplay"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "807824387546-da98vngamep683klp7qjv03b2ubg58q9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.blindsplay.blindsplay",
+            "certificate_hash": "ff9e466dd90fc0bb9cbbcb7c43d22a99317ceffd"
+          }
+        },
+        {
+          "client_id": "807824387546-0gnbjsi3n916cbojqnhjhil7vt3f71of.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCuvKQIy6_2tjHsXi7XtEy3XZV2oBylj6c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "807824387546-0gnbjsi3n916cbojqnhjhil7vt3f71of.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,12 +1,10 @@
 import 'package:blindsplay/presentation/screens/mainscreen/mobile/MainMobile.dart';
 import 'package:blindsplay/presentation/screens/mainscreen/web/MainWeb.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
 import '../../../config/colors.dart';
-import '../../../config/text_styles.dart';
 import '../../ui/widgets/common.dart';
-import '../pages.dart';
+import '../tabs/tabs.dart';
 
 class MainScreen extends StatefulWidget {
   @override
