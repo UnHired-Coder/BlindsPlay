@@ -363,6 +363,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
   String getRandomIcon() {
     var rng = Random();
-    return "meme/${rng.nextInt(11) + 1}.png";
+    return "assets/meme/${rng.nextInt(11) + 1}.png";
   }
 }

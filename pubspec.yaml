@@ -65,6 +65,18 @@ dev_dependencies:
 flutter:
   assets:
     - assets/
+    - assets/meme/
+    - assets/meme/1.png
+    - assets/meme/2.png
+    - assets/meme/3.png
+    - assets/meme/4.png
+    - assets/meme/5.png
+    - assets/meme/6.png
+    - assets/meme/7.png
+    - assets/meme/8.png
+    - assets/meme/9.png
+    - assets/meme/10.png
+    - assets/meme/11.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
