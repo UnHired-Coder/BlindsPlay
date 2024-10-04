@@ -1,7 +1,10 @@
+import 'package:amplitude_flutter/amplitude.dart';
 import 'package:blindsplay/config/colors.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+
 import '../../../config/constants.dart';
 import '../../../logic/blocs/game/game_bloc.dart';
 import '../../../logic/blocs/game/game_event.dart';
@@ -19,6 +22,9 @@ class GamePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final amplitude = GetIt.instance<Amplitude>();
+    amplitude.logEvent("Open GamePage");
+
     return Scaffold(
       backgroundColor: AppColors.primary,
       appBar: !kIsWeb ? _buildAppBar() : null,
@@ -47,26 +53,40 @@ class _GameContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final amplitude = GetIt.instance<Amplitude>();
+
     return BlocBuilder<GameBloc, GameState>(
       builder: (context, state) {
         if (state is GameInitial) {
+          amplitude.logEvent("Game State GameInitial");
+
           return FadeInWidget(
               key: Key("GameStart"), child: _buildMessage('Get ready...'));
         } else if (state is GameWaiting) {
+          amplitude.logEvent("Game State GameWaiting");
+
           return FadeInWidget(
               key: Key("GameStart"),
               child: _buildMessage('Game starts in : ${state.countdown}s'));
         } else if (state is GameInProgress) {
+          amplitude.logEvent("Game State GameInProgress");
+
           return FadeInWidget(
               key: Key("ActiveGameBoard"),
               child: ActiveGameBoard(state: state, boardSize: boardSize));
         } else if (state is GameOver) {
+          amplitude.logEvent("Game State GameOver");
+
           return FadeInWidget(
               key: Key("FinishedGameBoard"),
-              child: FinishedGameBoard(state: state,  boardSize: boardSize));
+              child: FinishedGameBoard(state: state, boardSize: boardSize));
         } else if (state is GameError) {
+          amplitude.logEvent("Game State GameError");
+
           return _buildMessage('Error: ${state.error}');
         } else {
+          amplitude.logEvent("Game State No State");
+
           return _buildMessage('Unknown State');
         }
       },

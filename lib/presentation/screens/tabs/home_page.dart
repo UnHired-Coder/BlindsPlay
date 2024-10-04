@@ -1,4 +1,7 @@
+import 'package:amplitude_flutter/amplitude.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+
 import '../../../config/colors.dart';
 import '../../model/PageModel.dart';
 import '../../ui/effects/game_rules_background_gradient.dart';
@@ -18,6 +21,9 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final amplitude = GetIt.instance<Amplitude>();
+    amplitude.logEvent("Open HomePage");
+
     return Scaffold(
       backgroundColor: AppColors.primary,
       body: Container(

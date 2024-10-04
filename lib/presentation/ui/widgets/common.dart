@@ -44,13 +44,15 @@ void launchGame(BuildContext context, GameMode gameMode) async {
     );
   } else {
     // User is authenticated, proceed to the game page
-    Navigator.push(
+    Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
         builder: (context) {
           return GamePage(boardSize: 3, gameMode: gameMode);
         },
       ),
+      (Route<dynamic> route) =>
+          route.isFirst, // This will keep only the first route (main page).
     );
   }
 }

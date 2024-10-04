@@ -1,6 +1,8 @@
+import 'package:amplitude_flutter/amplitude.dart';
 import 'package:blindsplay/presentation/screens/tabs/tabs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../../config/colors.dart';
 import '../../../config/spacing.dart';
@@ -18,6 +20,9 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final amplitude = GetIt.instance<Amplitude>();
+    amplitude.logEvent("Open ProfilePage");
+
     return Scaffold(
       backgroundColor: AppColors.primary,
       appBar: AppBar(

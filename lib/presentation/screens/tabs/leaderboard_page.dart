@@ -1,8 +1,10 @@
+import 'package:amplitude_flutter/amplitude.dart';
 import 'package:blindsplay/config/colors.dart';
 import 'package:blindsplay/config/spacing.dart';
 import 'package:blindsplay/config/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../../logic/blocs/leaderboard/leaderboard_bloc.dart';
 import '../../../logic/blocs/leaderboard/leaderboard_event.dart';
@@ -16,6 +18,9 @@ class LeaderboardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final amplitude = GetIt.instance<Amplitude>();
+    amplitude.logEvent("Open LeaderboardPage");
+
     return Scaffold(
       backgroundColor: AppColors.primary,
       appBar: AppBar(

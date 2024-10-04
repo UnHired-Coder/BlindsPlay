@@ -1,6 +1,9 @@
+import 'package:amplitude_flutter/amplitude.dart';
 import 'package:blindsplay/config/colors.dart';
 import 'package:blindsplay/config/spacing.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+
 import '../../../config/text_styles.dart';
 
 class AboutPage extends StatelessWidget {
@@ -8,6 +11,9 @@ class AboutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final amplitude = GetIt.instance<Amplitude>();
+    amplitude.logEvent("Open AboutPage");
+
     return Scaffold(
       backgroundColor: AppColors.primary,
       appBar: AppBar(
