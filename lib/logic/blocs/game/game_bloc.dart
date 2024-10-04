@@ -340,7 +340,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   Future<void> _playSound(String soundType) async {
     final player =
         AudioPlayer(); // assuming you're using the audio players package
-    await player.play(AssetSource('placed_bait.mp3'), volume: 0.6);
+    await player.play(AssetSource('placed_bait_click.mp3'), volume: 0.6);
   }
 
   @override

@@ -79,6 +79,7 @@ flutter:
     - assets/meme/9.png
     - assets/meme/10.png
     - assets/meme/11.png
+    - assets/placed_bait_click.mp3
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
