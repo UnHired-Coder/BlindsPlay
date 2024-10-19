@@ -14,6 +14,13 @@ Future<void> main() async {
 final GetIt getIt = GetIt.instance;
 
 void setupServices() async {
+  getIt.registerLazySingleton<Amplitude>(() {
+    final amplitude = Amplitude.getInstance();
+    amplitude.init(
+        'cf36ee56a0cfb45c6d9071b41dd02c02'); // Replace 'YOUR_API_KEY' with your Amplitude API key
+    return amplitude;
+  });
+
   if (kIsWeb) {
     await Firebase.initializeApp(
         options: const FirebaseOptions(
@@ -24,8 +31,4 @@ void setupServices() async {
   } else {
     await Firebase.initializeApp();
   }
-
-  final Amplitude amplitude = Amplitude.getInstance();
-  amplitude.init('cf36ee56a0cfb45c6d9071b41dd02c02');
-  getIt.registerSingleton<Amplitude>(amplitude);
 }

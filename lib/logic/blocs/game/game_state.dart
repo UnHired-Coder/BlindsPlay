@@ -58,7 +58,8 @@ class GameInProgress extends GameState {
   });
 
   @override
-  List<Object?> get props => [board, visibleBoard, currentPlayer, active, elapsedTime, placeHolders];
+  List<Object?> get props =>
+      [board, visibleBoard, currentPlayer, active, elapsedTime, placeHolders];
 
   GameInProgress copyWith({
     List<List<TileState>>? board,

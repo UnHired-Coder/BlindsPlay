@@ -48,6 +48,7 @@ dependencies:
   google_sign_in_web: ^0.10.0
   amplitude_flutter: ^3.13.0
   get_it: ^7.0.0
+  web_socket_channel: ^3.0.1
 
 dev_dependencies:
   flutter_test:

@@ -20,7 +20,7 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final amplitude = GetIt.instance<Amplitude>();
+    final amplitude = GetIt.I<Amplitude>();
     amplitude.logEvent("Open ProfilePage");
 
     return Scaffold(

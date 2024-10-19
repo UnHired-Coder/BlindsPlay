@@ -22,7 +22,7 @@ class GamePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final amplitude = GetIt.instance<Amplitude>();
+    final amplitude = GetIt.I<Amplitude>();
     amplitude.logEvent("Open GamePage");
 
     return Scaffold(
@@ -53,7 +53,7 @@ class _GameContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final amplitude = GetIt.instance<Amplitude>();
+    final amplitude = GetIt.I<Amplitude>();
 
     return BlocBuilder<GameBloc, GameState>(
       builder: (context, state) {
@@ -61,24 +61,24 @@ class _GameContent extends StatelessWidget {
           amplitude.logEvent("Game State GameInitial");
 
           return FadeInWidget(
-              key: Key("GameStart"), child: _buildMessage('Get ready...'));
+              key: Key("GameWaiting"), child: _buildMessage('Get ready...'));
         } else if (state is GameWaiting) {
           amplitude.logEvent("Game State GameWaiting");
 
           return FadeInWidget(
-              key: Key("GameStart"),
+              key: Key("GameInProgress"),
               child: _buildMessage('Game starts in : ${state.countdown}s'));
         } else if (state is GameInProgress) {
           amplitude.logEvent("Game State GameInProgress");
 
           return FadeInWidget(
-              key: Key("ActiveGameBoard"),
+              key: Key("GameOver"),
               child: ActiveGameBoard(state: state, boardSize: boardSize));
         } else if (state is GameOver) {
           amplitude.logEvent("Game State GameOver");
 
           return FadeInWidget(
-              key: Key("FinishedGameBoard"),
+              key: Key("GameError"),
               child: FinishedGameBoard(state: state, boardSize: boardSize));
         } else if (state is GameError) {
           amplitude.logEvent("Game State GameError");
