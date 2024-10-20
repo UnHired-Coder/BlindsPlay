@@ -28,7 +28,6 @@ class BaseResponse {
     final baseResponse = BaseResponse.fromJson(json);
 
     late final dynamic data;
-    print(baseResponse.eventType);
 
     switch (baseResponse.eventType) {
       case EventType.playerMatched:
@@ -37,6 +36,8 @@ class BaseResponse {
       case EventType.joinedRoom:
         data = JoinedRoomData.fromJson(baseResponse.data);
         break;
+      case EventType.makeMove:
+        data = BoardGameState.fromJson(baseResponse.data);
       default:
         data = null;
         break;

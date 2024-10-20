@@ -2,8 +2,7 @@ import '../WebSocketService.dart';
 import '../model/MatchingStartedData.dart';
 
 abstract class IGameRepository {
-  Future<void> joinRoom(
-      int playerID, String roomID, MessageCallback onConnected);
+  Future<void> joinRoom(int playerID, String roomID);
   Future<void> makeMove(int playerID, String roomID, int posX, int posY);
   Future<MatchingStartedData> findMatch(int userId); // New method
   Future<void> match(

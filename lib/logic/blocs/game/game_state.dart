@@ -4,6 +4,22 @@ enum TileState { empty, red, X, O }
 
 enum GameMode { offline2Players, offlineAgainstPC, onlineMultiplayer }
 
+TileState getTileStateFromSymbol(String symbol) {
+  switch (symbol) {
+    case "X":
+      return TileState.X;
+    case "O":
+      return TileState.O;
+    case "?":
+      return TileState.red;
+    case "":
+      return TileState.empty;
+    default:
+      return TileState
+          .empty; // Return empty as a default for unrecognized symbols
+  }
+}
+
 extension TileStateExtension on TileState {
   String get symbol {
     switch (this) {

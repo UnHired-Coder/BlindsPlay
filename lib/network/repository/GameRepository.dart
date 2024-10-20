@@ -21,8 +21,7 @@ class GameRepository implements IGameRepository {
         _webService = webService;
 
   @override
-  Future<void> joinRoom(
-      int playerID, String roomID, MessageCallback onConnected) async {
+  Future<void> joinRoom(int playerID, String roomID) async {
     final joinMessage = {
       "action": "join-room",
       "data": {

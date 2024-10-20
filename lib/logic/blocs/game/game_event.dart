@@ -76,12 +76,3 @@ class PlaySound extends GameEvent {
   @override
   List<Object?> get props => [soundType];
 }
-
-class SocketMessageReceived extends GameEvent {
-  final Map<String, dynamic> data;
-
-  const SocketMessageReceived(this.data);
-
-  @override
-  List<Object?> get props => [data];
-}

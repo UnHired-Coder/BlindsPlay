@@ -36,7 +36,6 @@ class OnlineGameBloc extends Bloc<GameEvent, GameState> {
     on<UpdateBoard>(_onUpdateBoard);
     on<PlaySound>(_onPlaySound);
     on<WaitingToStart>(_onStartWaiting);
-    on<SocketMessageReceived>(_onSocketMessageReceived);
 
     randomizePlaceholders();
 
@@ -51,20 +50,6 @@ class OnlineGameBloc extends Bloc<GameEvent, GameState> {
     });
   }
 
-  StreamSubscription<Map<String, dynamic>>? _socketSubscription;
-
-  // Handle messages received from WebSocket
-  Future<void> _onSocketMessageReceived(
-      SocketMessageReceived event, Emitter<GameState> emit) async {
-    final data = event.data;
-
-    if (data['event'] == 'player-matched') {
-      timerBloc.startCountdown(const Duration(days: 1));
-      // Start waiting state with a countdown
-      add(const WaitingToStart(AppConstants.waitingToStartTime));
-    }
-  }
-
   // Event handler for StartGame event
   Future<void> _onStartGame(StartGame event, Emitter<GameState> emit) async {
     gameMode = event.gameMode;
@@ -75,25 +60,21 @@ class OnlineGameBloc extends Bloc<GameEvent, GameState> {
     MatchingStartedData matchingStartedData =
         await gameRepository.findMatch(playerID);
 
-    gameRepository.match(playerID, matchingStartedData.waitlistId, (event) {
-      switch (event.eventType) {
+    gameRepository.match(playerID, matchingStartedData.waitlistId,
+        (clientEvent) {
+      switch (clientEvent.eventType) {
         case EventType.playerMatched:
           {
-            final playerMatchedData = (event.data as PlayerMatchedData);
-            gameRepository.joinRoom(playerID, playerMatchedData.roomId,
-                (event) {
-              switch (event.eventType) {
-                case EventType.joinedRoom:
-                  {
-                    final joinedRoomData =
-                        (event.data as JoinedRoomResponse).data;
-                    print("Player joined: $joinedRoomData.playerId");
-                  }
-                default:
-                  {}
-              }
-            });
+            final playerMatchedData = (clientEvent.data as PlayerMatchedData);
+            assignedLabel = getTileStateFromSymbol(
+                playerMatchedData.initialGameData.assignedLabel);
+
+            gameRepository.joinRoom(playerID, playerMatchedData.roomId);
+          }
+        case EventType.joinedRoom:
+          {
             add(const WaitingToStart(AppConstants.waitingToStartTime));
+            final joinedRoomData = (clientEvent.data as JoinedRoomData);
           }
         default:
           {}
