@@ -3,11 +3,14 @@ import 'dart:convert';
 
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-typedef MessageCallback = void Function(Map<String, dynamic>);
+import 'model/BaseResponse.dart';
+import 'model/Events.dart';
+
+typedef MessageCallback = void Function(BaseResponse);
 
 class WebSocketService {
   WebSocketChannel? _channel; // Allow _channel to be nullable
-  StreamSubscription<Map<String, dynamic>>? _subscription;
+  StreamSubscription<BaseResponse>? _subscription;
 
   // Connect to a WebSocket server and call onMessageReceived for each message
   void connect(String url, MessageCallback onMessageReceived) {
@@ -47,8 +50,8 @@ class WebSocketService {
     _subscription?.cancel();
 
     // Wrap and listen to the stream, then pass each parsed message to the callback
-    _subscription = _wrapStream(stream).listen((message) {
-      onMessageReceived(message);
+    _subscription = _wrapStream(stream).listen((baseResponse) {
+      onMessageReceived(baseResponse);
     }, onError: (error) {
       print('WebSocket error: $error');
     }, onDone: () {
@@ -56,25 +59,20 @@ class WebSocketService {
     });
   }
 
-  // Parse a WebSocket message into a Map<String, dynamic>
-  Map<String, dynamic>? _parseMessage(dynamic message) {
+  // Parse a WebSocket message into a BaseResponse
+  BaseResponse _parseMessage(dynamic message) {
     try {
-      final decodedData = jsonDecode(message) as Map<String, dynamic>;
-      if (decodedData.containsKey('event') && decodedData.containsKey('data')) {
-        return decodedData;
-      } else {
-        print('Invalid data format received from WebSocket.');
-      }
+      return BaseResponse.parseResponse(message);
     } catch (e) {
       print('Failed to parse data from WebSocket: $e');
+      return BaseResponse(eventType: EventType.unknown, data: null);
     }
-    return null;
   }
 
-  // Wrap the WebSocket stream to convert messages into Map<String, dynamic>
-  Stream<Map<String, dynamic>> _wrapStream(Stream<dynamic> stream) {
+  // Wrap the WebSocket stream to convert messages into BaseResponse
+  Stream<BaseResponse> _wrapStream(Stream<dynamic> stream) {
     return stream.map((message) {
-      return _parseMessage(message) ?? {};
-    }).where((data) => data.isNotEmpty);
+      return _parseMessage(message);
+    });
   }
 }

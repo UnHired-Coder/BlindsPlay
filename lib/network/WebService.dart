@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-import 'model/GameResponse.dart';
+import 'model/MatchingStartedData.dart';
 
 class WebService {
   final String baseUrl;

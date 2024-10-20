@@ -1,15 +1,23 @@
 import 'dart:convert';
 
+import 'package:blindsplay/network/model/JoinedRoomData.dart';
+
+import 'Events.dart';
+import 'PlayerMatchedData.dart';
+
 class BaseResponse {
-  final String event;
+  final EventType eventType;
   final dynamic data;
 
-  BaseResponse({required this.event, required this.data});
+  BaseResponse({required this.eventType, required this.data});
 
   // Factory method to create a BaseResponse from JSON
   factory BaseResponse.fromJson(Map<String, dynamic> json) {
+    final event = json['event'] as String;
+    final eventType = eventTypeFromString(event);
+
     return BaseResponse(
-      event: json['event'] as String,
+      eventType: eventType,
       data: json['data'],
     );
   }
@@ -17,6 +25,22 @@ class BaseResponse {
   // Method to parse the response into specific event data
   static BaseResponse parseResponse(String jsonString) {
     final Map<String, dynamic> json = jsonDecode(jsonString);
-    return BaseResponse.fromJson(json);
+    final baseResponse = BaseResponse.fromJson(json);
+
+    late final dynamic data;
+    print(baseResponse.eventType);
+
+    switch (baseResponse.eventType) {
+      case EventType.playerMatched:
+        data = PlayerMatchedData.fromJson(baseResponse.data);
+        break;
+      case EventType.joinedRoom:
+        data = JoinedRoomData.fromJson(baseResponse.data);
+        break;
+      default:
+        data = null;
+        break;
+    }
+    return BaseResponse(eventType: baseResponse.eventType, data: data);
   }
 }

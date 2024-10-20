@@ -3,10 +3,13 @@ import 'dart:math';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:blindsplay/logic/blocs/util/timer_block.dart';
+import 'package:blindsplay/network/model/JoinedRoomData.dart';
+import 'package:blindsplay/network/model/PlayerMatchedData.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../config/constants.dart';
-import '../../../network/model/GameResponse.dart';
+import '../../../network/model/Events.dart';
+import '../../../network/model/MatchingStartedData.dart';
 import '../../../network/repository/GameRepository.dart';
 import '../util/tic_tac_toe_pc_move_helper.dart';
 import 'game_event.dart';
@@ -50,22 +53,6 @@ class OnlineGameBloc extends Bloc<GameEvent, GameState> {
 
   StreamSubscription<Map<String, dynamic>>? _socketSubscription;
 
-  // Listen to socket messages safely
-  /*void _listenToSocketMessages() {
-    // Cancel any existing subscription to avoid multiple listeners
-    _socketSubscription?.cancel();
-
-    // Listen to the repository's socketMessages stream
-    print("Socket: ${gameRepository.socketMessages}");
-    _socketSubscription = gameRepository.socketMessages.listen((message) {
-      print("Socket: $message");
-      add(SocketMessageReceived(message));
-    }, onError: (error) {
-      print("Socket: $error");
-      addError(error); // Handle errors in the stream if necessary
-    });
-  }*/
-
   // Handle messages received from WebSocket
   Future<void> _onSocketMessageReceived(
       SocketMessageReceived event, Emitter<GameState> emit) async {
@@ -88,8 +75,29 @@ class OnlineGameBloc extends Bloc<GameEvent, GameState> {
     MatchingStartedData matchingStartedData =
         await gameRepository.findMatch(playerID);
 
-    gameRepository.match(playerID, matchingStartedData.waitlistId, (stream) {
-      add(const WaitingToStart(AppConstants.waitingToStartTime));
+    gameRepository.match(playerID, matchingStartedData.waitlistId, (event) {
+      switch (event.eventType) {
+        case EventType.playerMatched:
+          {
+            final playerMatchedData = (event.data as PlayerMatchedData);
+            gameRepository.joinRoom(playerID, playerMatchedData.roomId,
+                (event) {
+              switch (event.eventType) {
+                case EventType.joinedRoom:
+                  {
+                    final joinedRoomData =
+                        (event.data as JoinedRoomResponse).data;
+                    print("Player joined: $joinedRoomData.playerId");
+                  }
+                default:
+                  {}
+              }
+            });
+            add(const WaitingToStart(AppConstants.waitingToStartTime));
+          }
+        default:
+          {}
+      }
     });
   }
 

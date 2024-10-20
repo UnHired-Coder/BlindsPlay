@@ -1,5 +1,5 @@
 import '../WebSocketService.dart';
-import '../model/GameResponse.dart';
+import '../model/MatchingStartedData.dart';
 
 abstract class IGameRepository {
   Future<void> joinRoom(

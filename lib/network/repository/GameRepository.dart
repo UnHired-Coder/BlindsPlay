@@ -2,7 +2,7 @@ import 'dart:async';
 
 import '../WebService.dart';
 import '../WebSocketService.dart';
-import '../model/GameResponse.dart';
+import '../model/MatchingStartedData.dart';
 import 'IGameRepository.dart';
 
 class GameRepository implements IGameRepository {
@@ -23,9 +23,6 @@ class GameRepository implements IGameRepository {
   @override
   Future<void> joinRoom(
       int playerID, String roomID, MessageCallback onConnected) async {
-    _webSocketService.connect(
-        'wss://your-websocket-url', onConnected = onConnected);
-
     final joinMessage = {
       "action": "join-room",
       "data": {
