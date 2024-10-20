@@ -14,7 +14,7 @@ Widget CompeteOnlineCta(BuildContext context) {
     text: "Compete online!",
     icon: "assets/ic_lightning.png",
     onTap: () {
-      launchGame(context, GameMode.offlineAgainstPC);
+      launchGame(context, GameMode.onlineMultiplayer);
     },
   );
 }
@@ -25,7 +25,7 @@ Widget PlayNowCta(BuildContext context) {
     text: "Play now!",
     icon: "assets/ic_play.png",
     onTap: () {
-      launchGame(context, GameMode.offline2Players);
+      launchGame(context, GameMode.offlineAgainstPC);
     },
   );
 }

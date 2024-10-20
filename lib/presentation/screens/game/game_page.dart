@@ -1,5 +1,7 @@
 import 'package:amplitude_flutter/amplitude.dart';
 import 'package:blindsplay/config/colors.dart';
+import 'package:blindsplay/logic/blocs/game/online_game_bloc.dart';
+import 'package:blindsplay/network/repository/GameRepository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,10 +30,20 @@ class GamePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.primary,
       appBar: !kIsWeb ? _buildAppBar() : null,
-      body: BlocProvider(
-        create: (context) => GameBloc(gameMode: gameMode)
-          ..add(StartGame(gameMode)), // Start game when the page is created
-        child: _GameContent(boardSize: boardSize),
+      body: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => GameBloc(gameMode: gameMode)
+              ..add(StartGame(gameMode)), // Start game when the page is created
+          ),
+          BlocProvider(
+            create: (context) => OnlineGameBloc(
+                gameMode: gameMode, gameRepository: GetIt.I<GameRepository>())
+              ..add(
+                  StartGame(gameMode)), // Initialize something for AnotherBloc
+          ),
+        ], // Start game when the page is created
+        child: _GameContent(boardSize: boardSize, gameMode: gameMode),
       ),
     );
   }
@@ -48,49 +60,99 @@ class GamePage extends StatelessWidget {
 
 class _GameContent extends StatelessWidget {
   final int boardSize;
+  final GameMode gameMode;
 
-  const _GameContent({required this.boardSize});
+  const _GameContent({required this.boardSize, required this.gameMode});
 
   @override
   Widget build(BuildContext context) {
     final amplitude = GetIt.I<Amplitude>();
 
-    return BlocBuilder<GameBloc, GameState>(
-      builder: (context, state) {
-        if (state is GameInitial) {
-          amplitude.logEvent("Game State GameInitial");
+    if (gameMode == GameMode.onlineMultiplayer) {
+      return BlocBuilder<OnlineGameBloc, GameState>(
+        builder: (context, state) {
+          if (state is GameInitial) {
+            amplitude.logEvent("Game State GameInitial");
 
-          return FadeInWidget(
-              key: Key("GameWaiting"), child: _buildMessage('Get ready...'));
-        } else if (state is GameWaiting) {
-          amplitude.logEvent("Game State GameWaiting");
+            return FadeInWidget(
+                key: Key("GameWaiting"), child: _buildMessage('Get ready...'));
+          } else if (state is GameWaiting) {
+            amplitude.logEvent("Game State GameWaiting");
 
-          return FadeInWidget(
-              key: Key("GameInProgress"),
-              child: _buildMessage('Game starts in : ${state.countdown}s'));
-        } else if (state is GameInProgress) {
-          amplitude.logEvent("Game State GameInProgress");
+            return FadeInWidget(
+                key: Key("GameInProgress"),
+                child: _buildMessage('Game starts in : ${state.countdown}s'));
+          } else if (state is GameInProgress) {
+            amplitude.logEvent("Game State GameInProgress");
 
-          return FadeInWidget(
-              key: Key("GameOver"),
-              child: ActiveGameBoard(state: state, boardSize: boardSize));
-        } else if (state is GameOver) {
-          amplitude.logEvent("Game State GameOver");
+            return FadeInWidget(
+                key: Key("GameOver"),
+                child: ActiveGameBoard(
+                  state: state,
+                  boardSize: boardSize,
+                  onMakeMove: (posX, posY) {},
+                ));
+          } else if (state is GameOver) {
+            amplitude.logEvent("Game State GameOver");
 
-          return FadeInWidget(
-              key: Key("GameError"),
-              child: FinishedGameBoard(state: state, boardSize: boardSize));
-        } else if (state is GameError) {
-          amplitude.logEvent("Game State GameError");
+            return FadeInWidget(
+                key: Key("GameError"),
+                child: FinishedGameBoard(state: state, boardSize: boardSize));
+          } else if (state is GameError) {
+            amplitude.logEvent("Game State GameError");
 
-          return _buildMessage('Error: ${state.error}');
-        } else {
-          amplitude.logEvent("Game State No State");
+            return _buildMessage('Error: ${state.error}');
+          } else {
+            amplitude.logEvent("Game State No State");
 
-          return _buildMessage('Unknown State');
-        }
-      },
-    );
+            return _buildMessage('Unknown State');
+          }
+        },
+      );
+    } else {
+      return BlocBuilder<GameBloc, GameState>(
+        builder: (context, state) {
+          if (state is GameInitial) {
+            amplitude.logEvent("Game State GameInitial");
+
+            return FadeInWidget(
+                key: Key("GameWaiting"), child: _buildMessage('Get ready...'));
+          } else if (state is GameWaiting) {
+            amplitude.logEvent("Game State GameWaiting");
+
+            return FadeInWidget(
+                key: Key("GameInProgress"),
+                child: _buildMessage('Game starts in : ${state.countdown}s'));
+          } else if (state is GameInProgress) {
+            amplitude.logEvent("Game State GameInProgress");
+
+            return FadeInWidget(
+                key: Key("GameOver"),
+                child: ActiveGameBoard(
+                    state: state,
+                    boardSize: boardSize,
+                    onMakeMove: (posX, posY) {
+                      BlocProvider.of<GameBloc>(context)
+                          .add(MakeMove(posX, posY));
+                    }));
+          } else if (state is GameOver) {
+            amplitude.logEvent("Game State GameOver");
+
+            return FadeInWidget(
+                key: Key("GameError"),
+                child: FinishedGameBoard(state: state, boardSize: boardSize));
+          } else if (state is GameError) {
+            amplitude.logEvent("Game State GameError");
+
+            return _buildMessage('Error: ${state.error}');
+          } else {
+            amplitude.logEvent("Game State No State");
+
+            return _buildMessage('Unknown State');
+          }
+        },
+      );
+    }
   }
 
   Widget _buildMessage(String message) {

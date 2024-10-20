@@ -5,6 +5,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
+import 'network/WebService.dart';
+import 'network/WebSocketService.dart';
+import 'network/repository/GameRepository.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   setupServices();
@@ -20,6 +24,19 @@ void setupServices() async {
         'cf36ee56a0cfb45c6d9071b41dd02c02'); // Replace 'YOUR_API_KEY' with your Amplitude API key
     return amplitude;
   });
+
+  // Register the WebSocketService
+  getIt.registerLazySingleton<WebSocketService>(() => WebSocketService());
+
+  getIt.registerLazySingleton<WebService>(
+      () => WebService(baseUrl: 'http://10.0.2.2:8080'));
+
+  // Register the GameRepository and pass in the WebSocketService dependency
+  getIt.registerLazySingleton<GameRepository>(
+    () => GameRepository(
+        webSocketService: getIt<WebSocketService>(),
+        webService: getIt<WebService>()),
+  );
 
   if (kIsWeb) {
     await Firebase.initializeApp(

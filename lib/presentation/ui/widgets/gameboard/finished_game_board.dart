@@ -2,6 +2,7 @@ import 'package:blindsplay/config/constants.dart';
 import 'package:blindsplay/presentation/ui/widgets/gameboard/game_board.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import '../../../../config/colors.dart';
 import '../../../../config/text_styles.dart';
 import '../../../../logic/blocs/game/game_state.dart';
@@ -41,6 +42,7 @@ class FinishedGameBoard extends StatelessWidget {
                   active: true,
                   cellWidth: cellWidth,
                   boardSize: AppConstants.boardSize,
+                  onMakeMove: (_, __) {},
                 ),
               ),
               const SizedBox(height: 24),

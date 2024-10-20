@@ -5,13 +5,14 @@ import '../../../../config/constants.dart';
 import '../../../../config/text_styles.dart';
 import '../../../../logic/blocs/game/game_state.dart';
 import 'game_board.dart';
-import 'package:flutter/foundation.dart';
 
 class ActiveGameBoard extends StatelessWidget {
   final GameInProgress state;
   final int boardSize; // Dynamic board size
+  final void Function(int row, int column)? onMakeMove;
 
-  const ActiveGameBoard({required this.state, required this.boardSize});
+  const ActiveGameBoard(
+      {required this.state, required this.boardSize, required this.onMakeMove});
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +52,7 @@ class ActiveGameBoard extends StatelessWidget {
                               active: state.active,
                               cellWidth: cellWidth,
                               boardSize: AppConstants.boardSize,
+                              onMakeMove: onMakeMove,
                             ),
                             !state.active
                                 ? Text(

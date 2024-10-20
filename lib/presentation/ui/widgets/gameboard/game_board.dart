@@ -1,9 +1,5 @@
-import 'package:blindsplay/config/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../logic/blocs/game/game_bloc.dart';
-import '../../../../logic/blocs/game/game_event.dart';
 import '../../../../logic/blocs/game/game_state.dart';
 import 'game_bars.dart';
 import 'game_tile.dart';
@@ -14,6 +10,7 @@ class GameBoard extends StatelessWidget {
   final bool active;
   final double cellWidth;
   final int boardSize;
+  final void Function(int row, int column)? onMakeMove;
 
   GameBoard(
       {super.key,
@@ -21,7 +18,8 @@ class GameBoard extends StatelessWidget {
       required this.placeHolders,
       required this.active,
       required this.cellWidth,
-      required this.boardSize});
+      required this.boardSize,
+      required this.onMakeMove});
 
   @override
   Widget build(BuildContext context) {
@@ -59,17 +57,17 @@ class GameBoard extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: List.generate(boardSize, (columnIndex) {
         return GameTile(
-            x: rowIndex,
-            y: columnIndex,
-            cellWidth: cellWidth,
-            tileState: visibleBoard[rowIndex][columnIndex],
-            placeHolder: placeHolders?[rowIndex][columnIndex],
-            onTap: () {
-              if (active) {
-                BlocProvider.of<GameBloc>(context)
-                    .add(MakeMove(rowIndex, columnIndex));
-              }
-            });
+          x: rowIndex,
+          y: columnIndex,
+          cellWidth: cellWidth,
+          tileState: visibleBoard[rowIndex][columnIndex],
+          placeHolder: placeHolders?[rowIndex][columnIndex],
+          onTap: () {
+            if (active) {
+              onMakeMove?.call(rowIndex, columnIndex);
+            }
+          },
+        );
       }),
     );
   }

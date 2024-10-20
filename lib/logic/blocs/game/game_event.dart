@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+
 import 'game_state.dart';
 
 abstract class GameEvent extends Equatable {
@@ -67,7 +68,8 @@ class ConnectionError extends GameEvent {
 }
 
 class PlaySound extends GameEvent {
-  final String soundType; // You can define different sound types for X and O if needed
+  final String
+      soundType; // You can define different sound types for X and O if needed
 
   const PlaySound(this.soundType);
 
@@ -75,3 +77,11 @@ class PlaySound extends GameEvent {
   List<Object?> get props => [soundType];
 }
 
+class SocketMessageReceived extends GameEvent {
+  final Map<String, dynamic> data;
+
+  const SocketMessageReceived(this.data);
+
+  @override
+  List<Object?> get props => [data];
+}
