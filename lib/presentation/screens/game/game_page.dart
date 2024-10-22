@@ -90,7 +90,10 @@ class _GameContent extends StatelessWidget {
                 child: ActiveGameBoard(
                   state: state,
                   boardSize: boardSize,
-                  onMakeMove: (posX, posY) {},
+                  onMakeMove: (posX, posY) {
+                    BlocProvider.of<OnlineGameBloc>(context)
+                        .add(MakeMove(posX, posY));
+                  },
                 ));
           } else if (state is GameOver) {
             amplitude.logEvent("Game State GameOver");
