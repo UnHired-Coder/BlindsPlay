@@ -7,6 +7,7 @@ abstract class IGameRepository {
   Future<MatchingStartedData> findMatch(int userId); // New method
   Future<void> match(
       int playerID, String waitlistId, MessageCallback onConnected);
+  Future<void> playGame(String roomID, MessageCallback onConnected);
   // Method to be called when the WebSocket connection is established
   void close();
 }

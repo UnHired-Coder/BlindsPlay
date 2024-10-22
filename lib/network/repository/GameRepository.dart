@@ -65,4 +65,10 @@ class GameRepository implements IGameRepository {
         "ws://10.0.2.2:8080/tictacmemo/find-match/$playerID/$waitlistId";
     _webSocketService.connect(url, onConnected = onConnected);
   }
+
+  @override
+  Future<void> playGame(String roomID, MessageCallback onConnected) async {
+    final url = "ws://10.0.2.2:8080/tictacmemo/play-game/$roomID";
+    _webSocketService.connect(url, onConnected = onConnected);
+  }
 }

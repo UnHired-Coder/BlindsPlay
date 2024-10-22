@@ -36,6 +36,9 @@ class BaseResponse {
       case EventType.joinedRoom:
         data = JoinedRoomData.fromJson(baseResponse.data);
         break;
+      case EventType.startGame:
+        data = BoardGameState.fromJson(baseResponse.data);
+        break;
       case EventType.makeMove:
         data = BoardGameState.fromJson(baseResponse.data);
       default:

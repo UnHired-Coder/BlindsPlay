@@ -2,6 +2,7 @@ enum EventType {
   playerMatched,
   joinedRoom,
   makeMove,
+  startGame,
   unknown,
 }
 
@@ -13,6 +14,8 @@ EventType eventTypeFromString(String event) {
       return EventType.joinedRoom;
     case 'make-move':
       return EventType.makeMove;
+    case 'start-game':
+      return EventType.startGame;
     default:
       return EventType.unknown;
   }

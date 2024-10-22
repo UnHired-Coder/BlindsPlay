@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:blindsplay/logic/blocs/util/timer_block.dart';
+import 'package:blindsplay/network/model/BaseResponse.dart';
 import 'package:blindsplay/network/model/JoinedRoomData.dart';
 import 'package:blindsplay/network/model/PlayerMatchedData.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -50,36 +51,50 @@ class OnlineGameBloc extends Bloc<GameEvent, GameState> {
     });
   }
 
+  final playerID = 1;
+
   // Event handler for StartGame event
   Future<void> _onStartGame(StartGame event, Emitter<GameState> emit) async {
     gameMode = event.gameMode;
 
     emit(const GameInitial());
 
-    final playerID = 1;
     MatchingStartedData matchingStartedData =
         await gameRepository.findMatch(playerID);
 
-    gameRepository.match(playerID, matchingStartedData.waitlistId,
-        (clientEvent) {
-      switch (clientEvent.eventType) {
-        case EventType.playerMatched:
-          {
-            final playerMatchedData = (clientEvent.data as PlayerMatchedData);
-            assignedLabel = getTileStateFromSymbol(
-                playerMatchedData.initialGameData.assignedLabel);
+    gameRepository.match(
+        playerID, matchingStartedData.waitlistId, _onServerEvent);
+  }
 
-            gameRepository.joinRoom(playerID, playerMatchedData.roomId);
-          }
-        case EventType.joinedRoom:
-          {
-            add(const WaitingToStart(AppConstants.waitingToStartTime));
-            final joinedRoomData = (clientEvent.data as JoinedRoomData);
-          }
-        default:
-          {}
-      }
-    });
+  void _onServerEvent(BaseResponse serverEvent) {
+    switch (serverEvent.eventType) {
+      case EventType.playerMatched:
+        {
+          final playerMatchedData = (serverEvent.data as PlayerMatchedData);
+          assignedLabel = getTileStateFromSymbol(
+              playerMatchedData.initialGameData.assignedLabel);
+
+          gameRepository.playGame(playerMatchedData.roomId, _onServerEvent);
+          gameRepository.joinRoom(playerID, playerMatchedData.roomId);
+        }
+      case EventType.joinedRoom:
+        {
+          final playerMatchedData = (serverEvent.data as JoinedRoomData);
+          print(playerMatchedData);
+
+          add(const WaitingToStart(AppConstants.waitingToStartTime));
+        }
+      case EventType.startGame:
+        {
+          final boardGameState = (serverEvent.data as BoardGameState);
+          print("Starting game...");
+          print(boardGameState.board);
+        }
+      case EventType.makeMove:
+        {}
+      default:
+        {}
+    }
   }
 
   // Event handler for StartWaiting event
@@ -93,17 +108,6 @@ class OnlineGameBloc extends Bloc<GameEvent, GameState> {
       await Future.delayed(const Duration(seconds: 1));
       emit(GameWaiting(event.countdown - i - 1));
     }
-
-    List<List<TileState>> initialBoard =
-        List.generate(3, (_) => List.generate(3, (_) => TileState.empty));
-    List<List<TileState>> visibleBoard =
-        List.generate(3, (_) => List.generate(3, (_) => TileState.empty));
-
-    emit(GameInProgress(
-        board: initialBoard,
-        visibleBoard: visibleBoard,
-        currentPlayer: TileState.X,
-        placeHolders: placeHolders));
 
     timerBloc.startCountdown(const Duration(days: 1));
   }
