@@ -51,7 +51,7 @@ class OnlineGameBloc extends Bloc<GameEvent, GameState> {
     });
   }
 
-  final playerID = 2;
+  final playerID = 1;
 
   // Event handler for StartGame event
   Future<void> _onPrepareForMatch(
@@ -110,12 +110,39 @@ class OnlineGameBloc extends Bloc<GameEvent, GameState> {
           TileState currentPlayer =
               getTileStateFromSymbol(boardGameState.currentPlayer);
 
+          List<List<TileState>> board =
+              convertToTileState(boardGameState.board);
+          List<List<TileState>> visibleBoard =
+              convertToTileState(boardGameState.visibleBoard);
+
           emit(GameInProgress(
               board: convertToTileState(boardGameState.board),
-              visibleBoard: convertToTileState(boardGameState.visibleBoard),
+              visibleBoard: visibleBoard,
               currentPlayer: currentPlayer,
               placeHolders: placeHolders,
               active: currentPlayer == assignedLabel));
+
+          if (boardGameState.isDraw) {
+            // Game End: Draw
+            const result = "It's a draw!";
+            emit(GameOver(
+                result: result,
+                finalBoard: board,
+                elapsedTime: timerBloc.state,
+                moveCount: _moveCount));
+          }
+
+          TileState winner = getTileStateFromSymbol(boardGameState.winner);
+
+          if (winner != TileState.empty) {
+            // Game End
+            final result = "Player ${winner.symbol} wins!";
+            emit(GameOver(
+                result: result,
+                finalBoard: board,
+                elapsedTime: timerBloc.state,
+                moveCount: _moveCount));
+          }
         }
       default:
         {}
