@@ -74,13 +74,15 @@ class OnlineGameBloc extends Bloc<GameEvent, GameState> {
           assignedLabel = getTileStateFromSymbol(
               playerMatchedData.initialGameData.assignedLabel);
 
+          print("AssignedLabel :$assignedLabel");
+
           gameRepository.playGame(playerMatchedData.roomId, _onServerEvent);
           gameRepository.joinRoom(playerID, playerMatchedData.roomId);
         }
       case EventType.joinedRoom:
         {
-          final playerMatchedData = (serverEvent.data as JoinedRoomData);
-          print(playerMatchedData);
+          final joinedRoomData = (serverEvent.data as JoinedRoomData);
+          print(joinedRoomData);
 
           add(const WaitingToStart(AppConstants.waitingToStartTime));
         }
@@ -89,9 +91,32 @@ class OnlineGameBloc extends Bloc<GameEvent, GameState> {
           final boardGameState = (serverEvent.data as BoardGameState);
           print("Starting game...");
           print(boardGameState.board);
+
+          TileState currentPlayer =
+              getTileStateFromSymbol(boardGameState.currentPlayer);
+
+          emit(GameInProgress(
+              board: convertToTileState(boardGameState.board),
+              visibleBoard: convertToTileState(boardGameState.visibleBoard),
+              currentPlayer: currentPlayer,
+              placeHolders: placeHolders,
+              active: currentPlayer == assignedLabel));
         }
       case EventType.makeMove:
-        {}
+        {
+          final boardGameState = (serverEvent.data as BoardGameState);
+          print("Opponent made a move!");
+
+          TileState currentPlayer =
+              getTileStateFromSymbol(boardGameState.currentPlayer);
+
+          emit(GameInProgress(
+              board: convertToTileState(boardGameState.board),
+              visibleBoard: convertToTileState(boardGameState.visibleBoard),
+              currentPlayer: currentPlayer,
+              placeHolders: placeHolders,
+              active: currentPlayer == assignedLabel));
+        }
       default:
         {}
     }
@@ -394,5 +419,11 @@ class OnlineGameBloc extends Bloc<GameEvent, GameState> {
   String getRandomIcon() {
     var rng = Random();
     return "assets/meme/${rng.nextInt(11) + 1}.png";
+  }
+
+  List<List<TileState>> convertToTileState(List<List<String>> board) {
+    return board.map((row) {
+      return row.map((symbol) => getTileStateFromSymbol(symbol)).toList();
+    }).toList();
   }
 }
