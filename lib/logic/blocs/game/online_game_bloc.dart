@@ -115,8 +115,14 @@ class OnlineGameBloc extends Bloc<GameEvent, GameState> {
           List<List<TileState>> visibleBoard =
               convertToTileState(boardGameState.visibleBoard);
 
+          add(PlaySound(currentPlayer == TileState.X ? "X" : "O"));
+          _moveCount++;
+
+          await Future.delayed(const Duration(
+              milliseconds: AppConstants.delayToHide)); //Simulate API/ Socket
+
           emit(GameInProgress(
-              board: convertToTileState(boardGameState.board),
+              board: board,
               visibleBoard: visibleBoard,
               currentPlayer: currentPlayer,
               placeHolders: placeHolders,
@@ -168,17 +174,16 @@ class OnlineGameBloc extends Bloc<GameEvent, GameState> {
   Future<void> _onMakeMove(MakeMove event, Emitter<GameState> emit) async {
     final currentState = state;
     if (currentState is GameInProgress) {
-      if (currentState.board[event.x][event.y] == TileState.empty) {
-        add(PlaySound(currentState.currentPlayer == TileState.X ? "X" : "O"));
-        _moveCount++;
+      currentState.visibleBoard[event.x][event.y] = currentState.currentPlayer;
 
-        gameRepository.makeMove(playerID, _roomID, event.x, event.y);
+      emit(GameInProgress(
+          board: currentState.board,
+          visibleBoard: currentState.visibleBoard,
+          currentPlayer: currentState.currentPlayer,
+          placeHolders: placeHolders,
+          active: currentState.currentPlayer == assignedLabel));
 
-        await Future.delayed(const Duration(
-            milliseconds: AppConstants.delayToHide)); //Simulate API/ Socket
-
-        add(HideMove(event.x, event.y));
-      }
+      gameRepository.makeMove(playerID, _roomID, event.x, event.y);
     }
   }
 
