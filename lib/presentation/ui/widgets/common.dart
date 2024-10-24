@@ -5,7 +5,7 @@ import '../../../config/text_styles.dart';
 import '../../../logic/blocs/game/game_state.dart';
 import '../../../network/repository/login/FirebaseAuthService.dart';
 import '../../screens/auth/LoginPage.dart';
-import '../../screens/game/game_page.dart';
+import '../../screens/game/GamePage.dart';
 import 'base_cta_ui.dart';
 
 Widget CompeteOnlineCta(BuildContext context) {

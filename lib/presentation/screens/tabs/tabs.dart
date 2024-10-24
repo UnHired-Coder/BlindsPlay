@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../logic/blocs/game/game_state.dart';
 import '../../model/PageModel.dart';
-import '../game/game_page.dart';
+import '../game/GamePage.dart';
 import 'leaderboard_page.dart';
 import 'profile_page.dart';
 

@@ -1,5 +1,6 @@
 import 'package:amplitude_flutter/amplitude.dart';
 import 'package:blindsplay/config/colors.dart';
+import 'package:blindsplay/config/spacing.dart';
 import 'package:blindsplay/logic/blocs/game/online_game_bloc.dart';
 import 'package:blindsplay/network/repository/gmae/GameRepository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -84,7 +85,7 @@ class _GameContent extends StatelessWidget {
 
             return FadeInWidget(
                 key: Key("GameInProgress"),
-                child: _buildMessage('Game starts in : ${state.countdown}s'));
+                child: _buildPlayerWaitingUi(state.countdown));
           } else if (state is GameInProgress) {
             amplitude.logEvent("Game State GameInProgress");
 
@@ -161,14 +162,134 @@ class _GameContent extends StatelessWidget {
     }
   }
 
-  Widget _buildMessage(String message) {
+  Widget _buildMessage(String message, {Color color = AppColors.onPrimary}) {
     return Center(
       child: Text(
         message,
-        style: const TextStyle(
-            fontSize: 24,
-            color: AppColors.onPrimary,
-            fontFamily: AppConstants.fontFamily1),
+        style: TextStyle(
+            fontSize: 20, color: color, fontFamily: AppConstants.fontFamily1),
+      ),
+    );
+  }
+
+  Widget _buildPlayerWaitingUi(int countdown) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _buildPlayerCard(
+                  imageUrl: "",
+                  avatarUrl: "",
+                  playerName: "Ankit wala",
+                  score: "100"),
+              const SizedBox(width: AppSpacing.medium),
+              _buildMessage('V/s', color: AppColors.success),
+              const SizedBox(width: AppSpacing.medium),
+              _buildPlayerCard(
+                  imageUrl: "",
+                  avatarUrl: "",
+                  playerName: "Sarwar chahal",
+                  score: "100"),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.large),
+          _buildMessage('Game starts in : ${countdown}s')
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPlayerCard({
+    required String imageUrl,
+    String? avatarUrl,
+    required String playerName,
+    required String score,
+  }) {
+    return Container(
+      width: 90,
+      child: Column(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: AppColors.greyDark,
+              borderRadius: BorderRadius.circular(5),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black
+                      .withOpacity(0.3), // Shadow color with opacity
+                  spreadRadius: 2, // How much the shadow spreads
+                  blurRadius: 8, // The blur effect of the shadow
+                  offset: Offset(0, 4), // Position of the shadow (x, y)
+                ),
+              ],
+            ),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  width: 90,
+                  height: 90,
+                  decoration: BoxDecoration(
+                      color: AppColors.greyDark,
+                      borderRadius: BorderRadius.circular(5)),
+                ),
+                if (avatarUrl != null)
+                  Container(
+                    width: 80,
+                    height: 80,
+                    alignment: Alignment.bottomCenter,
+                    decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [
+                            AppColors.primary,
+                            AppColors.secondary,
+                            AppColors.primary,
+                            AppColors.secondary,
+                            AppColors.primary,
+                            AppColors.secondary,
+                          ],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          transform: GradientRotation(
+                              30 * 3.14 / 180), // 30 degrees to radians
+                        ),
+                        borderRadius: BorderRadius.circular(3)),
+                  ),
+                Positioned(
+                  bottom: 10,
+                  child: Column(
+                    children: [
+                      Text(
+                        playerName,
+                        style: const TextStyle(
+                          color: AppColors.grey,
+                          fontSize: 8,
+                          fontFamily: AppConstants.fontFamily1,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      Text(
+                        score,
+                        style: const TextStyle(
+                          color: AppColors.onPrimary,
+                          fontSize: 10,
+                          fontFamily: AppConstants.fontFamily1,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
