@@ -11,13 +11,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../config/constants.dart';
 import '../../../network/model/Events.dart';
 import '../../../network/model/MatchingStartedData.dart';
-import '../../../network/repository/GameRepository.dart';
+import '../../../network/repository/gmae/GameRepository.dart';
 import 'game_event.dart';
 import 'game_state.dart';
 
 class OnlineGameBloc extends Bloc<GameEvent, GameState> {
   final TimerBloc timerBloc = TimerBloc();
   GameMode gameMode; // Add GameMode as a final property
+  String playerID;
 
   late List<List<String>> placeHolders =
       List.generate(3, (_) => List.generate(3, (_) => ""));
@@ -27,7 +28,10 @@ class OnlineGameBloc extends Bloc<GameEvent, GameState> {
   TileState? assignedLabel;
   late String _roomID;
 
-  OnlineGameBloc({required this.gameMode, required this.gameRepository})
+  OnlineGameBloc(
+      {required this.gameMode,
+      required this.gameRepository,
+      required this.playerID})
       : super(const GameInitial()) {
     // Register the event handlers
     on<StartGame>(_onPrepareForMatch);
@@ -50,8 +54,6 @@ class OnlineGameBloc extends Bloc<GameEvent, GameState> {
       }
     });
   }
-
-  final playerID = 1;
 
   // Event handler for StartGame event
   Future<void> _onPrepareForMatch(

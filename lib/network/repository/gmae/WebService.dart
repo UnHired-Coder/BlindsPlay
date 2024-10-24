@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-import 'model/MatchingStartedData.dart';
+import '../../model/MatchingStartedData.dart';
 
 class WebService {
   final String baseUrl;
@@ -10,7 +10,7 @@ class WebService {
   WebService({required this.baseUrl});
 
   // Method to find a match by user ID.
-  Future<MatchingStartedData> findMatch(int userId) async {
+  Future<MatchingStartedData> findMatch(String userId) async {
     final uri = Uri.parse('$baseUrl/tictacmemo/find-match')
         .replace(queryParameters: {'user_id': userId.toString()});
 

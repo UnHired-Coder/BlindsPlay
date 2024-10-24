@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../config/colors.dart';
 import '../../../config/text_styles.dart';
 import '../../../logic/blocs/game/game_state.dart';
-import '../../../util/firebase_auth.dart';
+import '../../../network/repository/login/FirebaseAuthService.dart';
 import '../../screens/auth/LoginPage.dart';
 import '../../screens/game/game_page.dart';
 import 'base_cta_ui.dart';
@@ -32,7 +32,7 @@ Widget PlayNowCta(BuildContext context) {
 
 void launchGame(BuildContext context, GameMode gameMode) async {
   // Check if the user is authenticated
-  final user = await AuthService()
+  final user = await FirebaseAuthService()
       .getCurrentUser(); // Update this method to fetch the current user
   if (user == null) {
     // User is not authenticated, navigate to login page

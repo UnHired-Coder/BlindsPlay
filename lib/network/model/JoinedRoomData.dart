@@ -3,14 +3,14 @@ import 'Events.dart';
 
 class JoinedRoomData {
   final String roomId;
-  final int playerId;
+  final String playerId;
 
   JoinedRoomData({required this.roomId, required this.playerId});
 
   factory JoinedRoomData.fromJson(Map<String, dynamic> json) {
     return JoinedRoomData(
       roomId: json['room_id'] as String,
-      playerId: json['player_id'] as int,
+      playerId: json['player_id'] as String,
     );
   }
 }

@@ -59,7 +59,7 @@ class Room {
   final DateTime updatedAt;
   final BoardGameState boardGameState;
   final String currentTurn;
-  final Map<String, int> playerIds;
+  final Map<String, String> playerIds;
 
   Room({
     required this.roomId,
@@ -83,7 +83,7 @@ class Room {
         boardGameState: BoardGameState.fromJson(json['GameState']),
         currentTurn: json['CurrentTurn'] as String,
         playerIds:
-            Map<String, int>.from(json['PlayerIDs'] as Map<String, dynamic>),
+            Map<String, String>.from(json['PlayerIDs'] as Map<String, dynamic>),
       );
     } catch (e) {
       throw Exception('Failed to parse Room: $e');

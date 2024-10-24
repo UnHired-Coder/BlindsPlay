@@ -1,7 +1,8 @@
 import 'package:amplitude_flutter/amplitude.dart';
 import 'package:blindsplay/config/colors.dart';
 import 'package:blindsplay/logic/blocs/game/online_game_bloc.dart';
-import 'package:blindsplay/network/repository/GameRepository.dart';
+import 'package:blindsplay/network/repository/gmae/GameRepository.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,7 +39,9 @@ class GamePage extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => OnlineGameBloc(
-                gameMode: gameMode, gameRepository: GetIt.I<GameRepository>())
+                gameMode: gameMode,
+                gameRepository: GetIt.I<GameRepository>(),
+                playerID: FirebaseAuth.instance.currentUser!.uid)
               ..add(
                   StartGame(gameMode)), // Initialize something for AnotherBloc
           ),

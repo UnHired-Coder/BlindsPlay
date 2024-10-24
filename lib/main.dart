@@ -1,13 +1,16 @@
 import 'package:amplitude_flutter/amplitude.dart';
+import 'package:blindsplay/network/repository/login/FirebaseAuthService.dart';
+import 'package:blindsplay/network/repository/login/UserRepository.dart';
+import 'package:blindsplay/network/repository/login/UserService.dart';
 import 'package:blindsplay/presentation/screens/app.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
-import 'network/WebService.dart';
-import 'network/WebSocketService.dart';
-import 'network/repository/GameRepository.dart';
+import 'network/repository/gmae/GameRepository.dart';
+import 'network/repository/gmae/WebService.dart';
+import 'network/repository/gmae/WebSocketService.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,6 +40,14 @@ void setupServices() async {
         webSocketService: getIt<WebSocketService>(),
         webService: getIt<WebService>()),
   );
+
+  getIt.registerLazySingleton<FirebaseAuthService>(() => FirebaseAuthService());
+
+  getIt.registerLazySingleton<UserService>(
+      () => UserService(baseUrl: 'http://10.0.2.2:8080'));
+
+  getIt.registerLazySingleton<UserRepository>(
+      () => UserRepository(userService: getIt<UserService>()));
 
   if (kIsWeb) {
     await Firebase.initializeApp(

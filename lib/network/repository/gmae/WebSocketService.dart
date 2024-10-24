@@ -3,8 +3,8 @@ import 'dart:convert';
 
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-import 'model/BaseResponse.dart';
-import 'model/Events.dart';
+import '../../model/BaseResponse.dart';
+import '../../model/Events.dart';
 
 typedef MessageCallback = void Function(BaseResponse);
 

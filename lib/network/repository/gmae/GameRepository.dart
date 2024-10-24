@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import '../WebService.dart';
-import '../WebSocketService.dart';
-import '../model/MatchingStartedData.dart';
+import '../../model/MatchingStartedData.dart';
 import 'IGameRepository.dart';
+import 'WebService.dart';
+import 'WebSocketService.dart';
 
 class GameRepository implements IGameRepository {
   final WebSocketService _webSocketService;
@@ -21,7 +21,7 @@ class GameRepository implements IGameRepository {
         _webService = webService;
 
   @override
-  Future<void> joinRoom(int playerID, String roomID) async {
+  Future<void> joinRoom(String playerID, String roomID) async {
     final joinMessage = {
       "action": "join-room",
       "data": {
@@ -33,7 +33,8 @@ class GameRepository implements IGameRepository {
   }
 
   @override
-  Future<void> makeMove(int playerID, String roomID, int posX, int posY) async {
+  Future<void> makeMove(
+      String playerID, String roomID, int posX, int posY) async {
     final moveMessage = {
       "action": "make-move",
       "data": {
@@ -47,7 +48,7 @@ class GameRepository implements IGameRepository {
   }
 
   @override
-  Future<MatchingStartedData> findMatch(int userId) async {
+  Future<MatchingStartedData> findMatch(String userId) async {
     return _webService.findMatch(userId);
   }
 
@@ -60,7 +61,7 @@ class GameRepository implements IGameRepository {
 
   @override
   Future<void> match(
-      int playerID, String waitlistId, MessageCallback onConnected) async {
+      String playerID, String waitlistId, MessageCallback onConnected) async {
     final url =
         "ws://10.0.2.2:8080/tictacmemo/find-match/$playerID/$waitlistId";
     _webSocketService.connect(url, onConnected = onConnected);
