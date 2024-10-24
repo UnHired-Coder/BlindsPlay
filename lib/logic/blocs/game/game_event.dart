@@ -76,3 +76,79 @@ class PlaySound extends GameEvent {
   @override
   List<Object?> get props => [soundType];
 }
+
+class UpdateGameProgress extends GameEvent {
+  final List<List<TileState>>? board;
+  final List<List<TileState>>? visibleBoard;
+  final TileState currentPlayer;
+  final bool? active;
+  final List<List<String>>? placeHolders;
+  final int? elapsedTime;
+
+  const UpdateGameProgress({
+    this.board,
+    this.visibleBoard,
+    required this.currentPlayer,
+    this.active,
+    this.placeHolders,
+    this.elapsedTime,
+  });
+
+  @override
+  List<Object?> get props =>
+      [board, visibleBoard, currentPlayer, active, placeHolders, elapsedTime];
+}
+
+class GameStarted extends GameEvent {
+  final List<List<TileState>> board;
+  final List<List<TileState>> visibleBoard;
+  final TileState currentPlayer;
+  final bool active;
+
+  const GameStarted({
+    required this.board,
+    required this.visibleBoard,
+    required this.currentPlayer,
+    required this.active,
+  });
+
+  @override
+  List<Object?> get props => [board, visibleBoard, currentPlayer, active];
+}
+
+class GameProgressUpdated extends GameEvent {
+  final List<List<TileState>> board;
+  final List<List<TileState>> visibleBoard;
+  final TileState currentPlayer;
+  final bool active;
+  final int moveCount;
+
+  const GameProgressUpdated({
+    required this.board,
+    required this.visibleBoard,
+    required this.currentPlayer,
+    required this.active,
+    required this.moveCount,
+  });
+
+  @override
+  List<Object?> get props =>
+      [board, visibleBoard, currentPlayer, active, moveCount];
+}
+
+class GameFinished extends GameEvent {
+  final String result;
+  final List<List<TileState>> finalBoard;
+  final int elapsedTime;
+  final int moveCount;
+
+  const GameFinished({
+    required this.result,
+    required this.finalBoard,
+    required this.elapsedTime,
+    required this.moveCount,
+  });
+
+  @override
+  List<Object?> get props => [result, finalBoard, elapsedTime, moveCount];
+}
