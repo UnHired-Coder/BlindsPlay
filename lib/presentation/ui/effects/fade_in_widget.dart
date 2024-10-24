@@ -15,7 +15,10 @@ class _FadeInWidgetState extends State<FadeInWidget> {
   @override
   void initState() {
     super.initState();
+    _setOpacityState();
+  }
 
+  _setOpacityState() async {
     // Trigger the opacity change after a delay to make it visible
     Future.delayed(const Duration(milliseconds: 500), () {
       setState(() {
