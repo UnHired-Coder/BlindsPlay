@@ -104,6 +104,11 @@ class OnlineGameBloc extends Bloc<GameEvent, GameState> {
           List<List<TileState>> visibleBoard =
               convertToTileState(boardGameState.visibleBoard);
 
+          add(PlaySound(
+              boardGameState.currentPlayer == TileState.X ? "X" : "O"));
+
+          await Future.delayed(const Duration(seconds: 1));
+
           add(GameProgressUpdated(
             board: board,
             visibleBoard: visibleBoard,
@@ -201,23 +206,6 @@ class OnlineGameBloc extends Bloc<GameEvent, GameState> {
         visibleBoard: updatedVisibleBoard,
         currentPlayer: currentState.currentPlayer,
         active: false,
-        moveCount: _moveCount,
-      ));
-
-      await _onOnlineOpponentMakesMove(emit);
-    }
-  }
-
-  Future<void> _onOnlineOpponentMakesMove(Emitter<GameState> emit) async {
-    final currentState = state;
-    if (currentState is GameInProgress) {
-      await Future.delayed(Duration(seconds: 4));
-
-      add(GameProgressUpdated(
-        board: currentState.board,
-        visibleBoard: currentState.visibleBoard,
-        currentPlayer: currentState.currentPlayer,
-        active: true,
         moveCount: _moveCount,
       ));
     }
