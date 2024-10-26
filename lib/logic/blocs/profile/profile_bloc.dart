@@ -1,6 +1,9 @@
 // profile_bloc.dart
 import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../network/repository/login/UserRepository.dart';
 import 'data/profile.dart';
 import 'data/recent_game.dart';
 import 'profile_event.dart';
@@ -8,15 +11,18 @@ import 'profile_state.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final String apiUrl; // API URL
+  final UserRepository userRepository; // API endpoint URL
 
-  ProfileBloc({required this.apiUrl}) : super(ProfileInitial()) {
+  ProfileBloc({required this.apiUrl, required this.userRepository})
+      : super(ProfileInitial()) {
     // Register the event handlers
     on<LoadProfile>(_onLoadProfile);
     on<RefreshProfile>(_onRefreshProfile);
   }
 
   // Event handler for LoadProfile event
-  Future<void> _onLoadProfile(LoadProfile event, Emitter<ProfileState> emit) async {
+  Future<void> _onLoadProfile(
+      LoadProfile event, Emitter<ProfileState> emit) async {
     emit(ProfileLoading());
     try {
       final profile = await _fetchProfile();
@@ -27,7 +33,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   }
 
   // Event handler for RefreshProfile event
-  Future<void> _onRefreshProfile(RefreshProfile event, Emitter<ProfileState> emit) async {
+  Future<void> _onRefreshProfile(
+      RefreshProfile event, Emitter<ProfileState> emit) async {
     emit(ProfileLoading());
     try {
       final profile = await _fetchProfile();
@@ -38,19 +45,28 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   }
 
   Future<Profile> _fetchProfile() async {
-    // Simulate a delay (API call)
-    await Future.delayed(Duration(seconds: 2));
-
     // Mock profile data
-    return Profile(
-      name: 'John Doe',
-      rating: 1500,
-      rank: 5,
-      recentGames: [
-        RecentGame(opponentName: 'Alice', ratingBeforeGame: 1490, ratingChange: 10, win: true),
-        RecentGame(opponentName: 'Bob', ratingBeforeGame: 1510, ratingChange: -10, win: false),
-      ],
-    );
-  }
 
+    if (userRepository.isLoggedIn) {
+      return Profile(
+        name: userRepository.currentUser!.username,
+        rating: userRepository.currentUser!.rating,
+        rank: userRepository.currentUser!.rank,
+        recentGames: [
+          RecentGame(
+              opponentName: 'Test User',
+              ratingBeforeGame: 1000,
+              ratingChange: 0,
+              win: true),
+        ],
+      );
+    } else {
+      return Profile(
+        name: '---',
+        rating: 0,
+        rank: 0,
+        recentGames: [],
+      );
+    }
+  }
 }

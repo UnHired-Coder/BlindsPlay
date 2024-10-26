@@ -2,7 +2,6 @@ import 'package:amplitude_flutter/amplitude.dart';
 import 'package:blindsplay/config/colors.dart';
 import 'package:blindsplay/config/spacing.dart';
 import 'package:blindsplay/config/text_styles.dart';
-import 'package:blindsplay/logic/blocs/leaderboard/data/leader_board_entry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -34,9 +33,10 @@ class LeaderboardPage extends StatelessWidget {
           scrolledUnderElevation: 0,
           foregroundColor: AppColors.onPrimary),
       body: BlocProvider(
-        create: (context) =>
-            LeaderboardBloc(apiUrl: 'https://your-api-url/leaderboard')
-              ..add(StartLeaderboard()),
+        create: (context) => LeaderboardBloc(
+            userRepository: GetIt.I<UserRepository>(),
+            apiUrl: 'https://your-api-url/leaderboard')
+          ..add(StartLeaderboard()),
         child: const LeaderboardView(),
       ),
     );
@@ -48,8 +48,6 @@ class LeaderboardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userRepository = GetIt.I<UserRepository>();
-
     return BlocBuilder<LeaderboardBloc, LeaderboardState>(
       builder: (context, state) {
         if (state is LeaderboardLoading) {
@@ -61,13 +59,9 @@ class LeaderboardView extends StatelessWidget {
               children: [
                 const LeaderboardHeader(),
                 const SizedBox(height: AppSpacing.small),
-                if (userRepository.isLoggedIn)
-                  LeaderboardUserRank(
-                      entry: LeaderboardEntry(
-                          rank: userRepository.currentUser!.rank,
-                          name: userRepository.currentUser!.username,
-                          rating: userRepository.currentUser!.rating)),
-                if (userRepository.isLoggedIn)
+                if (state.userLeaderboard != null)
+                  LeaderboardUserRank(entry: state.userLeaderboard!),
+                if (state.userLeaderboard != null)
                   const SizedBox(height: AppSpacing.large),
                 Expanded(
                   child: Leaderboard(leaderboard: state.leaderboard),

@@ -35,7 +35,9 @@ class ProfilePage extends StatelessWidget {
           scrolledUnderElevation: 0,
           foregroundColor: AppColors.onPrimary),
       body: BlocProvider(
-        create: (context) => ProfileBloc(apiUrl: 'https://api.example.com')
+        create: (context) => ProfileBloc(
+            userRepository: GetIt.I<UserRepository>(),
+            apiUrl: 'https://api.example.com')
           ..add(LoadProfile()), // Trigger loading profile on creation
         child: userRepository.isLoggedIn
             ? const ProfileView()

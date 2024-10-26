@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../config/colors.dart';
@@ -16,20 +15,28 @@ class RecentGamesSection extends StatelessWidget {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: ListView.separated(
-          itemCount: recentGames.length * 20,
-          itemBuilder: (context, index) {
-            final entry = recentGames[index % 2];
-            final color = entry.win ? AppColors.success : AppColors.error;
-            return RecentGameTile(entry: entry, color: color);
-          },
-          separatorBuilder: (BuildContext context, int index) {
-            return const Divider(
-              color: Colors.grey, // Color of the divider line
-              thickness: 1.0, // Thickness of the line
-            );
-          },
-        ),
+        child: (recentGames.isNotEmpty)
+            ? ListView.separated(
+                itemCount: recentGames.length,
+                itemBuilder: (context, index) {
+                  final entry = recentGames[index];
+                  final color = entry.win ? AppColors.success : AppColors.error;
+                  return RecentGameTile(entry: entry, color: color);
+                },
+                separatorBuilder: (BuildContext context, int index) {
+                  return const Divider(
+                    color: Colors.grey, // Color of the divider line
+                    thickness: 1.0, // Thickness of the line
+                  );
+                },
+              )
+            : Container(
+                width: double.infinity,
+                alignment: Alignment.center,
+                child: Text("No recent games",
+                    style: AppTextStyles.bodyTextSmall
+                        .copyWith(color: AppColors.grey)),
+              ),
       ),
     );
   }

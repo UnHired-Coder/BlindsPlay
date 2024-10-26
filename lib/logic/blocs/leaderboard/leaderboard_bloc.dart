@@ -1,5 +1,7 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:convert';
+
+import 'package:blindsplay/network/repository/login/UserRepository.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 
 import 'data/leader_board_entry.dart';
@@ -8,8 +10,10 @@ import 'leaderboard_state.dart';
 
 class LeaderboardBloc extends Bloc<LeaderboardEvent, LeaderboardState> {
   final String apiUrl; // API endpoint URL
+  final UserRepository userRepository; // API endpoint URL
 
-  LeaderboardBloc({required this.apiUrl}) : super(const LeaderboardInitial()) {
+  LeaderboardBloc({required this.apiUrl, required this.userRepository})
+      : super(const LeaderboardInitial()) {
     // Register the event handlers
     on<StartLeaderboard>(_onStartLeaderboard);
     on<RefreshLeaderboard>(_onRefreshLeaderboard);
@@ -23,9 +27,14 @@ class LeaderboardBloc extends Bloc<LeaderboardEvent, LeaderboardState> {
     try {
       // Fetch leaderboard from API
       List<LeaderboardEntry> leaderboard = await _fetchLeaderboard();
-      emit(LeaderboardLoaded(leaderboard: leaderboard));
+      emit(LeaderboardLoaded(
+          userLeaderboard: LeaderboardEntry(
+              rank: userRepository.currentUser!.rank,
+              name: userRepository.currentUser!.username,
+              rating: userRepository.currentUser!.rating),
+          leaderboard: leaderboard));
     } catch (e) {
-      emit(LeaderboardError('Failed to load leaderboard'));
+      emit(const LeaderboardError('Failed to load leaderboard'));
     }
   }
 

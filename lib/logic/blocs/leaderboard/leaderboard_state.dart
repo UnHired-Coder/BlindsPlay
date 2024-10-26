@@ -14,13 +14,19 @@ class LeaderboardLoading extends LeaderboardState {
 }
 
 class LeaderboardLoaded extends LeaderboardState {
+  final LeaderboardEntry? userLeaderboard;
   final List<LeaderboardEntry> leaderboard;
 
-  const LeaderboardLoaded({required this.leaderboard});
+  const LeaderboardLoaded(
+      {required this.userLeaderboard, required this.leaderboard});
 
   // CopyWith to update the state easily
-  LeaderboardLoaded copyWith({List<LeaderboardEntry>? leaderboard}) {
-    return LeaderboardLoaded(leaderboard: leaderboard ?? this.leaderboard);
+  LeaderboardLoaded copyWith(
+      {LeaderboardEntry? userLeaderboard,
+      List<LeaderboardEntry>? leaderboard}) {
+    return LeaderboardLoaded(
+        userLeaderboard: userLeaderboard ?? this.userLeaderboard,
+        leaderboard: leaderboard ?? this.leaderboard);
   }
 }
 
