@@ -27,9 +27,7 @@ class _MainScreenState extends State<MainScreen> {
         ? WebLayout(
             selectedIndex: _selectedIndex,
             onTabSelected: _onTabSelected,
-            tabs: APP_TABS,
-            authService: GetIt.I<FirebaseAuthService>(),
-          )
+            tabs: APP_TABS)
         : MobileLayout(
             selectedIndex: _selectedIndex,
             onTabSelected: _onTabSelected,
