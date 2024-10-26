@@ -128,7 +128,7 @@ class _GameContent extends StatelessWidget {
             return FadeInWidget(
                 key: Key("GameWaiting"),
                 child: _buildMessage('Searching for your opponent...'));
-          } else if (state is GameWaiting) {
+          } else if (state is OfflineGameWaiting) {
             amplitude.logEvent("Game State GameWaiting");
 
             return FadeInWidget(

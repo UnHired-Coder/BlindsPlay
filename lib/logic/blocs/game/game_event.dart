@@ -10,6 +10,16 @@ abstract class GameEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+class OfflineWaitingToStart extends GameEvent {
+  final int countdown;
+
+  const OfflineWaitingToStart(
+    this.countdown,
+  );
+  @override
+  List<Object?> get props => [countdown];
+}
+
 class WaitingToStart extends GameEvent {
   final int countdown;
   final GamePlayer you;

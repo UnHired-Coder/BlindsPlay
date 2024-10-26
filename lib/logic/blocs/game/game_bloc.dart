@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:blindsplay/logic/blocs/util/timer_block.dart';
-import 'package:blindsplay/network/model/Player.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../config/constants.dart';
@@ -27,7 +26,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     on<EndGame>(_onEndGame);
     on<UpdateBoard>(_onUpdateBoard);
     on<PlaySound>(_onPlaySound);
-    on<WaitingToStart>(_onStartWaiting);
+    on<OfflineWaitingToStart>(_onStartWaiting);
 
     randomizePlaceholders();
 
@@ -54,23 +53,22 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     }
 
     // Start waiting state with a countdown
-    add(WaitingToStart(AppConstants.waitingToStartTime,
-        GamePlayer.fromJson(Map()), GamePlayer.fromJson(Map())));
+    add(OfflineWaitingToStart(
+      AppConstants.waitingToStartTime,
+    ));
   }
 
   // Event handler for StartWaiting event
   Future<void> _onStartWaiting(
-      WaitingToStart event, Emitter<GameState> emit) async {
+      OfflineWaitingToStart event, Emitter<GameState> emit) async {
     // Start the countdown timer
     timerBloc.startCountdown(Duration(seconds: event.countdown));
 
     // Emit the waiting state
     for (int i = 0; i < event.countdown; i++) {
       await Future.delayed(const Duration(seconds: 1));
-      emit(GameWaiting(
+      emit(OfflineGameWaiting(
         event.countdown - i - 1,
-        GamePlayer.fromJson(Map()),
-        GamePlayer.fromJson(Map()),
       ));
     }
 

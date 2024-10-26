@@ -49,6 +49,14 @@ class GameInitial extends GameState {
   const GameInitial();
 }
 
+class OfflineGameWaiting extends GameState {
+  final int countdown;
+  const OfflineGameWaiting(this.countdown);
+
+  @override
+  List<Object?> get props => [countdown];
+}
+
 class GameWaiting extends GameState {
   final int countdown;
   final GamePlayer you;
