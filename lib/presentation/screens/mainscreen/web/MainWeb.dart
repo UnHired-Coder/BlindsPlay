@@ -1,3 +1,4 @@
+import 'package:blindsplay/network/repository/login/FirebaseAuthService.dart';
 import 'package:blindsplay/presentation/screens/tabs/tabs.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +16,7 @@ class WebLayout extends StatelessWidget {
     required this.selectedIndex,
     required this.onTabSelected,
     required this.tabs,
+    required FirebaseAuthService authService,
   }) : super(key: key);
 
   @override

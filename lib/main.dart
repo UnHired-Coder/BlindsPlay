@@ -14,13 +14,13 @@ import 'network/repository/gmae/WebSocketService.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  setupServices();
+  await setupServices();
   runApp(MyApp());
 }
 
 final GetIt getIt = GetIt.instance;
 
-void setupServices() async {
+Future<void> setupServices() async {
   getIt.registerLazySingleton<Amplitude>(() {
     final amplitude = Amplitude.getInstance();
     amplitude.init(

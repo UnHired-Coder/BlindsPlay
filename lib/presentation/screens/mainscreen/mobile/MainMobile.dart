@@ -1,3 +1,4 @@
+import 'package:blindsplay/network/repository/login/FirebaseAuthService.dart';
 import 'package:blindsplay/presentation/screens/tabs/tabs.dart';
 import 'package:flutter/material.dart';
 
@@ -5,17 +6,19 @@ import '../../../../config/colors.dart';
 import '../../../ui/sections/game_rules.dart';
 import '../../../ui/sections/home_screen_banner.dart';
 import '../../../ui/widgets/common.dart';
+import '../../auth/LoginPage.dart';
 
 class MobileLayout extends StatelessWidget {
   final ValueChanged<int> onTabSelected; // To handle tab selection
   final int selectedIndex; // To manage the currently selected index
   final List<Widget> pageWidgets; // List of page widgets
-
+  final FirebaseAuthService authService;
   const MobileLayout({
     Key? key,
     required this.onTabSelected,
     required this.selectedIndex,
     required this.pageWidgets,
+    required this.authService,
   }) : super(key: key);
 
   @override
@@ -56,16 +59,22 @@ class MobileLayout extends StatelessWidget {
                     height: 32,
                   ),
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => pageNavDestinations[2].page,
-                      ),
-                    );
+                    _openLoginOrProfile(context);
                   },
                 )), // Image aligned to top right with 10 padding
           ],
         ),
+      ),
+    );
+  }
+
+  _openLoginOrProfile(context) async {
+    final user = await authService.getCurrentUser();
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            user != null ? pageNavDestinations[2].page : LoginPage(),
       ),
     );
   }
