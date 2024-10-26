@@ -2,6 +2,7 @@ import 'package:amplitude_flutter/amplitude.dart';
 import 'package:blindsplay/config/colors.dart';
 import 'package:blindsplay/config/spacing.dart';
 import 'package:blindsplay/logic/blocs/game/online_game_bloc.dart';
+import 'package:blindsplay/network/model/Player.dart';
 import 'package:blindsplay/network/repository/gmae/GameRepository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -79,13 +80,15 @@ class _GameContent extends StatelessWidget {
             amplitude.logEvent("Game State GameInitial");
 
             return FadeInWidget(
-                key: Key("GameWaiting"), child: _buildMessage('Get ready...'));
+                key: Key("GameWaiting"),
+                child: _buildMessage('Searching for your opponent...'));
           } else if (state is GameWaiting) {
             amplitude.logEvent("Game State GameWaiting");
 
             return FadeInWidget(
                 key: Key("GameInProgress"),
-                child: _buildPlayerWaitingUi(state.countdown));
+                child: _buildPlayerWaitingUi(
+                    state.countdown, state.you, state.opponent));
           } else if (state is GameInProgress) {
             amplitude.logEvent("Game State GameInProgress");
 
@@ -123,7 +126,8 @@ class _GameContent extends StatelessWidget {
             amplitude.logEvent("Game State GameInitial");
 
             return FadeInWidget(
-                key: Key("GameWaiting"), child: _buildMessage('Get ready...'));
+                key: Key("GameWaiting"),
+                child: _buildMessage('Searching for your opponent...'));
           } else if (state is GameWaiting) {
             amplitude.logEvent("Game State GameWaiting");
 
@@ -172,7 +176,7 @@ class _GameContent extends StatelessWidget {
     );
   }
 
-  Widget _buildPlayerWaitingUi(int countdown) {
+  Widget _buildPlayerWaitingUi(int countdown, Player you, Player opponent) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
@@ -186,16 +190,16 @@ class _GameContent extends StatelessWidget {
               _buildPlayerCard(
                   imageUrl: "",
                   avatarUrl: "",
-                  playerName: "Ankit wala",
-                  score: "100"),
+                  playerName: "You",
+                  rating: you.rating.toString()),
               const SizedBox(width: AppSpacing.medium),
               _buildMessage('V/s', color: AppColors.success),
               const SizedBox(width: AppSpacing.medium),
               _buildPlayerCard(
                   imageUrl: "",
                   avatarUrl: "",
-                  playerName: "Sarwar chahal",
-                  score: "100"),
+                  playerName: opponent.username,
+                  rating: opponent.rating.toString()),
             ],
           ),
           const SizedBox(height: AppSpacing.large),
@@ -209,7 +213,7 @@ class _GameContent extends StatelessWidget {
     required String imageUrl,
     String? avatarUrl,
     required String playerName,
-    required String score,
+    required String rating,
   }) {
     return Container(
       width: 90,
@@ -275,7 +279,7 @@ class _GameContent extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        score,
+                        rating,
                         style: const TextStyle(
                           color: AppColors.onPrimary,
                           fontSize: 10,

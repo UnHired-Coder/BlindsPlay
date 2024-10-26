@@ -1,3 +1,4 @@
+import 'package:blindsplay/network/model/Player.dart';
 import 'package:equatable/equatable.dart';
 
 import 'game_state.dart';
@@ -11,8 +12,10 @@ abstract class GameEvent extends Equatable {
 
 class WaitingToStart extends GameEvent {
   final int countdown;
+  final Player you;
+  final Player opponent;
 
-  const WaitingToStart(this.countdown);
+  const WaitingToStart(this.countdown, this.you, this.opponent);
 
   @override
   List<Object?> get props => [countdown];

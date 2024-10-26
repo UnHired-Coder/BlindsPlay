@@ -8,6 +8,7 @@ import 'package:blindsplay/network/model/PlayerMatchedData.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../config/constants.dart';
+import '../../../network/model/BoardState.dart';
 import '../../../network/model/Events.dart';
 import '../../../network/model/MatchingStartedData.dart';
 import '../../../network/repository/gmae/GameRepository.dart';
@@ -68,13 +69,15 @@ class OnlineGameBloc extends Bloc<GameEvent, GameState> {
         playerID, matchingStartedData.waitlistId, _onServerEvent);
   }
 
+  late PlayerMatchedData playerMatchedData;
+
   void _onServerEvent(BaseResponse serverEvent) async {
     switch (serverEvent.eventType) {
       case EventType.playerMatched:
         {
-          final playerMatchedData = (serverEvent.data as PlayerMatchedData);
+          playerMatchedData = (serverEvent.data as PlayerMatchedData);
           assignedLabel = getTileStateFromSymbol(
-              playerMatchedData.initialGameData.assignedLabel);
+              playerMatchedData.you.initialGameData.assignedLabel);
 
           _roomID = playerMatchedData.roomId;
 
@@ -151,7 +154,7 @@ class OnlineGameBloc extends Bloc<GameEvent, GameState> {
     // Emit the waiting state
     for (int i = 0; i < event.countdown; i++) {
       await Future.delayed(const Duration(seconds: 1));
-      emit(GameWaiting(event.countdown - i - 1));
+      emit(GameWaiting(event.countdown - i - 1, event.you, event.opponent));
     }
 
     timerBloc.startCountdown(const Duration(days: 1));
@@ -163,7 +166,8 @@ class OnlineGameBloc extends Bloc<GameEvent, GameState> {
     required int delayInSeconds,
   }) async {
     // Step 1: Fire the GameWaiting event with the countdown duration
-    add(WaitingToStart(delayInSeconds));
+    add(WaitingToStart(
+        delayInSeconds, playerMatchedData.you, playerMatchedData.opponent));
 
     // Step 2: Wait for the specified duration
     await Future.delayed(Duration(seconds: delayInSeconds + 2));

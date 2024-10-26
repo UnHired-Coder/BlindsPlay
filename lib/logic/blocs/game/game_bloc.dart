@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:blindsplay/logic/blocs/util/timer_block.dart';
+import 'package:blindsplay/network/model/Player.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../config/constants.dart';
@@ -53,7 +54,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     }
 
     // Start waiting state with a countdown
-    add(const WaitingToStart(AppConstants.waitingToStartTime));
+    add(WaitingToStart(AppConstants.waitingToStartTime, Player.fromJson(Map()),
+        Player.fromJson(Map())));
   }
 
   // Event handler for StartWaiting event
@@ -65,7 +67,11 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     // Emit the waiting state
     for (int i = 0; i < event.countdown; i++) {
       await Future.delayed(const Duration(seconds: 1));
-      emit(GameWaiting(event.countdown - i - 1));
+      emit(GameWaiting(
+        event.countdown - i - 1,
+        Player.fromJson(Map()),
+        Player.fromJson(Map()),
+      ));
     }
 
     List<List<TileState>> initialBoard =

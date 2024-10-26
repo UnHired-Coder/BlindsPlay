@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:blindsplay/network/model/JoinedRoomData.dart';
 
+import 'BoardState.dart';
 import 'Events.dart';
 import 'PlayerMatchedData.dart';
 

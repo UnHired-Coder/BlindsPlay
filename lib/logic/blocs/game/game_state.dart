@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import '../../../network/model/Player.dart';
+
 enum TileState { empty, red, X, O }
 
 enum GameMode { offline2Players, offlineAgainstPC, onlineMultiplayer }
@@ -49,11 +51,12 @@ class GameInitial extends GameState {
 
 class GameWaiting extends GameState {
   final int countdown;
-
-  const GameWaiting(this.countdown);
+  final Player you;
+  final Player opponent;
+  const GameWaiting(this.countdown, this.you, this.opponent);
 
   @override
-  List<Object?> get props => [countdown];
+  List<Object?> get props => [countdown, you, opponent];
 }
 
 class GameInProgress extends GameState {
