@@ -1,9 +1,9 @@
 import 'BoardState.dart';
-import 'User.dart';
+import 'GameUser.dart';
 
 class Room {
   final String roomId;
-  final List<User> players;
+  final List<GameUser> players;
   final int maxPlayers;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -28,7 +28,7 @@ class Room {
         roomId: json['room_id'] as String,
         players: (json['players'] as List<dynamic>)
             .map((playerJson) =>
-                User.fromJson(playerJson as Map<String, dynamic>))
+                GameUser.fromJson(playerJson as Map<String, dynamic>))
             .toList(),
         maxPlayers: json['maxPlayers'] as int,
         createdAt: DateTime.parse(json['createdAt'] as String),

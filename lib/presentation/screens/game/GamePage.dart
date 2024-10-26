@@ -176,7 +176,8 @@ class _GameContent extends StatelessWidget {
     );
   }
 
-  Widget _buildPlayerWaitingUi(int countdown, Player you, Player opponent) {
+  Widget _buildPlayerWaitingUi(
+      int countdown, GamePlayer you, GamePlayer opponent) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(

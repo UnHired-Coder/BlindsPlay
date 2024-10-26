@@ -51,8 +51,8 @@ class GameInitial extends GameState {
 
 class GameWaiting extends GameState {
   final int countdown;
-  final Player you;
-  final Player opponent;
+  final GamePlayer you;
+  final GamePlayer opponent;
   const GameWaiting(this.countdown, this.you, this.opponent);
 
   @override

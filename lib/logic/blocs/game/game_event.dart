@@ -12,8 +12,8 @@ abstract class GameEvent extends Equatable {
 
 class WaitingToStart extends GameEvent {
   final int countdown;
-  final Player you;
-  final Player opponent;
+  final GamePlayer you;
+  final GamePlayer opponent;
 
   const WaitingToStart(this.countdown, this.you, this.opponent);
 

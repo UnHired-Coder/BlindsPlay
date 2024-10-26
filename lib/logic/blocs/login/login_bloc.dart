@@ -25,10 +25,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       SignInWithGoogle event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     try {
-      final User? user = await _authService.signInWithGoogle();
-      if (user != null) {
-        await _userRepository.loginUser(user, 'google');
-        emit(AuthAuthenticated(user));
+      final User? firebaseUser = await _authService.signInWithGoogle();
+      if (firebaseUser != null) {
+        await _userRepository.loginUser(firebaseUser, 'google');
+        emit(AuthAuthenticated(firebaseUser));
       } else {
         emit(AuthUnauthenticated());
       }
@@ -41,10 +41,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       SignInAnonymously event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     try {
-      final User? user = await _authService.signInAnonymously();
-      if (user != null) {
-        await _userRepository.loginUser(user, 'anonymous');
-        emit(AuthAuthenticated(user));
+      final User? firebaseUser = await _authService.signInAnonymously();
+      if (firebaseUser != null) {
+        await _userRepository.loginUser(firebaseUser, 'anonymous');
+        emit(AuthAuthenticated(firebaseUser));
       } else {
         emit(AuthUnauthenticated());
       }

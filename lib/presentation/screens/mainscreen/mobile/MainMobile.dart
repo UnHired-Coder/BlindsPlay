@@ -1,4 +1,4 @@
-import 'package:blindsplay/network/repository/login/FirebaseAuthService.dart';
+import 'package:blindsplay/network/repository/login/UserRepository.dart';
 import 'package:blindsplay/presentation/screens/tabs/tabs.dart';
 import 'package:flutter/material.dart';
 
@@ -12,13 +12,13 @@ class MobileLayout extends StatelessWidget {
   final ValueChanged<int> onTabSelected; // To handle tab selection
   final int selectedIndex; // To manage the currently selected index
   final List<Widget> pageWidgets; // List of page widgets
-  final FirebaseAuthService authService;
+  final UserRepository userRepository;
   const MobileLayout({
     Key? key,
     required this.onTabSelected,
     required this.selectedIndex,
     required this.pageWidgets,
-    required this.authService,
+    required this.userRepository,
   }) : super(key: key);
 
   @override
@@ -69,12 +69,12 @@ class MobileLayout extends StatelessWidget {
   }
 
   _openLoginOrProfile(context) async {
-    final user = await authService.getCurrentUser();
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>
-            user != null ? pageNavDestinations[2].page : LoginPage(),
+        builder: (context) => userRepository.isLoggedIn
+            ? pageNavDestinations[2].page
+            : LoginPage(),
       ),
     );
   }

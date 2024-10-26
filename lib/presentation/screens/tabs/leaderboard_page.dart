@@ -2,6 +2,7 @@ import 'package:amplitude_flutter/amplitude.dart';
 import 'package:blindsplay/config/colors.dart';
 import 'package:blindsplay/config/spacing.dart';
 import 'package:blindsplay/config/text_styles.dart';
+import 'package:blindsplay/logic/blocs/leaderboard/data/leader_board_entry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -9,6 +10,7 @@ import 'package:get_it/get_it.dart';
 import '../../../logic/blocs/leaderboard/leaderboard_bloc.dart';
 import '../../../logic/blocs/leaderboard/leaderboard_event.dart';
 import '../../../logic/blocs/leaderboard/leaderboard_state.dart';
+import '../../../network/repository/login/UserRepository.dart';
 import '../../ui/sections/leaderboard.dart';
 import '../../ui/sections/leaderboard_header.dart';
 import '../../ui/sections/leaderboard_user_rank.dart';
@@ -46,6 +48,8 @@ class LeaderboardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userRepository = GetIt.I<UserRepository>();
+
     return BlocBuilder<LeaderboardBloc, LeaderboardState>(
       builder: (context, state) {
         if (state is LeaderboardLoading) {
@@ -57,8 +61,14 @@ class LeaderboardView extends StatelessWidget {
               children: [
                 const LeaderboardHeader(),
                 const SizedBox(height: AppSpacing.small),
-                LeaderboardUserRank(entry: state.leaderboard[0]),
-                const SizedBox(height: AppSpacing.large),
+                if (userRepository.isLoggedIn)
+                  LeaderboardUserRank(
+                      entry: LeaderboardEntry(
+                          rank: userRepository.currentUser!.rank,
+                          name: userRepository.currentUser!.username,
+                          rating: userRepository.currentUser!.rating)),
+                if (userRepository.isLoggedIn)
+                  const SizedBox(height: AppSpacing.large),
                 Expanded(
                   child: Leaderboard(leaderboard: state.leaderboard),
                 ),

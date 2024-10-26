@@ -10,6 +10,7 @@ import '../../../config/text_styles.dart';
 import '../../../logic/blocs/profile/profile_bloc.dart';
 import '../../../logic/blocs/profile/profile_event.dart';
 import '../../../logic/blocs/profile/profile_state.dart';
+import '../../../network/repository/login/UserRepository.dart';
 import '../../model/PageModel.dart';
 import '../../ui/sections/profile_header.dart';
 import '../../ui/sections/recent_games.dart';
@@ -23,6 +24,8 @@ class ProfilePage extends StatelessWidget {
     final amplitude = GetIt.I<Amplitude>();
     amplitude.logEvent("Open ProfilePage");
 
+    final userRepository = GetIt.I<UserRepository>();
+
     return Scaffold(
       backgroundColor: AppColors.primary,
       appBar: AppBar(
@@ -34,7 +37,9 @@ class ProfilePage extends StatelessWidget {
       body: BlocProvider(
         create: (context) => ProfileBloc(apiUrl: 'https://api.example.com')
           ..add(LoadProfile()), // Trigger loading profile on creation
-        child: const ProfileView(),
+        child: userRepository.isLoggedIn
+            ? const ProfileView()
+            : const ProfileView(),
       ),
     );
   }

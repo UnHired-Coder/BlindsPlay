@@ -54,8 +54,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     }
 
     // Start waiting state with a countdown
-    add(WaitingToStart(AppConstants.waitingToStartTime, Player.fromJson(Map()),
-        Player.fromJson(Map())));
+    add(WaitingToStart(AppConstants.waitingToStartTime,
+        GamePlayer.fromJson(Map()), GamePlayer.fromJson(Map())));
   }
 
   // Event handler for StartWaiting event
@@ -69,8 +69,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       await Future.delayed(const Duration(seconds: 1));
       emit(GameWaiting(
         event.countdown - i - 1,
-        Player.fromJson(Map()),
-        Player.fromJson(Map()),
+        GamePlayer.fromJson(Map()),
+        GamePlayer.fromJson(Map()),
       ));
     }
 

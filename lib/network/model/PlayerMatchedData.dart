@@ -5,7 +5,7 @@ import 'Player.dart';
 class PlayerMatchedData {
   final Opponent opponent;
   final String roomId;
-  final Player you;
+  final GamePlayer you;
 
   PlayerMatchedData({
     required this.opponent,
@@ -17,7 +17,7 @@ class PlayerMatchedData {
     return PlayerMatchedData(
       opponent: Opponent.fromJson(json['opponenet'] as Map<String, dynamic>),
       roomId: json['room_id'] as String,
-      you: Player.fromJson(json['you'] as Map<String, dynamic>),
+      you: GamePlayer.fromJson(json['you'] as Map<String, dynamic>),
     );
   }
 }

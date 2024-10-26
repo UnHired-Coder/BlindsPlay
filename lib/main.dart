@@ -28,26 +28,24 @@ Future<void> setupServices() async {
     return amplitude;
   });
 
-  // Register the WebSocketService
-  getIt.registerLazySingleton<WebSocketService>(() => WebSocketService());
+  final webSocketService = WebSocketService();
+  getIt.registerLazySingleton<WebSocketService>(() => webSocketService);
 
-  getIt.registerLazySingleton<WebService>(
-      () => WebService(baseUrl: 'http://10.0.2.2:8080'));
+  final webService = WebService(baseUrl: 'http://10.0.2.2:8080');
+  getIt.registerLazySingleton<WebService>(() => webService);
 
-  // Register the GameRepository and pass in the WebSocketService dependency
   getIt.registerLazySingleton<GameRepository>(
     () => GameRepository(
-        webSocketService: getIt<WebSocketService>(),
-        webService: getIt<WebService>()),
+        webSocketService: webSocketService, webService: webService),
   );
 
-  getIt.registerLazySingleton<FirebaseAuthService>(() => FirebaseAuthService());
-
-  getIt.registerLazySingleton<UserService>(
-      () => UserService(baseUrl: 'http://10.0.2.2:8080'));
+  final userService = UserService(baseUrl: 'http://10.0.2.2:8080');
+  getIt.registerLazySingleton<UserService>(() => userService);
 
   getIt.registerLazySingleton<UserRepository>(
-      () => UserRepository(userService: getIt<UserService>()));
+      () => UserRepository(userService: userService));
+
+  getIt.registerLazySingleton<FirebaseAuthService>(() => FirebaseAuthService());
 
   if (kIsWeb) {
     await Firebase.initializeApp(

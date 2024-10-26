@@ -1,4 +1,4 @@
-import 'package:blindsplay/network/repository/login/FirebaseAuthService.dart';
+import 'package:blindsplay/network/repository/login/UserRepository.dart';
 import 'package:blindsplay/presentation/screens/mainscreen/mobile/MainMobile.dart';
 import 'package:blindsplay/presentation/screens/mainscreen/web/MainWeb.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +32,7 @@ class _MainScreenState extends State<MainScreen> {
             selectedIndex: _selectedIndex,
             onTabSelected: _onTabSelected,
             pageWidgets: APP_TABS,
-            authService: GetIt.I<FirebaseAuthService>(),
+            userRepository: GetIt.I<UserRepository>(),
           );
   }
 
