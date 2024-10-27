@@ -1,10 +1,10 @@
-
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TimerBloc extends Cubit<int> {
   Timer? _timer;
+  bool isPaused = false;
 
   TimerBloc() : super(0);
 
@@ -14,12 +14,18 @@ class TimerBloc extends Cubit<int> {
     int secondsPassed = 0;
 
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      secondsPassed++;
-      emit(secondsPassed);
-      if (secondsPassed >= duration.inSeconds) {
-        timer.cancel();
+      if (!isPaused) {
+        secondsPassed++;
+        emit(secondsPassed);
+        if (secondsPassed >= duration.inSeconds) {
+          timer.cancel();
+        }
       }
     });
+  }
+
+  void pause(bool pause) {
+    isPaused = pause;
   }
 
   void reset() {

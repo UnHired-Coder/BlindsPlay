@@ -112,6 +112,8 @@ class OnlineGameBloc extends Bloc<GameEvent, GameState> {
 
           await Future.delayed(const Duration(seconds: 1));
 
+          timerBloc.pause(currentPlayer != assignedLabel);
+
           add(GameProgressUpdated(
             board: board,
             visibleBoard: visibleBoard,
@@ -173,6 +175,9 @@ class OnlineGameBloc extends Bloc<GameEvent, GameState> {
     await Future.delayed(Duration(seconds: delayInSeconds + 2));
 
     // Step 3: After the delay, fire the GameStarted event
+
+    timerBloc.pause(currentPlayer != assignedLabel);
+
     add(GameStarted(
       board: convertToTileState(boardGameState.board),
       visibleBoard: convertToTileState(boardGameState.visibleBoard),
