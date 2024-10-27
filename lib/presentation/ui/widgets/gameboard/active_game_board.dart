@@ -19,9 +19,8 @@ class ActiveGameBoard extends StatelessWidget {
     return LayoutBuilder(builder: (context, constraints) {
       final isWeb = (constraints.maxWidth > 1000);
 
-      final double boardWidth = (isWeb
-          ? (boardSize * AppConstants.cellWidth)
-          : constraints.maxWidth * 0.8);
+      final double boardWidth =
+          (isWeb ? AppConstants.boardWidth : (AppConstants.boardWidth));
       final double cellWidth = boardWidth / 3;
 
       return Stack(
