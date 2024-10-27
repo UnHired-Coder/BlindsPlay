@@ -56,13 +56,15 @@ class GameTile extends StatelessWidget {
   // Custom UI for X state
   Widget _buildCustomXUI() {
     return const Icon(Icons.close,
-        size: 60, color: Color(0xffFF2A2A)); // Example: X icon
+        size: AppConstants.cellWidth * 0.8,
+        color: Color(0xffFF2A2A)); // Example: X icon
   }
 
   // Custom UI for O state
   Widget _buildCustomOUI() {
     return const Icon(Icons.radio_button_unchecked,
-        size: 60, color: Color(0xff8EFE82)); // Example: O icon
+        size: AppConstants.cellWidth * 0.8,
+        color: Color(0xff8EFE82)); // Example: O icon
   }
 
   // Custom UI for red state (this could be a red background or different layout)
@@ -70,7 +72,8 @@ class GameTile extends StatelessWidget {
     return SizedBox(
       width: cellWidth,
       height: cellWidth, // This can be any custom design you want
-      child: Image(image: AssetImage(placeHolder!)), // Use randomized placeholder
+      child:
+          Image(image: AssetImage(placeHolder!)), // Use randomized placeholder
     );
   }
 
