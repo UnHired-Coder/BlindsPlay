@@ -1,4 +1,3 @@
-import 'package:blindsplay/config/screen_size.dart';
 import 'package:flutter/material.dart';
 
 Widget HomeScreenBanner() {
@@ -11,8 +10,9 @@ Widget HomeScreenBanner() {
       children: [
         Image(
           image: const AssetImage('assets/tic_tac_toe_anim.png'),
-          width:
-              isWeb ? (constraints.maxWidth / 2) : (constraints.maxWidth * 0.8),
+          width: isWeb
+              ? (constraints.maxWidth / 2.5)
+              : (constraints.maxWidth * 0.8),
         ),
       ],
     );

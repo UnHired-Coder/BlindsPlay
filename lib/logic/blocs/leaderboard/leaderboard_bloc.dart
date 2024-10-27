@@ -49,7 +49,7 @@ class LeaderboardBloc extends Bloc<LeaderboardEvent, LeaderboardState> {
         List<LeaderboardEntry> updatedLeaderboard = await _fetchLeaderboard();
         emit(currentState.copyWith(leaderboard: updatedLeaderboard));
       } catch (e) {
-        emit(LeaderboardError('Failed to refresh leaderboard'));
+        emit(const LeaderboardError('Failed to refresh leaderboard'));
       }
     }
   }

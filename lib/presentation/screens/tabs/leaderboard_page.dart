@@ -70,7 +70,10 @@ class LeaderboardView extends StatelessWidget {
             ),
           );
         } else if (state is LeaderboardError) {
-          return Center(child: Text(state.message));
+          return Center(
+              child: Text(state.message,
+                  style: AppTextStyles.bodyTextSmall
+                      .copyWith(color: AppColors.grey)));
         } else {
           return Center(
             child: Text(
