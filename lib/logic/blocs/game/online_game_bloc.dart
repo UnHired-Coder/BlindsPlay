@@ -36,7 +36,6 @@ class OnlineGameBloc extends Bloc<GameEvent, GameState> {
     on<StartGame>(_onPrepareForMatch);
     on<MakeMove>(_onMakeMove);
     on<HideMove>(_onHideMove);
-    on<EndGame>(_onEndGame);
     on<UpdateBoard>(_onUpdateBoard);
     on<PlaySound>(_onPlaySound);
     on<WaitingToStart>(_onStartWaiting);
@@ -220,18 +219,6 @@ class OnlineGameBloc extends Bloc<GameEvent, GameState> {
     }
   }
 
-  // Event handler for EndGame event
-  Future<void> _onEndGame(EndGame event, Emitter<GameState> emit) async {
-    final currentState = state;
-    if (currentState is GameInProgress) {
-      emit(GameOver(
-          result: event.result,
-          finalBoard: currentState.board,
-          elapsedTime: timerBloc.state,
-          moveCount: _moveCount)); // Reset values for GameOver
-    }
-  }
-
   // Event handler for UpdateBoard event
   Future<void> _onUpdateBoard(
       UpdateBoard event, Emitter<GameState> emit) async {
@@ -267,6 +254,9 @@ class OnlineGameBloc extends Bloc<GameEvent, GameState> {
   }
 
   void _onGameFinished(GameFinished event, Emitter<GameState> emit) {
+    gameRepository.updateScore(playerID, _roomID, assignedLabel?.symbol,
+        event.elapsedTime, event.moveCount);
+
     emit(GameOver(
       result: event.result,
       finalBoard: event.finalBoard,

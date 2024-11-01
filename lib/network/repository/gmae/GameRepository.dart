@@ -48,6 +48,22 @@ class GameRepository implements IGameRepository {
   }
 
   @override
+  Future<void> updateScore(String playerID, String roomID,
+      String? assignedLabel, int elapsedTime, int moveCount) async {
+    final updateScoreMessage = {
+      "action": "update-score",
+      "data": {
+        "playerID": playerID,
+        "roomID": roomID,
+        "assignedLabel": assignedLabel,
+        "elapsedTime": elapsedTime,
+        "moveCount": moveCount
+      }
+    };
+    _webSocketService.sendMessage(updateScoreMessage);
+  }
+
+  @override
   Future<MatchingStartedData> findMatch(String userId) async {
     return _webService.findMatch(userId);
   }
