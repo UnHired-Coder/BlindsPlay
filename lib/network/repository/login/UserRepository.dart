@@ -16,13 +16,18 @@ class UserRepository {
   bool get isLoggedIn => _currentUser != null;
 
   Future<void> loginUser(User firebaseUser, String authType) async {
-    final String randomName =
-        firebaseUser.displayName ?? generateRandomGuestName();
+    final randomName = (firebaseUser.displayName?.isNotEmpty == true)
+        ? firebaseUser.displayName.toString()
+        : generateRandomGuestName();
+
+    final email = (firebaseUser.email?.isNotEmpty == true)
+        ? firebaseUser.email.toString()
+        : "Anonymous@email.com";
 
     _currentUser = await _userService.loginUser(
       userId: firebaseUser.uid,
       name: randomName,
-      email: firebaseUser.email ?? 'Anonymous@email.com',
+      email: email,
       authType: authType,
     );
   }

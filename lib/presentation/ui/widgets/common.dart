@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../../config/colors.dart';
 import '../../../config/text_styles.dart';
 import '../../../logic/blocs/game/game_state.dart';
-import '../../../network/repository/login/FirebaseAuthService.dart';
+import '../../../network/repository/login/UserRepository.dart';
 import '../../screens/auth/LoginPage.dart';
 import '../../screens/game/GamePage.dart';
 import 'base_cta_ui.dart';
 
-Widget CompeteOnlineCta(BuildContext context) {
+Widget CompeteOnlineCta(BuildContext context,
+    {String ctaText = "Compete online!"}) {
   return BaseCtaUi(
     context: context,
-    text: "Compete online!",
+    text: ctaText,
     icon: "assets/ic_lightning.png",
     onTap: () {
       launchGame(context, GameMode.onlineMultiplayer);
@@ -32,17 +34,8 @@ Widget PlayNowCta(BuildContext context) {
 
 void launchGame(BuildContext context, GameMode gameMode) async {
   // Check if the user is authenticated
-  final user = await FirebaseAuthService()
-      .getCurrentUser(); // Update this method to fetch the current user
-  if (user == null) {
-    // User is not authenticated, navigate to login page
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => LoginPage(), // Navigate to your login page
-      ),
-    );
-  } else {
+  final UserRepository userRepository = GetIt.I<UserRepository>();
+  if (userRepository.isLoggedIn) {
     // User is authenticated, proceed to the game page
     Navigator.pushAndRemoveUntil(
       context,
@@ -53,6 +46,14 @@ void launchGame(BuildContext context, GameMode gameMode) async {
       ),
       (Route<dynamic> route) =>
           route.isFirst, // This will keep only the first route (main page).
+    );
+  } else {
+    // User is not authenticated, navigate to login page
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LoginPage(), // Navigate to your login page
+      ),
     );
   }
 }

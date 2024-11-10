@@ -41,12 +41,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       SignInAnonymously event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     try {
-      final User? firebaseUser = await _authService.signInAnonymously();
-      if (firebaseUser != null) {
-        await _userRepository.loginUser(firebaseUser, 'anonymous');
-        emit(AuthAuthenticated(firebaseUser));
+      final user = await _authService.getCurrentUser();
+      if (user != null) {
+        // Already authenticated
+        await _userRepository.loginUser(user, 'anonymous');
+        emit(AuthAuthenticated(user));
       } else {
-        emit(AuthUnauthenticated());
+        final User? firebaseUser = await _authService.signInAnonymously();
+        if (firebaseUser != null) {
+          await _userRepository.loginUser(firebaseUser, 'anonymous');
+          emit(AuthAuthenticated(firebaseUser));
+        } else {
+          emit(AuthUnauthenticated());
+        }
       }
     } catch (e) {
       emit(AuthError(e.toString()));
