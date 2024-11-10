@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:blindsplay/network/model/GameUser.dart';
+import 'package:blindsplay/network/model/ProfileData.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'UserService.dart';
@@ -32,10 +33,11 @@ class UserRepository {
     );
   }
 
-  Future<GameUser> getUserProfile() async {
-    _currentUser =
+  Future<ProfileData> getUserProfile() async {
+    final userProfile =
         await _userService.getUserProfile(userId: _currentUser!.userId);
-    return _currentUser!;
+    _currentUser = userProfile.gameUser;
+    return userProfile!;
   }
 
   // Helper function to generate a random guest name

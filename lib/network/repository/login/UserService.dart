@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:blindsplay/network/model/GameUser.dart';
 import 'package:http/http.dart' as http;
 
+import '../../model/ProfileData.dart';
+
 class UserService {
   final String baseUrl;
 
@@ -38,7 +40,7 @@ class UserService {
     return GameUser.fromJson(userJson);
   }
 
-  Future<GameUser> getUserProfile({required String userId}) async {
+  Future<ProfileData> getUserProfile({required String userId}) async {
     final url = Uri.parse('$baseUrl/common/profile');
 
     final response = await http.post(
@@ -54,7 +56,6 @@ class UserService {
     }
 
     final Map<String, dynamic> responseData = jsonDecode(response.body);
-    final userJson = responseData['user'] as Map<String, dynamic>;
-    return GameUser.fromJson(userJson);
+    return ProfileData.fromJson(responseData);
   }
 }

@@ -1,21 +1,18 @@
 // profile_bloc.dart
 import 'dart:async';
 
-import 'package:blindsplay/network/model/GameUser.dart';
+import 'package:blindsplay/network/model/ProfileData.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../network/repository/login/UserRepository.dart';
 import 'data/profile.dart';
-import 'data/recent_game.dart';
 import 'profile_event.dart';
 import 'profile_state.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
-  final String apiUrl; // API URL
   final UserRepository userRepository; // API endpoint URL
 
-  ProfileBloc({required this.apiUrl, required this.userRepository})
-      : super(ProfileInitial()) {
+  ProfileBloc({required this.userRepository}) : super(ProfileInitial()) {
     // Register the event handlers
     on<LoadProfile>(_onLoadProfile);
     on<RefreshProfile>(_onRefreshProfile);
@@ -49,18 +46,14 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     // Mock profile data
 
     if (userRepository.isLoggedIn) {
-      GameUser user = await userRepository.getUserProfile();
+      ProfileData profileData = await userRepository.getUserProfile();
+
+      final user = profileData.gameUser;
       return Profile(
         name: user.username,
         rating: user.rating,
         rank: user.rank,
-        recentGames: [
-          RecentGame(
-              opponentName: 'Test User',
-              ratingBeforeGame: 1000,
-              ratingChange: 0,
-              win: true),
-        ],
+        recentGames: profileData.gameHistory,
       );
     } else {
       return Profile(

@@ -1,32 +1,32 @@
-// data/recent_game.dart
 class RecentGame {
-  final String opponentName;
-  final int ratingBeforeGame;
+  final int id;
+  final String userId;
+  final String opponentUserId;
+  final String opponentUsername;
   final int ratingChange;
-  final bool win; // true if win, false if lose
+  final int ratingBeforeChange;
+  final DateTime createdAt;
 
   RecentGame({
-    required this.opponentName,
-    required this.ratingBeforeGame,
+    required this.id,
+    required this.userId,
+    required this.opponentUserId,
+    required this.opponentUsername,
     required this.ratingChange,
-    required this.win,
+    required this.ratingBeforeChange,
+    required this.createdAt,
   });
 
+  // Factory method to create an instance from JSON
   factory RecentGame.fromJson(Map<String, dynamic> json) {
     return RecentGame(
-      opponentName: json['opponentName'],
-      ratingBeforeGame: json['ratingBeforeGame'],
-      ratingChange: json['ratingChange'],
-      win: json['win'],
+      id: json['id'] as int,
+      userId: json['user_id'] as String,
+      opponentUserId: json['opponent_user_id'] as String,
+      opponentUsername: json['username'] as String,
+      ratingChange: json['rating_change'] as int,
+      ratingBeforeChange: json['rating_before_change'] as int,
+      createdAt: DateTime.parse(json['createdAt'] as String),
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'opponentName': opponentName,
-      'ratingBeforeGame': ratingBeforeGame,
-      'ratingChange': ratingChange,
-      'win': win,
-    };
   }
 }

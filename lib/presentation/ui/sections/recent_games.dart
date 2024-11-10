@@ -20,7 +20,11 @@ class RecentGamesSection extends StatelessWidget {
                 itemCount: recentGames.length,
                 itemBuilder: (context, index) {
                   final entry = recentGames[index];
-                  final color = entry.win ? AppColors.success : AppColors.error;
+                  final color = entry.ratingChange > 0 // win
+                      ? AppColors.success
+                      : (entry.ratingChange == 0) // draw
+                          ? AppColors.grey
+                          : AppColors.error;
                   return RecentGameTile(entry: entry, color: color);
                 },
                 separatorBuilder: (BuildContext context, int index) {
@@ -60,17 +64,17 @@ class RecentGameTile extends StatelessWidget {
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(entry.opponentName,
+          Text(entry.opponentUsername,
               style: AppTextStyles.bodyTextSmall
                   .copyWith(color: AppColors.onPrimary)),
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text("${entry.ratingBeforeGame}",
+              Text("${entry.ratingBeforeChange}",
                   style: AppTextStyles.bodyTextSmall
                       .copyWith(color: AppColors.grey)),
               const SizedBox(width: 6),
-              Text("${entry.win ? "+" : ""}${entry.ratingChange}",
+              Text("${entry.ratingChange >= 0 ? "+" : ""}${entry.ratingChange}",
                   style: AppTextStyles.bodyTextSmall.copyWith(color: color)),
             ],
           ),
@@ -84,7 +88,10 @@ class RecentGameTile extends StatelessWidget {
             color: color.withOpacity(0.1),
             borderRadius: const BorderRadius.all(Radius.circular(6))),
         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-        child: Text(entry.win ? "W" : "L",
+        child: Text(
+            entry.ratingChange > 0
+                ? "W"
+                : (entry.ratingChange == 0 ? "D" : "L"),
             style: AppTextStyles.bodyTextSmall.copyWith(color: color)),
       ),
     );

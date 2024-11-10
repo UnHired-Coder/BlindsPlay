@@ -16,7 +16,8 @@ class Profile {
 
   factory Profile.fromJson(Map<String, dynamic> json) {
     var recentGamesJson = json['recentGames'] as List;
-    List<RecentGame> recentGamesList = recentGamesJson.map((game) => RecentGame.fromJson(game)).toList();
+    List<RecentGame> recentGamesList =
+        recentGamesJson.map((game) => RecentGame.fromJson(game)).toList();
 
     return Profile(
       name: json['name'],
@@ -24,14 +25,5 @@ class Profile {
       rank: json['rank'],
       recentGames: recentGamesList,
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'rating': rating,
-      'rank': rank,
-      'recentGames': recentGames.map((game) => game.toJson()).toList(),
-    };
   }
 }
