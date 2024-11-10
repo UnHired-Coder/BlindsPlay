@@ -62,12 +62,12 @@ class FinishedGameBoard extends StatelessWidget {
                 style: AppTextStyles.bodyText.copyWith(color: AppColors.accent),
               ),
               const SizedBox(height: 40),
-              Row(
+              Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  CompeteOnlineCta(context),
-                  SizedBox(width: isWeb ? 40 : 20),
-                  PlayNowCta(context),
+                  CompeteOnlineCta(context, ctaText: "Play again!"),
+                  // SizedBox(height: isWeb ? 40 : 20),
+                  // PlayNowCta(context),
                 ],
               )
             ],
