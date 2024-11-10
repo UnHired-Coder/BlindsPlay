@@ -1,6 +1,7 @@
 // profile_bloc.dart
 import 'dart:async';
 
+import 'package:blindsplay/network/model/GameUser.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../network/repository/login/UserRepository.dart';
@@ -48,10 +49,11 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     // Mock profile data
 
     if (userRepository.isLoggedIn) {
+      GameUser user = await userRepository.getUserProfile();
       return Profile(
-        name: userRepository.currentUser!.username,
-        rating: userRepository.currentUser!.rating,
-        rank: userRepository.currentUser!.rank,
+        name: user.username,
+        rating: user.rating,
+        rank: user.rank,
         recentGames: [
           RecentGame(
               opponentName: 'Test User',

@@ -32,6 +32,12 @@ class UserRepository {
     );
   }
 
+  Future<GameUser> getUserProfile() async {
+    _currentUser =
+        await _userService.getUserProfile(userId: _currentUser!.userId);
+    return _currentUser!;
+  }
+
   // Helper function to generate a random guest name
   String generateRandomGuestName() {
     const length = 4;

@@ -37,4 +37,24 @@ class UserService {
     final userJson = responseData['user'] as Map<String, dynamic>;
     return GameUser.fromJson(userJson);
   }
+
+  Future<GameUser> getUserProfile({required String userId}) async {
+    final url = Uri.parse('$baseUrl/common/profile');
+
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({'UserID': userId}),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to log in user: ${response.reasonPhrase}');
+    }
+
+    final Map<String, dynamic> responseData = jsonDecode(response.body);
+    final userJson = responseData['user'] as Map<String, dynamic>;
+    return GameUser.fromJson(userJson);
+  }
 }

@@ -41,7 +41,7 @@ class ProfilePage extends StatelessWidget {
           ..add(LoadProfile()), // Trigger loading profile on creation
         child: userRepository.isLoggedIn
             ? const ProfileView()
-            : const ProfileView(),
+            : const Center(child: CircularProgressIndicator()),
       ),
     );
   }
