@@ -78,17 +78,18 @@ class _GameContent extends StatelessWidget {
         builder: (context, state) {
           if (state is GameInitial) {
             amplitude.logEvent("Game State GameInitial");
-
             return FadeInWidget(
                 key: Key("GameWaiting"),
-                child: _buildMessage('Searching for your opponent...'));
+                child: _buildPlayerWaitingUi('Searching...', null, null));
           } else if (state is GameWaiting) {
             amplitude.logEvent("Game State GameWaiting");
 
             return FadeInWidget(
                 key: Key("GameInProgress"),
                 child: _buildPlayerWaitingUi(
-                    state.countdown, state.you, state.opponent));
+                    'Game starts in : ${state.countdown}s',
+                    state.you,
+                    state.opponent));
           } else if (state is GameInProgress) {
             amplitude.logEvent("Game State GameInProgress");
 
@@ -177,7 +178,7 @@ class _GameContent extends StatelessWidget {
   }
 
   Widget _buildPlayerWaitingUi(
-      int countdown, GamePlayer you, GamePlayer opponent) {
+      String message, GamePlayer? you, GamePlayer? opponent) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
@@ -188,23 +189,27 @@ class _GameContent extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              _buildPlayerCard(
+              if (you != null) ...[
+                _buildPlayerCard(
                   imageUrl: "",
                   avatarUrl: "",
                   playerName: "You",
-                  rating: you.rating.toString()),
-              const SizedBox(width: AppSpacing.medium),
-              _buildMessage('V/s', color: AppColors.success),
-              const SizedBox(width: AppSpacing.medium),
+                  rating: you.rating.toString(),
+                ),
+                const SizedBox(width: AppSpacing.medium),
+                _buildMessage('V/s', color: AppColors.success),
+                const SizedBox(width: AppSpacing.medium),
+              ],
               _buildPlayerCard(
-                  imageUrl: "",
-                  avatarUrl: "",
-                  playerName: opponent.username,
-                  rating: opponent.rating.toString()),
+                imageUrl: "",
+                avatarUrl: "",
+                playerName: opponent?.username,
+                rating: opponent?.rating.toString(),
+              ),
             ],
           ),
           const SizedBox(height: AppSpacing.large),
-          _buildMessage('Game starts in : ${countdown}s')
+          _buildMessage(message)
         ],
       ),
     );
@@ -213,8 +218,8 @@ class _GameContent extends StatelessWidget {
   Widget _buildPlayerCard({
     required String imageUrl,
     String? avatarUrl,
-    required String playerName,
-    required String rating,
+    required String? playerName,
+    required String? rating,
   }) {
     return Container(
       width: 90,
@@ -271,23 +276,24 @@ class _GameContent extends StatelessWidget {
                   child: Column(
                     children: [
                       Text(
-                        playerName,
-                        style: const TextStyle(
+                        playerName ?? "?",
+                        style: TextStyle(
                           color: AppColors.grey,
-                          fontSize: 8,
+                          fontSize: (playerName == null) ? 24 : 8,
                           fontFamily: AppConstants.fontFamily1,
                           fontWeight: FontWeight.w400,
                         ),
                       ),
-                      Text(
-                        rating,
-                        style: const TextStyle(
-                          color: AppColors.onPrimary,
-                          fontSize: 10,
-                          fontFamily: AppConstants.fontFamily1,
-                          fontWeight: FontWeight.w700,
+                      if (rating != null)
+                        Text(
+                          rating,
+                          style: const TextStyle(
+                            color: AppColors.onPrimary,
+                            fontSize: 10,
+                            fontFamily: AppConstants.fontFamily1,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
-                      ),
                     ],
                   ),
                 )
