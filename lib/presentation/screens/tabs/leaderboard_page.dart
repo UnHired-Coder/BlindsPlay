@@ -2,6 +2,7 @@ import 'package:amplitude_flutter/amplitude.dart';
 import 'package:blindsplay/config/colors.dart';
 import 'package:blindsplay/config/spacing.dart';
 import 'package:blindsplay/config/text_styles.dart';
+import 'package:blindsplay/network/repository/common/CommonRepository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -35,7 +36,7 @@ class LeaderboardPage extends StatelessWidget {
       body: BlocProvider(
         create: (context) => LeaderboardBloc(
             userRepository: GetIt.I<UserRepository>(),
-            apiUrl: 'https://your-api-url/leaderboard')
+            commonRepository: GetIt.I<CommonRepository>())
           ..add(StartLeaderboard()),
         child: const LeaderboardView(),
       ),

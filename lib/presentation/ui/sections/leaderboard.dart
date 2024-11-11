@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../config/colors.dart';
@@ -14,9 +13,9 @@ class Leaderboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: leaderboard.length - 1, // Already showed the top entry
+      itemCount: leaderboard.length, // Already showed the top entry
       itemBuilder: (context, index) {
-        final entry = leaderboard[index + 1]; // Start from the second entry
+        final entry = leaderboard[index]; // Start from the second entry
         return LeaderboardItem(entry: entry);
       },
     );
@@ -36,7 +35,7 @@ class LeaderboardItem extends StatelessWidget {
         leading: Text(
           '${entry.rank}',
           style:
-          AppTextStyles.bodyTextSmall.copyWith(color: AppColors.onPrimary),
+              AppTextStyles.bodyTextSmall.copyWith(color: AppColors.onPrimary),
         ),
         title: Row(
           children: [
@@ -51,7 +50,7 @@ class LeaderboardItem extends StatelessWidget {
         trailing: Text(
           '${entry.rating}',
           style:
-          AppTextStyles.bodyTextSmall.copyWith(color: AppColors.onPrimary),
+              AppTextStyles.bodyTextSmall.copyWith(color: AppColors.onPrimary),
         ),
       ),
     );
