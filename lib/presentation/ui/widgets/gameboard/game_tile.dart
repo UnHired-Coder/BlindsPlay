@@ -55,13 +55,13 @@ class GameTile extends StatelessWidget {
   // Custom UI for X state
   Widget _buildCustomXUI() {
     return Icon(Icons.close,
-        size: cellWidth * 0.6, color: Color(0xffFF2A2A)); // Example: X icon
+        size: cellWidth * 0.5, color: Color(0xffFF2A2A)); // Example: X icon
   }
 
   // Custom UI for O state
   Widget _buildCustomOUI() {
     return Icon(Icons.radio_button_unchecked,
-        size: cellWidth * 0.6, color: Color(0xff8EFE82)); // Example: O icon
+        size: cellWidth * 0.5, color: Color(0xff8EFE82)); // Example: O icon
   }
 
   // Custom UI for red state (this could be a red background or different layout)
