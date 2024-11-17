@@ -267,7 +267,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
             result: result,
             finalBoard: board,
             elapsedTime: timerBloc.state,
-            moveCount: _moveCount));
+            moveCount: _moveCount,
+            didIWin: null));
       }
     }
   }
@@ -280,7 +281,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           result: event.result,
           finalBoard: currentState.board,
           elapsedTime: timerBloc.state,
-          moveCount: _moveCount)); // Reset values for GameOver
+          moveCount: _moveCount,
+          didIWin: null)); // Reset values for GameOver
     }
   }
 

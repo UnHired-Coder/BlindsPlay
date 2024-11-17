@@ -112,16 +112,18 @@ class GameOver extends GameState {
   final List<List<TileState>> finalBoard;
   final int elapsedTime;
   final int moveCount;
+  final bool? didIWin;
 
-  const GameOver({
-    required this.result,
-    required this.finalBoard,
-    required this.elapsedTime,
-    required this.moveCount,
-  });
+  const GameOver(
+      {required this.result,
+      required this.finalBoard,
+      required this.elapsedTime,
+      required this.moveCount,
+      required this.didIWin});
 
   @override
-  List<Object?> get props => [result, finalBoard, elapsedTime, moveCount];
+  List<Object?> get props =>
+      [result, finalBoard, elapsedTime, moveCount, didIWin];
 }
 
 class GameError extends GameState {

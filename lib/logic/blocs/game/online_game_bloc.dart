@@ -123,26 +123,35 @@ class OnlineGameBloc extends Bloc<GameEvent, GameState> {
 
           if (boardGameState.isDraw) {
             add(GameFinished(
-              result: "It's a draw!",
-              finalBoard: board,
-              elapsedTime: timerBloc.state,
-              moveCount: _moveCount,
-            ));
+                result: "It's a draw!",
+                finalBoard: board,
+                elapsedTime: timerBloc.state,
+                moveCount: _moveCount,
+                didIWin: null));
           }
 
           TileState winner = getTileStateFromSymbol(boardGameState.winner);
 
           if (winner != TileState.empty) {
+            var didIWin = assignedLabel?.symbol == winner.symbol;
             add(GameFinished(
-              result: "Player ${winner.symbol} wins!",
-              finalBoard: board,
-              elapsedTime: timerBloc.state,
-              moveCount: _moveCount,
-            ));
+                result: _getWinnerText(didIWin),
+                finalBoard: board,
+                elapsedTime: timerBloc.state,
+                moveCount: _moveCount,
+                didIWin: didIWin));
           }
         }
       default:
         {}
+    }
+  }
+
+  String _getWinnerText(bool didIWin) {
+    if (didIWin) {
+      return "You win!";
+    } else {
+      return "You lost!";
     }
   }
 
@@ -260,11 +269,11 @@ class OnlineGameBloc extends Bloc<GameEvent, GameState> {
         event.elapsedTime, event.moveCount);
 
     emit(GameOver(
-      result: event.result,
-      finalBoard: event.finalBoard,
-      elapsedTime: event.elapsedTime,
-      moveCount: event.moveCount,
-    ));
+        result: event.result,
+        finalBoard: event.finalBoard,
+        elapsedTime: event.elapsedTime,
+        moveCount: event.moveCount,
+        didIWin: event.didIWin));
   }
 
   // Event handler for PlaySound event
