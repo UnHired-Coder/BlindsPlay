@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../config/constants.dart';
 import '../../../../logic/blocs/game/game_state.dart';
 
 class GameTile extends StatelessWidget {
@@ -55,16 +54,14 @@ class GameTile extends StatelessWidget {
 
   // Custom UI for X state
   Widget _buildCustomXUI() {
-    return const Icon(Icons.close,
-        size: AppConstants.cellWidth * 0.8,
-        color: Color(0xffFF2A2A)); // Example: X icon
+    return Icon(Icons.close,
+        size: cellWidth * 0.6, color: Color(0xffFF2A2A)); // Example: X icon
   }
 
   // Custom UI for O state
   Widget _buildCustomOUI() {
-    return const Icon(Icons.radio_button_unchecked,
-        size: AppConstants.cellWidth * 0.8,
-        color: Color(0xff8EFE82)); // Example: O icon
+    return Icon(Icons.radio_button_unchecked,
+        size: cellWidth * 0.6, color: Color(0xff8EFE82)); // Example: O icon
   }
 
   // Custom UI for red state (this could be a red background or different layout)
