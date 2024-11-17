@@ -1,6 +1,6 @@
 {
-    "name": "blindsplay",
-    "short_name": "blindsplay",
+    "name": "TicTacMemo",
+    "short_name": "TicTacMemo",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
