@@ -31,9 +31,8 @@ class FinishedGameBoard extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
+              SizedBox(
                 width: boardWidth,
-                // Define a dynamic width for the board if needed
                 height: boardWidth,
                 child: GameBoard(
                   visibleBoard: state.finalBoard,
