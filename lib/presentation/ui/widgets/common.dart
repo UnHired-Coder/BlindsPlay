@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../config/colors.dart';
+import '../../../config/constants.dart';
 import '../../../config/text_styles.dart';
 import '../../../logic/blocs/game/game_state.dart';
 import '../../../network/repository/login/UserRepository.dart';
@@ -80,5 +82,108 @@ AppBar CustomAppBar(isWeb) {
     ),
     leading: null,
     centerTitle: !isWeb,
+  );
+}
+
+Widget MessageUi(String message, {Color color = AppColors.onPrimary}) {
+  return Center(
+    child: Text(
+      message,
+      style: TextStyle(
+          fontSize: 20, color: color, fontFamily: AppConstants.fontFamily1),
+    ),
+  );
+}
+
+Widget PlayerCardUi({
+  required String imageUrl,
+  String? avatarUrl,
+  required String? playerName,
+  required String? rating,
+}) {
+  return Stack(
+    alignment: Alignment.center,
+    children: [
+      if (playerName == null)
+        SizedBox(
+          width: 200,
+          height: 200,
+          child: Lottie.asset('assets/searching_lottie.json'),
+        ),
+      Container(
+        decoration: BoxDecoration(
+          color: AppColors.greyDark,
+          borderRadius: BorderRadius.circular(5),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.3), // Shadow color with opacity
+              spreadRadius: 2, // How much the shadow spreads
+              blurRadius: 8, // The blur effect of the shadow
+              offset: const Offset(0, 4), // Position of the shadow (x, y)
+            ),
+          ],
+        ),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Container(
+              width: 90,
+              height: 90,
+              decoration: BoxDecoration(
+                  color: AppColors.greyDark,
+                  borderRadius: BorderRadius.circular(5)),
+            ),
+            if (avatarUrl != null)
+              Container(
+                width: 80,
+                height: 80,
+                alignment: Alignment.bottomCenter,
+                decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [
+                        AppColors.primary,
+                        AppColors.secondary,
+                        AppColors.primary,
+                        AppColors.secondary,
+                        AppColors.primary,
+                        AppColors.secondary,
+                      ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      transform: GradientRotation(
+                          30 * 3.14 / 180), // 30 degrees to radians
+                    ),
+                    borderRadius: BorderRadius.circular(3)),
+              ),
+            Positioned(
+              bottom: 10,
+              child: Column(
+                children: [
+                  Text(
+                    playerName ?? "?",
+                    style: TextStyle(
+                      color: AppColors.grey,
+                      fontSize: (playerName == null) ? 24 : 8,
+                      fontFamily: AppConstants.fontFamily1,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  if (rating != null)
+                    Text(
+                      rating,
+                      style: const TextStyle(
+                        color: AppColors.onPrimary,
+                        fontSize: 10,
+                        fontFamily: AppConstants.fontFamily1,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    ],
   );
 }

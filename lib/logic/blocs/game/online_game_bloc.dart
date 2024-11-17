@@ -177,12 +177,14 @@ class OnlineGameBloc extends Bloc<GameEvent, GameState> {
 
     timerBloc.pause(currentPlayer != assignedLabel);
 
-    add(GameStarted(
-      board: convertToTileState(boardGameState.board),
-      visibleBoard: convertToTileState(boardGameState.visibleBoard),
-      currentPlayer: currentPlayer,
-      active: currentPlayer == assignedLabel,
-    ));
+    if (!isClosed) {
+      add(GameStarted(
+        board: convertToTileState(boardGameState.board),
+        visibleBoard: convertToTileState(boardGameState.visibleBoard),
+        currentPlayer: currentPlayer,
+        active: currentPlayer == assignedLabel,
+      ));
+    }
   }
 
   Future<void> _onMakeMove(MakeMove event, Emitter<GameState> emit) async {
