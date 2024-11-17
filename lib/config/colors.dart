@@ -8,6 +8,7 @@ class AppColors {
   static const Color surface = Color(0xFFCFDBD5);
   static const Color onPrimary = Color(0xFFFFFFFF);
   static const Color onSecondary = Color(0xFF4F772D);
+  static const Color highlightRed = Color(0xFFD15353); // Red for errors
 
   // Additional colors for text
   static const Color error = Color(0xFFD15353); // Red for errors
@@ -15,7 +16,6 @@ class AppColors {
   static const Color grey = Color(0xFF9E9E9E); // Grey for captions
   static const Color greyDark = Color(0xFF616161); // Darker grey for over line
 }
-
 
 const ColorScheme appColorScheme = ColorScheme(
   brightness: Brightness.light,
@@ -28,3 +28,15 @@ const ColorScheme appColorScheme = ColorScheme(
   error: AppColors.error,
   onError: AppColors.onPrimary,
 );
+
+class AppGradients {
+  static const LinearGradient winnerText = LinearGradient(colors: [
+    AppColors.accent,
+    AppColors.highlightRed,
+  ]);
+
+  static const LinearGradient looserText = LinearGradient(colors: [
+    AppColors.grey,
+    AppColors.onPrimary,
+  ]);
+}

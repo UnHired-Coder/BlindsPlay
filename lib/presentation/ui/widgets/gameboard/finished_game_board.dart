@@ -1,6 +1,5 @@
 import 'package:blindsplay/config/constants.dart';
 import 'package:blindsplay/presentation/ui/widgets/gameboard/game_board.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../config/colors.dart';
@@ -20,7 +19,7 @@ class FinishedGameBoard extends StatelessWidget {
       final isWeb = (constraints.maxWidth > 1000);
 
       final double boardWidth =
-          (isWeb ? AppConstants.boardWidth : (AppConstants.boardWidth));
+          (isWeb ? AppConstants.boardWidth : (AppConstants.boardWidth)) / 1.5;
       final double cellWidth = boardWidth / 3;
 
       return Row(
@@ -31,6 +30,27 @@ class FinishedGameBoard extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              ShaderMask(
+                  blendMode: BlendMode.srcIn,
+                  shaderCallback: (bounds) => ((state.didIWin == true)
+                              ? AppGradients.winnerText
+                              : AppGradients.looserText)
+                          .createShader(
+                        Rect.fromLTWH(0, 0, bounds.width, bounds.height),
+                      ),
+                  child: Text(
+                    state.result,
+                    textAlign: TextAlign.center,
+                    softWrap: true,
+                    style: (isWeb
+                            ? AppTextStyles.textVeryLarge
+                            : AppTextStyles.heading1)
+                        .copyWith(
+                            color: (state.didIWin == true)
+                                ? AppColors.onPrimary
+                                : AppColors.onPrimary),
+                  )),
+              const SizedBox(height: 24),
               SizedBox(
                 width: boardWidth,
                 height: boardWidth,
@@ -42,16 +62,6 @@ class FinishedGameBoard extends StatelessWidget {
                   boardSize: AppConstants.boardSize,
                   onMakeMove: (_, __) {},
                 ),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                state.result,
-                textAlign: TextAlign.center,
-                softWrap: true,
-                style: (isWeb
-                        ? AppTextStyles.textVeryLarge
-                        : AppTextStyles.heading1)
-                    .copyWith(color: AppColors.onPrimary),
               ),
               const SizedBox(height: 8),
               Text(
