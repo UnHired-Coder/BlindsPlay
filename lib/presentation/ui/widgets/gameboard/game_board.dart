@@ -37,14 +37,18 @@ class GameBoard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           mainAxisSize: MainAxisSize.max,
           children: List.generate(boardSize - 1, (index) {
-            return const VerticalGameBar();
+            return VerticalGameBar(
+              barThickness: cellWidth * 0.15,
+            );
           }),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           mainAxisSize: MainAxisSize.max,
           children: List.generate(boardSize - 1, (index) {
-            return const HorizontalGameBar();
+            return HorizontalGameBar(
+              barThickness: cellWidth * 0.15,
+            );
           }),
         )
       ],
