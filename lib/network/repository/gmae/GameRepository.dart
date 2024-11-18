@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:blindsplay/config/constants.dart';
+
 import '../../model/MatchingStartedData.dart';
 import 'IGameRepository.dart';
 import 'WebService.dart';
@@ -79,13 +81,13 @@ class GameRepository implements IGameRepository {
   Future<void> match(
       String playerID, String waitlistId, MessageCallback onConnected) async {
     final url =
-        "ws://10.0.2.2:8080/tictacmemo/find-match/$playerID/$waitlistId";
+        "${AppConstants.BASE_WS_URL}/tictacmemo/find-match/$playerID/$waitlistId";
     _webSocketService.connect(url, onConnected = onConnected);
   }
 
   @override
   Future<void> playGame(String roomID, MessageCallback onConnected) async {
-    final url = "ws://10.0.2.2:8080/tictacmemo/play-game/$roomID";
+    final url = "${AppConstants.BASE_WS_URL}/tictacmemo/play-game/$roomID";
     _webSocketService.connect(url, onConnected = onConnected);
   }
 }

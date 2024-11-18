@@ -8,4 +8,10 @@ class AppConstants {
   static const int refreshPlaceholdersDuration = 3;
 
   static const String fontFamily1 = "FiraSans";
+
+  // static const String BASE_URL = "http://10.0.2.2:8080";
+  // static const String BASE_WS_URL = "ws://10.0.2.2:8080";
+
+  static const String BASE_URL = "http://0.0.0.0:8080";
+  static const String BASE_WS_URL = "ws://0.0.0.0:8080";
 }

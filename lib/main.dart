@@ -1,4 +1,5 @@
 import 'package:amplitude_flutter/amplitude.dart';
+import 'package:blindsplay/config/constants.dart';
 import 'package:blindsplay/network/repository/common/CommonRepository.dart';
 import 'package:blindsplay/network/repository/login/FirebaseAuthService.dart';
 import 'package:blindsplay/network/repository/login/UserRepository.dart';
@@ -33,7 +34,7 @@ Future<void> setupServices() async {
   final webSocketService = WebSocketService();
   getIt.registerLazySingleton<WebSocketService>(() => webSocketService);
 
-  final webService = WebService(baseUrl: 'http://10.0.2.2:8080');
+  final webService = WebService(baseUrl: AppConstants.BASE_URL);
   getIt.registerLazySingleton<WebService>(() => webService);
 
   getIt.registerLazySingleton<GameRepository>(
@@ -41,7 +42,7 @@ Future<void> setupServices() async {
         webSocketService: webSocketService, webService: webService),
   );
 
-  final userService = UserService(baseUrl: 'http://10.0.2.2:8080');
+  final userService = UserService(baseUrl: AppConstants.BASE_URL);
   getIt.registerLazySingleton<UserService>(() => userService);
 
   getIt.registerLazySingleton<UserRepository>(
@@ -49,7 +50,7 @@ Future<void> setupServices() async {
 
   getIt.registerLazySingleton<FirebaseAuthService>(() => FirebaseAuthService());
 
-  final commonWebService = CommonWebService(baseUrl: 'http://10.0.2.2:8080');
+  final commonWebService = CommonWebService(baseUrl: AppConstants.BASE_URL);
   getIt.registerLazySingleton<CommonWebService>(() => commonWebService);
 
   getIt.registerLazySingleton<CommonRepository>(
