@@ -3,6 +3,7 @@ import 'package:blindsplay/presentation/screens/tabs/tabs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 
 import '../../../config/colors.dart';
 import '../../../config/spacing.dart';
@@ -24,7 +25,7 @@ class ProfilePage extends StatelessWidget {
     final amplitude = GetIt.I<Amplitude>();
     amplitude.logEvent("Open ProfilePage");
 
-    final userRepository = GetIt.I<UserRepository>();
+    final userRepository = Provider.of<UserRepository>(context);
 
     return Scaffold(
       backgroundColor: AppColors.primary,
@@ -35,9 +36,8 @@ class ProfilePage extends StatelessWidget {
           scrolledUnderElevation: 0,
           foregroundColor: AppColors.onPrimary),
       body: BlocProvider(
-        create: (context) =>
-            ProfileBloc(userRepository: GetIt.I<UserRepository>())
-              ..add(LoadProfile()), // Trigger loading profile on creation
+        create: (context) => ProfileBloc(userRepository: userRepository)
+          ..add(LoadProfile()), // Trigger loading profile on creation
         child: userRepository.isLoggedIn
             ? const ProfileView()
             : const Center(child: CircularProgressIndicator()),

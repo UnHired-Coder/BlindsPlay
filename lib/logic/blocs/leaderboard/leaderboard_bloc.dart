@@ -27,10 +27,12 @@ class LeaderboardBloc extends Bloc<LeaderboardEvent, LeaderboardState> {
       // Fetch leaderboard from API
       List<LeaderboardEntry> leaderboard = await _fetchLeaderboard();
       emit(LeaderboardLoaded(
-          userLeaderboard: LeaderboardEntry(
-              rank: userRepository.currentUser!.rank,
-              name: userRepository.currentUser!.username,
-              rating: userRepository.currentUser!.rating),
+          userLeaderboard: (userRepository.isLoggedIn == true)
+              ? LeaderboardEntry(
+                  rank: userRepository.currentUser!.rank,
+                  name: userRepository.currentUser!.username,
+                  rating: userRepository.currentUser!.rating)
+              : null,
           leaderboard: leaderboard));
     } catch (e) {
       emit(LeaderboardError(e.toString()));

@@ -47,7 +47,8 @@ class _MainScreenState extends State<MainScreen> {
           preferredSize: const Size.fromHeight(100),
           child: isWeb
               ? Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 100, vertical: 20),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 100, vertical: 20),
                   child: CustomAppBar(isWeb))
               : const SizedBox.shrink(),
         ),

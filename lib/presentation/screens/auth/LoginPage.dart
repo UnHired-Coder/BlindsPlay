@@ -1,8 +1,5 @@
-import 'package:blindsplay/network/repository/login/FirebaseAuthService.dart';
-import 'package:blindsplay/network/repository/login/UserRepository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 
 import '../../../config/colors.dart';
 import '../../../config/spacing.dart';
@@ -26,27 +23,22 @@ class LoginPage extends StatelessWidget {
         scrolledUnderElevation: 0,
         foregroundColor: AppColors.onPrimary,
       ),
-      body: BlocProvider(
-        create: (context) => AuthBloc(
-            authService: GetIt.I<FirebaseAuthService>(),
-            userRepository: GetIt.I<UserRepository>()),
-        child: BlocConsumer<AuthBloc, AuthState>(
-          listener: (context, state) {
-            if (state is AuthAuthenticated) {
-              Navigator.pop(context); // Navigate back when authenticated
-            } else if (state is AuthError) {
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text(state.message)));
-            }
-          },
-          builder: (context, state) {
-            if (state is AuthLoading) {
-              return Center(child: CircularProgressIndicator());
-            } else {
-              return _buildAuthOptions(context);
-            }
-          },
-        ),
+      body: BlocConsumer<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is AuthAuthenticated) {
+            Navigator.pop(context); // Navigate back when authenticated
+          } else if (state is AuthError) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(state.message)));
+          }
+        },
+        builder: (context, state) {
+          if (state is AuthLoading) {
+            return const Center(child: CircularProgressIndicator());
+          } else {
+            return _buildAuthOptions(context);
+          }
+        },
       ),
     );
   }

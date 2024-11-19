@@ -6,6 +6,7 @@ import 'package:blindsplay/network/repository/common/CommonRepository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 
 import '../../../logic/blocs/leaderboard/leaderboard_bloc.dart';
 import '../../../logic/blocs/leaderboard/leaderboard_event.dart';
@@ -23,6 +24,7 @@ class LeaderboardPage extends StatelessWidget {
     final amplitude = GetIt.I<Amplitude>();
     amplitude.logEvent("Open LeaderboardPage");
 
+    final userRepository = Provider.of<UserRepository>(context);
     return Scaffold(
       backgroundColor: AppColors.primary,
       appBar: AppBar(
@@ -35,7 +37,7 @@ class LeaderboardPage extends StatelessWidget {
           foregroundColor: AppColors.onPrimary),
       body: BlocProvider(
         create: (context) => LeaderboardBloc(
-            userRepository: GetIt.I<UserRepository>(),
+            userRepository: userRepository,
             commonRepository: GetIt.I<CommonRepository>())
           ..add(StartLeaderboard()),
         child: const LeaderboardView(),

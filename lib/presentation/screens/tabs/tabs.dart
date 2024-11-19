@@ -12,10 +12,7 @@ const List<PageNavModel> pageNavDestinations = [
   PageNavModel(
     title: 'Play Game',
     icon: 'assets/ic_play.png',
-    page: GamePage(
-        boardSize: 3,
-        gameMode: GameMode
-            .offline2Players), // This needs to be const or a const constructor if used
+    page: GamePage(boardSize: 3, gameMode: GameMode.offline2Players),
   ),
   PageNavModel(
     title: 'Leaderboard',
@@ -37,15 +34,15 @@ const List<PageNavModel> pageNavDestinations = [
 List<Widget> APP_TABS = <Widget>[
   HomePage(
       pages: pageNavDestinations,
-      navigateToPage: (index, _context) {
+      navigateToPage: (index, context) {
         Navigator.push(
-          _context,
+          context,
           MaterialPageRoute(
-            builder: (context) => pageNavDestinations[index].page,
+            builder: (ctx) => pageNavDestinations[index].page,
           ),
         );
       }),
-  LeaderboardPage(),
-  ProfilePage(),
-  AboutPage()
+  const LeaderboardPage(),
+  const ProfilePage(),
+  const AboutPage()
 ];

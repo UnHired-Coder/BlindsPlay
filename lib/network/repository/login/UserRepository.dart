@@ -3,10 +3,11 @@ import 'dart:math';
 import 'package:blindsplay/network/model/GameUser.dart';
 import 'package:blindsplay/network/model/ProfileData.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart'; // Import ChangeNotifier
 
 import 'UserService.dart';
 
-class UserRepository {
+class UserRepository extends ChangeNotifier {
   final UserService _userService;
   GameUser? _currentUser;
 
@@ -31,13 +32,19 @@ class UserRepository {
       email: email,
       authType: authType,
     );
+
+    // Notify listeners when currentUser is updated
+    notifyListeners();
   }
 
   Future<ProfileData> getUserProfile() async {
     final userProfile =
         await _userService.getUserProfile(userId: _currentUser!.userId);
     _currentUser = userProfile.gameUser;
-    return userProfile!;
+
+    // Notify listeners when currentUser is updated
+    notifyListeners();
+    return userProfile;
   }
 
   // Helper function to generate a random guest name
