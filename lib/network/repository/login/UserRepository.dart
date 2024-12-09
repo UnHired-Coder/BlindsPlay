@@ -2,17 +2,23 @@ import 'dart:math';
 
 import 'package:blindsplay/network/model/GameUser.dart';
 import 'package:blindsplay/network/model/ProfileData.dart';
+import 'package:blindsplay/util/SharedPreferencesManager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart'; // Import ChangeNotifier
+import 'package:flutter/material.dart';
 
 import 'UserService.dart';
 
 class UserRepository extends ChangeNotifier {
   final UserService _userService;
+  final SharedPreferencesManager _sharedPreferencesManager;
+
   GameUser? _currentUser;
 
-  UserRepository({required UserService userService})
-      : _userService = userService;
+  UserRepository(
+      {required UserService userService,
+      required SharedPreferencesManager sharedPreferencesManager})
+      : _userService = userService,
+        _sharedPreferencesManager = sharedPreferencesManager;
 
   GameUser? get currentUser => _currentUser;
   bool get isLoggedIn => _currentUser != null;
@@ -33,13 +39,14 @@ class UserRepository extends ChangeNotifier {
       authType: authType,
     );
 
+    _sharedPreferencesManager.setString('user_id', firebaseUser.uid);
     // Notify listeners when currentUser is updated
     notifyListeners();
   }
 
-  Future<ProfileData> getUserProfile() async {
-    final userProfile =
-        await _userService.getUserProfile(userId: _currentUser!.userId);
+  Future<ProfileData> getUserProfile({String? userId}) async {
+    final userProfile = await _userService.getUserProfile(
+        userId: userId ?? _currentUser?.userId ?? "");
     _currentUser = userProfile.gameUser;
 
     // Notify listeners when currentUser is updated

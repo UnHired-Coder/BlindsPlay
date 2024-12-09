@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 
 import '../../../config/colors.dart';
 import '../../../config/constants.dart';
@@ -36,7 +36,8 @@ Widget PlayNowCta(BuildContext context) {
 
 void launchGame(BuildContext context, GameMode gameMode) async {
   // Check if the user is authenticated
-  final UserRepository userRepository = GetIt.I<UserRepository>();
+  final UserRepository userRepository =
+      Provider.of<UserRepository>(context, listen: false);
   if (userRepository.isLoggedIn) {
     // User is authenticated, proceed to the game page
     Navigator.pushAndRemoveUntil(

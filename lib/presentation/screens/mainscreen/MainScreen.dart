@@ -2,7 +2,7 @@ import 'package:blindsplay/network/repository/login/UserRepository.dart';
 import 'package:blindsplay/presentation/screens/mainscreen/mobile/MainMobile.dart';
 import 'package:blindsplay/presentation/screens/mainscreen/web/MainWeb.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 
 import '../../../config/colors.dart';
 import '../../ui/widgets/common.dart';
@@ -32,7 +32,7 @@ class _MainScreenState extends State<MainScreen> {
             selectedIndex: _selectedIndex,
             onTabSelected: _onTabSelected,
             pageWidgets: APP_TABS,
-            userRepository: GetIt.I<UserRepository>(),
+            userRepository: Provider.of<UserRepository>(context),
           );
   }
 

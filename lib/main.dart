@@ -5,6 +5,7 @@ import 'package:blindsplay/network/repository/login/FirebaseAuthService.dart';
 import 'package:blindsplay/network/repository/login/UserRepository.dart';
 import 'package:blindsplay/network/repository/login/UserService.dart';
 import 'package:blindsplay/presentation/screens/app.dart';
+import 'package:blindsplay/util/SharedPreferencesManager.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,14 @@ import 'network/repository/gmae/WebSocketService.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await setupServices();
+
+  final sharedPreferencesManager = getIt<SharedPreferencesManager>();
+  final userRepository = getIt<UserRepository>();
+  String? userId = sharedPreferencesManager.getString('user_id');
+  if (userId != null) {
+    await FirebaseAuthService;
+    await userRepository.getUserProfile(userId: userId);
+  }
   runApp(MyApp());
 }
 
@@ -45,8 +54,15 @@ Future<void> setupServices() async {
   final userService = UserService(baseUrl: AppConstants.BASE_URL);
   getIt.registerLazySingleton<UserService>(() => userService);
 
-  getIt.registerLazySingleton<UserRepository>(
-      () => UserRepository(userService: userService));
+  getIt.registerSingletonAsync<SharedPreferencesManager>(() async {
+    final manager = SharedPreferencesManager();
+    await manager.init(); // Initialize SharedPreferences
+    return manager;
+  });
+
+  getIt.registerLazySingleton<UserRepository>(() => UserRepository(
+      userService: userService,
+      sharedPreferencesManager: SharedPreferencesManager()));
 
   getIt.registerLazySingleton<FirebaseAuthService>(() => FirebaseAuthService());
 
@@ -55,6 +71,8 @@ Future<void> setupServices() async {
 
   getIt.registerLazySingleton<CommonRepository>(
       () => CommonRepository(commonWebService: commonWebService));
+
+  await getIt.allReady();
 
   if (kIsWeb) {
     await Firebase.initializeApp(
