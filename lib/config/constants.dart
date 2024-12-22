@@ -9,13 +9,17 @@ class AppConstants {
 
   static const String fontFamily1 = "FiraSans";
 
+  //staging
   // static const String BASE_URL = "http://10.0.2.2:8080";
   // static const String BASE_WS_URL = "ws://10.0.2.2:8080";
-  //
+
+  //staging
   // static const String BASE_URL = "http://0.0.0.0:8080";
   // static const String BASE_WS_URL = "ws://0.0.0.0:8080";
 
   //prod
-  static const String BASE_URL = "https://tictacmemo-server.vercel.app";
-  static const String BASE_WS_URL = "wss://tictacmemo-server.vercel.app";
+  static const String BASE_URL =
+      "https://0a587489-1ca7-4ac8-933d-4e058aeeb8f3-00-1ycyvf91o39v8.pike.replit.dev";
+  static const String BASE_WS_URL =
+      "wss://0a587489-1ca7-4ac8-933d-4e058aeeb8f3-00-1ycyvf91o39v8.pike.replit.dev";
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +14,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ScreenSize.init(context);
+
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent, // Background color
+        statusBarIconBrightness: Brightness.light, // For white icons
+      ),
+    );
 
     return MultiProvider(
       providers: [
@@ -29,7 +37,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Tic Tac Memo',
-        home: Center(child: MainScreen()),
+        home: Center(child: SafeArea(child: MainScreen())),
       ),
     );
   }
