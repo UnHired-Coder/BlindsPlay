@@ -3,6 +3,7 @@ class GameUser {
   final String userId;
   final String username;
   final String email;
+  final String avatar;
   final String authType;
   final int rating;
   final int rank;
@@ -14,6 +15,7 @@ class GameUser {
     required this.userId,
     required this.username,
     required this.email,
+    required this.avatar,
     required this.authType,
     required this.rating,
     required this.rank,
@@ -28,6 +30,7 @@ class GameUser {
       userId: json['userId'],
       username: json['username'],
       email: json['email'],
+      avatar: json['avatar'],
       authType: json['authType'],
       rating: (json['rating'] ?? 1000) as int,
       rank: (json['rank'] ?? -1) as int,

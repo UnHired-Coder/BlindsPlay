@@ -59,7 +59,7 @@ class PlayerWaitingUiState extends State<PlayerWaitingUi> {
               if (widget.you != null) ...[
                 PlayerCardUi(
                   imageUrl: "",
-                  avatarUrl: "",
+                  avatarUrl: widget.you?.avatar,
                   playerName: "You",
                   rating: widget.you!.rating.toString(),
                 ),
@@ -69,7 +69,7 @@ class PlayerWaitingUiState extends State<PlayerWaitingUi> {
               ],
               PlayerCardUi(
                 imageUrl: "",
-                avatarUrl: "",
+                avatarUrl: widget.opponent?.avatar,
                 playerName: widget.opponent?.username,
                 rating: widget.opponent?.rating.toString(),
               ),

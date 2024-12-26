@@ -9,6 +9,7 @@ import '../../../logic/blocs/game/game_state.dart';
 import '../../../network/repository/login/UserRepository.dart';
 import '../../screens/auth/LoginPage.dart';
 import '../../screens/game/GamePage.dart';
+import 'AvatarAnimation.dart';
 import 'base_cta_ui.dart';
 
 Widget CompeteOnlineCta(BuildContext context,
@@ -128,47 +129,57 @@ Widget PlayerCardUi({
           alignment: Alignment.center,
           children: [
             Container(
-              width: 90,
-              height: 90,
+              width: 100,
+              height: 100,
               decoration: BoxDecoration(
                   color: AppColors.greyDark,
                   borderRadius: BorderRadius.circular(5)),
             ),
-            if (avatarUrl != null)
-              Container(
-                width: 80,
-                height: 80,
-                alignment: Alignment.bottomCenter,
-                decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [
-                        AppColors.primary,
-                        AppColors.secondary,
-                        AppColors.primary,
-                        AppColors.secondary,
-                        AppColors.primary,
-                        AppColors.secondary,
-                      ],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      transform: GradientRotation(
-                          30 * 3.14 / 180), // 30 degrees to radians
-                    ),
-                    borderRadius: BorderRadius.circular(3)),
-              ),
-            Positioned(
-              bottom: 10,
-              child: Column(
-                children: [
-                  Text(
-                    playerName ?? "?",
-                    style: TextStyle(
-                      color: AppColors.grey,
-                      fontSize: (playerName == null) ? 24 : 8,
-                      fontFamily: AppConstants.fontFamily1,
-                      fontWeight: FontWeight.w400,
-                    ),
+            Container(
+              width: 90,
+              height: 90,
+              alignment: Alignment.bottomCenter,
+              decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [
+                      AppColors.primary,
+                      AppColors.secondary,
+                      AppColors.primary,
+                      AppColors.secondary,
+                      AppColors.primary,
+                      AppColors.secondary,
+                    ],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    transform: GradientRotation(
+                        30 * 3.14 / 180), // 30 degrees to radians
                   ),
+                  borderRadius: BorderRadius.circular(3)),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    height: 60,
+                    width: 60,
+                    alignment: Alignment.center,
+                    child: ((avatarUrl == null)
+                        ? AvatarAnimation(
+                            duration: const Duration(
+                                milliseconds:
+                                    300), // Change image every 0.5 seconds
+                          )
+                        : Image.network(avatarUrl)),
+                  ),
+                  if (playerName != null)
+                    Text(
+                      playerName,
+                      style: const TextStyle(
+                        color: AppColors.grey,
+                        fontSize: 8,
+                        fontFamily: AppConstants.fontFamily1,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
                   if (rating != null)
                     Text(
                       rating,
