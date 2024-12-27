@@ -10,7 +10,7 @@ import 'profile_page.dart';
 
 const List<PageNavModel> pageNavDestinations = [
   PageNavModel(
-    title: 'Play Game',
+    title: 'Compete',
     icon: 'assets/ic_play.png',
     page: GamePage(boardSize: 3, gameMode: GameMode.offline2Players),
   ),

@@ -23,24 +23,30 @@ class WebLayout extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 70),
       child: Row(
         children: <Widget>[
-          NavigationRail(
-            backgroundColor: AppColors.primary,
-            extended: true,
-            minWidth: 300,
-            selectedIndex: selectedIndex,
-            onDestinationSelected: onTabSelected,
-            useIndicator: false,
-            labelType: NavigationRailLabelType.none,
-            destinations: pageNavDestinations.asMap().entries.map((entry) {
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: pageNavDestinations.asMap().entries.map((entry) {
               int idx = entry.key;
               PageNavModel pageModel = entry.value; // Use PageModel
-              return NavigationRailDestination(
-                icon: CustomNavItemUi(
-                  isSelected: selectedIndex == idx,
-                  label: pageModel.title, // Access title from PageModel
-                  imageUrl: pageModel.icon, // Access icon from PageModel
+              return GestureDetector(
+                onTap: () => onTabSelected(idx), // Handle tab selection
+                child: Container(
+                  margin: const EdgeInsets.symmetric(
+                      vertical: 8), // Adjust spacing between items
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  decoration: BoxDecoration(
+                    color: selectedIndex == idx
+                        ? AppColors.primary
+                        : Colors.transparent, // Highlight selected item
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: CustomNavItemUi(
+                    isSelected: selectedIndex == idx,
+                    label: pageModel.title, // Access title from PageModel
+                    imageUrl: pageModel.icon,
+                    highlightedIndex: idx == 0, // Access icon from PageModel
+                  ),
                 ),
-                label: const SizedBox.shrink(),
               );
             }).toList(),
           ),

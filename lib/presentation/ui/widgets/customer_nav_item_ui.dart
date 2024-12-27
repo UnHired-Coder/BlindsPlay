@@ -7,19 +7,21 @@ class CustomNavItemUi extends StatelessWidget {
   final bool isSelected;
   final String label;
   final String imageUrl;
+  final bool highlightedIndex;
 
   const CustomNavItemUi({
     super.key,
     required this.isSelected,
     required this.label,
     required this.imageUrl,
+    required this.highlightedIndex,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 20.0),
+      width: 200,
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
       color:
           isSelected ? AppColors.surface.withOpacity(0.1) : Colors.transparent,
       child: Column(
@@ -34,10 +36,12 @@ class CustomNavItemUi extends StatelessWidget {
                 label,
                 maxLines: 1,
                 style: TextStyle(
-                    color: AppColors.surface,
+                    color: (highlightedIndex
+                        ? AppColors.success
+                        : AppColors.surface),
                     fontWeight:
                         isSelected ? FontWeight.bold : FontWeight.normal,
-                    fontFamily:  AppConstants.fontFamily1),
+                    fontFamily: AppConstants.fontFamily1),
               )
             ],
           ),
