@@ -3,7 +3,6 @@ import 'package:blindsplay/presentation/screens/tabs/tabs.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../config/colors.dart';
-import '../../../ui/sections/game_rules.dart';
 import '../../../ui/sections/home_screen_banner.dart';
 import '../../../ui/widgets/common.dart';
 import '../../auth/LoginPage.dart';
@@ -38,8 +37,8 @@ class MobileLayout extends StatelessWidget {
                   children: [
                     const SizedBox(height: 100),
                     HomeScreenBanner(),
-                    const SizedBox(height: 20),
-                    GameRulesSection(),
+                    // const SizedBox(height: 20),
+                    // GameRulesSection(),
                     const SizedBox(height: 60),
                     CompeteOnlineCta(context),
                     const SizedBox(height: 30),

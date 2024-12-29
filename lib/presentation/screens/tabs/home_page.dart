@@ -5,7 +5,6 @@ import 'package:get_it/get_it.dart';
 import '../../../config/colors.dart';
 import '../../model/PageModel.dart';
 import '../../ui/effects/game_rules_background_gradient.dart';
-import '../../ui/sections/game_rules.dart';
 import '../../ui/sections/home_screen_banner.dart';
 import '../../ui/widgets/common.dart';
 
@@ -48,8 +47,8 @@ class HomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             HomeScreenBanner(),
-            const SizedBox(height: 16),
-            GameRulesSection(),
+            // const SizedBox(height: 16),
+            // GameRulesSection(),
             const SizedBox(height: 60),
             CompeteOnlineCta(context),
             const SizedBox(height: 30),
