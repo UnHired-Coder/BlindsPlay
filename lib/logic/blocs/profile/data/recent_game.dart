@@ -3,6 +3,7 @@ class RecentGame {
   final String userId;
   final String opponentUserId;
   final String opponentUsername;
+  final String opponentAvatar;
   final int ratingChange;
   final int ratingBeforeChange;
   final DateTime createdAt;
@@ -12,6 +13,7 @@ class RecentGame {
     required this.userId,
     required this.opponentUserId,
     required this.opponentUsername,
+    required this.opponentAvatar,
     required this.ratingChange,
     required this.ratingBeforeChange,
     required this.createdAt,
@@ -23,6 +25,7 @@ class RecentGame {
       id: json['id'] as int,
       userId: json['user_id'] as String,
       opponentUserId: json['opponent_user_id'] as String,
+      opponentAvatar: json['opponent_avatar'] as String,
       opponentUsername: json['username'] as String,
       ratingChange: json['rating_change'] as int,
       ratingBeforeChange: json['rating_before_change'] as int,

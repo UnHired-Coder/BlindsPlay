@@ -56,10 +56,14 @@ class RecentGameTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(vertical: AppSpacing.small),
-      leading: const CircleAvatar(
+      leading: CircleAvatar(
         backgroundColor: AppColors.secondary,
         radius: 24,
-        child: Icon(Icons.person, color: Colors.white),
+        child: ClipOval(
+          child: Transform.scale(
+              scale: 1.5,
+              child: Image.network(entry.opponentAvatar, fit: BoxFit.cover)),
+        ),
       ),
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
