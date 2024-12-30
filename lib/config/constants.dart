@@ -1,6 +1,6 @@
 class AppConstants {
   static const int boardSize = 3;
-  static const double cellWidth = 100.0;
+  static const double cellWidth = 100.0 - ((boardSize - 3) * 20);
   static const double boardWidth = boardSize * cellWidth;
 
   static const int delayToHide = 500;

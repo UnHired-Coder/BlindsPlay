@@ -14,8 +14,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   final TimerBloc timerBloc = TimerBloc();
   GameMode gameMode; // Add GameMode as a final property
 
-  late List<List<String>> placeHolders =
-      List.generate(3, (_) => List.generate(3, (_) => ""));
+  late List<List<String>> placeHolders = List.generate(AppConstants.boardSize,
+      (_) => List.generate(AppConstants.boardSize, (_) => ""));
   int _moveCount = 0;
 
   GameBloc({required this.gameMode}) : super(const GameInitial()) {
@@ -72,10 +72,10 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       ));
     }
 
-    List<List<TileState>> initialBoard =
-        List.generate(3, (_) => List.generate(3, (_) => TileState.empty));
-    List<List<TileState>> visibleBoard =
-        List.generate(3, (_) => List.generate(3, (_) => TileState.empty));
+    List<List<TileState>> initialBoard = List.generate(AppConstants.boardSize,
+        (_) => List.generate(AppConstants.boardSize, (_) => TileState.empty));
+    List<List<TileState>> visibleBoard = List.generate(AppConstants.boardSize,
+        (_) => List.generate(AppConstants.boardSize, (_) => TileState.empty));
 
     emit(GameInProgress(
         board: initialBoard,
@@ -289,8 +289,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   // Event handler for UpdateBoard event
   Future<void> _onUpdateBoard(
       UpdateBoard event, Emitter<GameState> emit) async {
-    List<List<TileState>> visibleBoard =
-        List.generate(3, (_) => List.generate(3, (_) => TileState.empty));
+    List<List<TileState>> visibleBoard = List.generate(AppConstants.boardSize,
+        (_) => List.generate(AppConstants.boardSize, (_) => TileState.empty));
     emit(GameInProgress(
         board: event.board,
         visibleBoard: visibleBoard,
@@ -299,30 +299,62 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   }
 
   TileState _getWinner(List<List<TileState>> board) {
-    // Check rows and columns
-    for (int i = 0; i < 3; i++) {
-      if (board[i][0] != TileState.empty &&
-          board[i][0] == board[i][1] &&
-          board[i][1] == board[i][2]) {
-        return board[i][0];
-      }
-      if (board[0][i] != TileState.empty &&
-          board[0][i] == board[1][i] &&
-          board[1][i] == board[2][i]) {
-        return board[0][i];
+    int boardSize = AppConstants.boardSize;
+
+    // Check rows
+    for (int i = 0; i < boardSize; i++) {
+      TileState first = board[i][0];
+      if (first != TileState.empty) {
+        bool rowWin = true;
+        for (int j = 1; j < boardSize; j++) {
+          if (board[i][j] != first) {
+            rowWin = false;
+            break;
+          }
+        }
+        if (rowWin) return first;
       }
     }
 
-    // Check diagonals
-    if (board[0][0] != TileState.empty &&
-        board[0][0] == board[1][1] &&
-        board[1][1] == board[2][2]) {
-      return board[0][0];
+    // Check columns
+    for (int i = 0; i < boardSize; i++) {
+      TileState first = board[0][i];
+      if (first != TileState.empty) {
+        bool columnWin = true;
+        for (int j = 1; j < boardSize; j++) {
+          if (board[j][i] != first) {
+            columnWin = false;
+            break;
+          }
+        }
+        if (columnWin) return first;
+      }
     }
-    if (board[0][2] != TileState.empty &&
-        board[0][2] == board[1][1] &&
-        board[1][1] == board[2][0]) {
-      return board[0][2];
+
+    // Check main diagonal
+    TileState firstDiagonal = board[0][0];
+    if (firstDiagonal != TileState.empty) {
+      bool diagonalWin = true;
+      for (int i = 1; i < boardSize; i++) {
+        if (board[i][i] != firstDiagonal) {
+          diagonalWin = false;
+          break;
+        }
+      }
+      if (diagonalWin) return firstDiagonal;
+    }
+
+    // Check anti-diagonal
+    TileState firstAntiDiagonal = board[0][boardSize - 1];
+    if (firstAntiDiagonal != TileState.empty) {
+      bool antiDiagonalWin = true;
+      for (int i = 1; i < boardSize; i++) {
+        if (board[i][boardSize - i - 1] != firstAntiDiagonal) {
+          antiDiagonalWin = false;
+          break;
+        }
+      }
+      if (antiDiagonalWin) return firstAntiDiagonal;
     }
 
     return TileState.empty; // No winner
@@ -356,14 +388,14 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   }
 
   randomizePlaceholders() {
-    placeHolders =
-        List.generate(3, (_) => List.generate(3, (_) => getRandomIcon()));
+    placeHolders = List.generate(AppConstants.boardSize,
+        (_) => List.generate(AppConstants.boardSize, (_) => getRandomIcon()));
 
     Timer.periodic(
         const Duration(seconds: AppConstants.refreshPlaceholdersDuration),
         (timer) {
-      placeHolders =
-          List.generate(3, (_) => List.generate(3, (_) => getRandomIcon()));
+      placeHolders = List.generate(AppConstants.boardSize,
+          (_) => List.generate(AppConstants.boardSize, (_) => getRandomIcon()));
     });
   }
 

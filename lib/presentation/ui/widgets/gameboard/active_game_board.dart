@@ -21,7 +21,7 @@ class ActiveGameBoard extends StatelessWidget {
 
       final double boardWidth =
           (isWeb ? AppConstants.boardWidth : (AppConstants.boardWidth));
-      final double cellWidth = boardWidth / 3;
+      final double cellWidth = boardWidth / AppConstants.boardSize;
 
       return Stack(
         children: [
@@ -85,7 +85,7 @@ class ActiveGameBoard extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image(
+                    const Image(
                       width: 24,
                       height: 24,
                       color: AppColors.onPrimary,

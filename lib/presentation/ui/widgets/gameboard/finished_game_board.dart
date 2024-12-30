@@ -20,7 +20,7 @@ class FinishedGameBoard extends StatelessWidget {
 
       final double boardWidth =
           (isWeb ? AppConstants.boardWidth : (AppConstants.boardWidth)) / 1.5;
-      final double cellWidth = boardWidth / 3;
+      final double cellWidth = boardWidth / AppConstants.boardSize;
 
       return Row(
         mainAxisSize: MainAxisSize.max,
