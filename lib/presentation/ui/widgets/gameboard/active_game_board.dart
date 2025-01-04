@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 
 import '../../../../config/colors.dart';
@@ -19,6 +21,35 @@ class ActiveGameBoard extends StatefulWidget {
 }
 
 class _ActiveGameBoardState extends State<ActiveGameBoard> {
+  double _rotationAngle = 0.0; // Initial rotation angle
+  double _timerProgress = 1.0; // Timer progress from 1.0 to 0.0
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _startTimer();
+  }
+
+  void _startTimer() {
+    const totalDuration = 5; // Duration in seconds
+    _timerProgress = 1.0;
+
+    _timer?.cancel(); // Cancel existing timer if any
+    _timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
+      setState(() {
+        _timerProgress -= 0.1 / totalDuration; // Decrease progress
+        if (_timerProgress <= 0) {
+          _timerProgress = 1.0; // Reset timer progress
+          _rotationAngle += 90.0; // Rotate the board by 90 degrees
+          //if (_rotationAngle >= 360) _rotationAngle = 0.0; // Reset rotation
+          timer.cancel();
+          _startTimer(); // Restart the timer
+        }
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
@@ -38,37 +69,40 @@ class _ActiveGameBoardState extends State<ActiveGameBoard> {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  AnimatedOpacity(
+                  AnimatedRotation(
+                      turns: _rotationAngle / 360,
                       duration: const Duration(milliseconds: 500),
-                      // Duration of the animation
-                      opacity: widget.state.active ? 1 : 0.5,
-                      child: Container(
-                        width: boardWidth,
-                        // Define a dynamic width for the board if needed
-                        height: boardWidth,
-                        // Define a dynamic width for the board if needed
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            GameBoard(
-                              visibleBoard: widget.state.visibleBoard,
-                              placeHolders: widget.state.placeHolders,
-                              active: widget.state.active,
-                              cellWidth: cellWidth,
-                              boardSize: AppConstants.boardSize,
-                              onMakeMove: widget.onMakeMove,
+                      child: AnimatedOpacity(
+                          duration: const Duration(milliseconds: 500),
+                          // Duration of the animation
+                          opacity: widget.state.active ? 1 : 0.5,
+                          child: Container(
+                            width: boardWidth,
+                            // Define a dynamic width for the board if needed
+                            height: boardWidth,
+                            // Define a dynamic width for the board if needed
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                GameBoard(
+                                  visibleBoard: widget.state.visibleBoard,
+                                  placeHolders: widget.state.placeHolders,
+                                  active: widget.state.active,
+                                  cellWidth: cellWidth,
+                                  boardSize: AppConstants.boardSize,
+                                  onMakeMove: widget.onMakeMove,
+                                ),
+                                !widget.state.active
+                                    ? Text(
+                                        "...",
+                                        textAlign: TextAlign.center,
+                                        style: AppTextStyles.heading1.copyWith(
+                                            color: AppColors.onPrimary),
+                                      )
+                                    : Text("")
+                              ],
                             ),
-                            !widget.state.active
-                                ? Text(
-                                    "...",
-                                    textAlign: TextAlign.center,
-                                    style: AppTextStyles.heading1
-                                        .copyWith(color: AppColors.onPrimary),
-                                  )
-                                : Text("")
-                          ],
-                        ),
-                      )),
+                          ))),
                   Text(
                     "${widget.state.currentPlayer.symbol}'s move...",
                     textAlign: TextAlign.center,
