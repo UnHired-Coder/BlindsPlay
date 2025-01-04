@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import '../../../../config/colors.dart';
 import '../../../../config/constants.dart';
@@ -24,6 +24,13 @@ class _ActiveGameBoardState extends State<ActiveGameBoard> {
   double _rotationAngle = 0.0; // Initial rotation angle
   double _timerProgress = 1.0; // Timer progress from 1.0 to 0.0
   Timer? _timer;
+  int totalDuration = 8; // Duration in seconds
+
+  @override
+  void dispose() {
+    super.dispose();
+    _timer?.cancel();
+  }
 
   @override
   void initState() {
@@ -32,7 +39,6 @@ class _ActiveGameBoardState extends State<ActiveGameBoard> {
   }
 
   void _startTimer() {
-    const totalDuration = 8; // Duration in seconds
     _timerProgress = 1.0;
 
     _timer?.cancel(); // Cancel existing timer if any
@@ -69,14 +75,26 @@ class _ActiveGameBoardState extends State<ActiveGameBoard> {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
+                  SizedBox(
+                      height: 4,
+                      width: boardWidth / 2,
+                      child: LinearProgressIndicator(
+                        value: _timerProgress,
+                        minHeight: 5,
+                        backgroundColor: AppColors.secondary,
+                        valueColor: const AlwaysStoppedAnimation<Color>(
+                            AppColors.accent),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
+                      )),
                   AnimatedRotation(
                       turns: _rotationAngle / 360,
                       duration: const Duration(milliseconds: 500),
                       child: AnimatedOpacity(
                           duration: const Duration(milliseconds: 500),
                           // Duration of the animation
-                          opacity: widget.state.active ? 1 : 0.5,
-                          child: Container(
+                          opacity: widget.state.active ? 1 : 0.3,
+                          child: SizedBox(
                             width: boardWidth,
                             // Define a dynamic width for the board if needed
                             height: boardWidth,
@@ -103,6 +121,7 @@ class _ActiveGameBoardState extends State<ActiveGameBoard> {
                               ],
                             ),
                           ))),
+                  const SizedBox(height: 50),
                   Text(
                     "${widget.state.currentPlayer.symbol}'s move...",
                     textAlign: TextAlign.center,
