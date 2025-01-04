@@ -32,7 +32,7 @@ class _ActiveGameBoardState extends State<ActiveGameBoard> {
   }
 
   void _startTimer() {
-    const totalDuration = 5; // Duration in seconds
+    const totalDuration = 8; // Duration in seconds
     _timerProgress = 1.0;
 
     _timer?.cancel(); // Cancel existing timer if any
