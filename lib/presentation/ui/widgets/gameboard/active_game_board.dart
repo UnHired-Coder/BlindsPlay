@@ -6,7 +6,7 @@ import '../../../../config/text_styles.dart';
 import '../../../../logic/blocs/game/game_state.dart';
 import 'game_board.dart';
 
-class ActiveGameBoard extends StatelessWidget {
+class ActiveGameBoard extends StatefulWidget {
   final GameInProgress state;
   final int boardSize; // Dynamic board size
   final void Function(int row, int column)? onMakeMove;
@@ -14,6 +14,11 @@ class ActiveGameBoard extends StatelessWidget {
   const ActiveGameBoard(
       {required this.state, required this.boardSize, required this.onMakeMove});
 
+  @override
+  State<ActiveGameBoard> createState() => _ActiveGameBoardState();
+}
+
+class _ActiveGameBoardState extends State<ActiveGameBoard> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
@@ -36,7 +41,7 @@ class ActiveGameBoard extends StatelessWidget {
                   AnimatedOpacity(
                       duration: const Duration(milliseconds: 500),
                       // Duration of the animation
-                      opacity: state.active ? 1 : 0.5,
+                      opacity: widget.state.active ? 1 : 0.5,
                       child: Container(
                         width: boardWidth,
                         // Define a dynamic width for the board if needed
@@ -46,14 +51,14 @@ class ActiveGameBoard extends StatelessWidget {
                           alignment: Alignment.center,
                           children: [
                             GameBoard(
-                              visibleBoard: state.visibleBoard,
-                              placeHolders: state.placeHolders,
-                              active: state.active,
+                              visibleBoard: widget.state.visibleBoard,
+                              placeHolders: widget.state.placeHolders,
+                              active: widget.state.active,
                               cellWidth: cellWidth,
                               boardSize: AppConstants.boardSize,
-                              onMakeMove: onMakeMove,
+                              onMakeMove: widget.onMakeMove,
                             ),
-                            !state.active
+                            !widget.state.active
                                 ? Text(
                                     "...",
                                     textAlign: TextAlign.center,
@@ -65,7 +70,7 @@ class ActiveGameBoard extends StatelessWidget {
                         ),
                       )),
                   Text(
-                    "${state.currentPlayer.symbol}'s move...",
+                    "${widget.state.currentPlayer.symbol}'s move...",
                     textAlign: TextAlign.center,
                     style: AppTextStyles.bodyTextLarge
                         .copyWith(color: AppColors.onPrimary),
@@ -93,7 +98,7 @@ class ActiveGameBoard extends StatelessWidget {
                           'assets/ic_clock.png'), // Access icon from PageModel
                     ),
                     Text(
-                      "${state.elapsedTime}s",
+                      "${widget.state.elapsedTime}s",
                       style: AppTextStyles.button
                           .copyWith(color: AppColors.onPrimary),
                       textAlign: TextAlign.center,
