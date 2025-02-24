@@ -2,7 +2,9 @@
 Multiplayer Tic-tac-toe Game Mobile & Web
 <br>
 <br>
-![Group 52](https://github.com/user-attachments/assets/0c4d2154-7335-4358-a010-1e30913fb2d7)
+![TicTacMemo](https://github.com/user-attachments/assets/0c4d2154-7335-4358-a010-1e30913fb2d7)
+![Leaderboard & Ranking](https://github.com/user-attachments/assets/93936294-b840-4038-8c52-c6b058bd400f)
+
 
 ## Running the App in Android Studio
 
